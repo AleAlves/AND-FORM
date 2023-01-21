@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/flowsFragment">
+
+    <fragment
+        android:id="@+id/flowsFragment"
+        android:name="com.example.dynamicformapp.feature.step.d.presentation.StepDFragment"
+        android:label="FlowsFragment" >
+        <action
+            android:id="@+id/action_flowsFragment_to_stepIFragment"
+            app:destination="@id/stepIFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stepIFragment"
+        android:name="com.example.dynamicformapp.feature.step.b.StepBFragment"
+        android:label="StepIFragment">
+        <action
+            android:id="@+id/action_stepIFragment_to_setpIIFragment"
+            app:destination="@id/setpIIFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setpIIFragment"
+        android:name="com.example.dynamicformapp.feature.step.SetpIIFragment"
+        android:label="SetpIIFragment">
+        <action
+            android:id="@+id/action_setpIIFragment_to_stepIIIFragment"
+            app:destination="@id/stepIIIFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stepIIIFragment"
+        android:name="com.example.dynamicformapp.feature.step.c.StepCFragment"
+        android:label="StepIIIFragment" />
+
+
+</navigation>
