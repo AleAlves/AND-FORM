@@ -8,13 +8,29 @@ data class FormTextVO(
     var inputError: String? = null,
     val maxCharacters: Int = 0,
     val checkBox: FormCheckVO? = null,
-    var onInputValidation: ((Int, String) -> Unit)
-) : FormVO()
+    override val onReadInput: ((FormInput) -> Unit)
+) : FormVO(onReadInput)
 
 data class FormCheckVO(
-    var caption: String,
-    var isChecked: Boolean,
-    var onInputValidation: ((Int, Boolean) -> Unit)
-) : FormVO()
+    var text: String,
+    var isSelected: Boolean,
+    override val onReadInput: ((FormInput) -> Unit)
+) : FormVO(onReadInput)
 
-abstract class FormVO
+data class FormRadioVO(
+    val id: String,
+    var text: String,
+    var isSelected: Boolean,
+    override val onReadInput: ((FormInput) -> Unit)
+) : FormVO(onReadInput)
+
+abstract class FormVO(
+    open val onReadInput: ((FormInput) -> Unit)
+)
+
+data class FormInput(
+    val position: Int,
+    val value: String = "",
+    val isSelected: Boolean = false,
+    var error: String? = null
+)

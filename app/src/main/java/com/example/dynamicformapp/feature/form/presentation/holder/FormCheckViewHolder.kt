@@ -3,8 +3,9 @@ package com.example.dynamicformapp.feature.form.presentation.holder
 import android.content.Context
 import android.view.LayoutInflater
 import com.example.dynamicformapp.databinding.InputCheckViewBinding
+import com.example.dynamicformapp.feature.form.model.FormInput
 
-class FormCheckViewHolder(context: Context) : BaseFormViewHolder(context) {
+class FormCheckViewHolder(context: Context) : BaseFormViewHolderImpl(context), BaseFormViewHolder {
 
     private val layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
 
@@ -12,7 +13,7 @@ class FormCheckViewHolder(context: Context) : BaseFormViewHolder(context) {
 
     init {
         binding.inputCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            onCheckInput?.invoke(currentPosition, isChecked)
+            onNewInput?.invoke(FormInput(currentPosition, isSelected = isChecked))
         }
     }
 

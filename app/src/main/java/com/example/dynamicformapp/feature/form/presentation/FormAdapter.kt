@@ -5,30 +5,28 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dynamicformapp.feature.form.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.model.FormTextVO
-import com.example.dynamicformapp.feature.form.model.FormVO
-import com.example.dynamicformapp.feature.form.presentation.holder.FormCheckViewHolder
-import com.example.dynamicformapp.feature.form.presentation.holder.BaseFormViewHolder
-import com.example.dynamicformapp.feature.form.presentation.holder.FormTextViewHolder
+import com.example.dynamicformapp.feature.form.model.*
+import com.example.dynamicformapp.feature.form.presentation.holder.*
+import java.io.Serializable
 
-
-class FormViewHolder(val view: BaseFormViewHolder) : RecyclerView.ViewHolder(view)
+class FormViewHolder(val view: BaseFormViewHolderImpl) : RecyclerView.ViewHolder(view)
 
 class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
 
     companion object {
         private const val TEXT = 1
         private const val CHECKBOX = 2
+        private const val RADIO = 3
         private const val UNKNOWN = 0
     }
 
-    var onTextInput: ((Int, String) -> Unit)? = null
+    var onReadInput: ((FormInput) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
         val inputType = when (viewType) {
             TEXT -> FormTextViewHolder(parent.context)
             CHECKBOX -> FormCheckViewHolder(parent.context)
+            RADIO -> FormRadioViewHolder(parent.context)
             else -> FormCheckViewHolder(parent.context)
         }
         return FormViewHolder(inputType)
@@ -38,7 +36,7 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
         with(holder.view) {
             data = differ.currentList[position]
             currentPosition = position
-            onTextInput = this@FormAdapter.onTextInput
+            onNewInput = this@FormAdapter.onReadInput
         }
     }
 
@@ -46,6 +44,7 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
         return when (differ.currentList[position]) {
             is FormTextVO -> TEXT
             is FormCheckVO -> CHECKBOX
+            is FormRadioVO -> RADIO
             else -> UNKNOWN
         }
     }

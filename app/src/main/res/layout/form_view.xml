@@ -7,5 +7,5 @@
         android:id="@+id/form_input_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_200" />
+        android:background="@color/yellow" />
 </LinearLayout>

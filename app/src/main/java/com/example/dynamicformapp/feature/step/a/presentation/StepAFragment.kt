@@ -31,7 +31,7 @@ class StepAFragment : StepFragment() {
             viewModel.doLogin()
             super.getFlows()
         }
-        binding.inputView.onTextInput = viewModel::onFormInput
+        binding.inputView.onReadInput = viewModel::onFormInput
         listenChanges()
     }
 

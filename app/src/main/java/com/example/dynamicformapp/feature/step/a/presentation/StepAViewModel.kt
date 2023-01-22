@@ -2,7 +2,7 @@ package com.example.dynamicformapp.feature.step.a.presentation
 
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
-import com.example.dynamicformapp.feature.form.model.FormTextVO
+import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.step.a.domain.StepAInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +20,8 @@ class StepAViewModel @Inject constructor(
 
     fun doLogin() = interactor.doLoginCall()
 
-    fun onFormInput(position: Int, value: String) {
-        interactor.onReadInput(position, value)
+    fun onFormInput(value: FormInput) {
+        interactor.onInput(value)
     }
 
     private fun onFormOutput() {

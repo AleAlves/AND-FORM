@@ -1,11 +1,11 @@
 package com.example.dynamicformapp.core.domain
 
-typealias Input = ((Int, String, String?) -> Unit)
+import com.example.dynamicformapp.feature.form.model.FormInput
 
+typealias UseCaseInput = ((FormInput) -> Unit)
 
 interface UsaCaseValidations {
-    fun onInputValidation(position: Int, value: String)
-    fun onCheckBoxValidation(position: Int, value: Boolean) {}
+    fun onReadInput(input: FormInput)
 }
 
 abstract class BaseUseCase<T> : UsaCaseValidations {
@@ -15,6 +15,6 @@ abstract class BaseUseCase<T> : UsaCaseValidations {
             field = value
         }
     var errorMessage: String? = null
-    var inputListener: Input = { _, _, _ -> }
-    abstract operator fun invoke(validation: Input): T
+    var inputListener: UseCaseInput = { _ -> }
+    abstract operator fun invoke(input: UseCaseInput): T
 }
