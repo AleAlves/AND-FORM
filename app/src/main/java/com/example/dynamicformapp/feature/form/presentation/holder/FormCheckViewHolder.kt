@@ -15,7 +15,6 @@ class FormCheckViewHolder(private val binding: InputCheckViewBinding) :
                 onNewInput?.invoke(FormInput(currentPosition, isSelected = isChecked))
             }
         }
-        binding.inputCheckbox.text = "wowowowo"
     }
 
     override fun setupView(data: FormVO?) {
