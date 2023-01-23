@@ -10,20 +10,15 @@ import com.example.dynamicformapp.feature.form.presentation.FormViewHolder
 class FormRadioViewHolder(private val binding: InputRadioViewBinding) :
     FormViewHolder(binding.root) {
 
-    private val watcher = CheckWatcher {
-        onNewInput?.invoke(FormInput(currentPosition, isSelected = it))
-    }
+    private var id = ""
 
-    init {
-        binding.inputRadio.setOnCheckedChangeListener { view, isChecked ->
-            if (isChecked != view.isChecked) {
-                onNewInput?.invoke(FormInput(currentPosition, isSelected = isChecked))
-            }
-        }
+    private val watcher = CheckWatcher {
+        onNewInput?.invoke(FormInput(currentPosition, value = id, isSelected = it))
     }
 
     override fun setupView(data: FormVO?) {
         data as FormRadioVO
+        id = data.id
         with(binding) {
             inputRadio.setOnCheckedChangeListener(null)
             inputRadio.isChecked = data.isSelected

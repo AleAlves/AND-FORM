@@ -10,6 +10,8 @@ import javax.inject.Inject
 
 class NewsletterFormUseCase @Inject constructor() : BaseUseCase<List<FormRadioVO>>() {
 
+    var newsLetterChoice = ""
+
     override val formVO: List<FormRadioVO> = listOf(
         FormRadioVO(
             id = UUID.randomUUID().toString(),
@@ -32,6 +34,7 @@ class NewsletterFormUseCase @Inject constructor() : BaseUseCase<List<FormRadioVO
 
     override fun onReadInput(input: FormInput) {
         isValid = input.isSelected
+        newsLetterChoice = input.value
         inputListener.invoke(input)
     }
 

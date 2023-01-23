@@ -42,5 +42,6 @@ class StepAInteractorImpl @Inject constructor(
         Log.d("WOW", "Request|email: ${emailFormUseCase.email}")
         Log.d("WOW", "Request|password: ${passwordFormUseCase.password}")
         Log.d("WOW", "Request|passwordsave: ${passwordFormUseCase.shouldSavePassword}")
+        Log.d("WOW", "Request|newsletter: ${newsLetterUseCase.newsLetterChoice}")
     }
 }
