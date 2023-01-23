@@ -5,6 +5,7 @@ import com.example.dynamicformapp.feature.form.domain.BaseFormIteractor
 import com.example.dynamicformapp.feature.form.domain.FormInteractor
 import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.step.login.domain.usecase.EmailFormUseCase
+import com.example.dynamicformapp.feature.step.login.domain.usecase.NewsletterFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.PasswordFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.TermFormUseCase
 import javax.inject.Inject
@@ -16,7 +17,8 @@ interface StepAInteractor : FormInteractor {
 class StepAInteractorImpl @Inject constructor(
     private val emailFormUseCase: EmailFormUseCase,
     private val passwordFormUseCase: PasswordFormUseCase,
-    private val termsUseCase: TermFormUseCase
+    private val termsUseCase: TermFormUseCase,
+    private val newsLetterUseCase: NewsletterFormUseCase
 ) : BaseFormIteractor(), StepAInteractor {
 
     override var onValidation: ((Boolean) -> Unit) = {}
@@ -25,8 +27,10 @@ class StepAInteractorImpl @Inject constructor(
     override var inputForms: ArrayList<FormVO> = arrayListOf(
         emailFormUseCase(::onOutput),
         passwordFormUseCase(::onOutput),
-        termsUseCase(::onOutput),
-    )
+        termsUseCase(::onOutput)
+    ).apply {
+        addAll(newsLetterUseCase(::onOutput))
+    }
 
     override fun performValidation() {
         onValidation.invoke(

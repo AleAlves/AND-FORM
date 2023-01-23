@@ -2,20 +2,30 @@ package com.example.dynamicformapp.feature.form.model
 
 
 data class FormTextVO(
-    var inputHint: String = "",
+    var text: String = "",
+    var requestFocus: Boolean = false,
+    var isEnabled: Boolean = true,
+    var hint: String = "",
     val subtitle: String = "",
-    var inputText: String = "",
     val inputType: Int,
     val maxSize: Int,
     val minSize: Int,
-    var requestFocus: Boolean,
-    var inputError: String? = null,
+    var error: String? = null,
     val checkBox: FormCheckVO? = null,
     override val onInput: ((FormInput) -> Unit)
 ) : FormVO(onInput)
 
 data class FormCheckVO(
-    var text: String,
+    var text: String = "",
+    var isEnabled: Boolean = true,
+    var isSelected: Boolean,
+    override val onInput: ((FormInput) -> Unit)
+) : FormVO(onInput)
+
+data class FormRadioVO(
+    val id: String,
+    var text: String = "",
+    var isEnabled: Boolean = true,
     var isSelected: Boolean,
     override val onInput: ((FormInput) -> Unit)
 ) : FormVO(onInput)

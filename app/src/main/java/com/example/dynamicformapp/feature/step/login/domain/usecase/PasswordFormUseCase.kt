@@ -15,13 +15,13 @@ class PasswordFormUseCase @Inject constructor() :
     var shouldSavePassword = false
 
     override val formVO: FormTextVO = FormTextVO(
-        inputHint = "Password",
+        hint = "Password",
         maxSize = 15,
         minSize = 6,
         checkBox = FormCheckVO(
             text = "Remember me",
             isSelected = false,
-            ::onReadSelectionInput
+            onInput = ::onReadSelectionInput
         ),
         requestFocus = true,
         onInput = ::onReadInput,

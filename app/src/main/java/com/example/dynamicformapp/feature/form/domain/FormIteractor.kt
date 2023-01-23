@@ -25,21 +25,38 @@ abstract class BaseFormIteractor : FormInteractor {
         performValidation()
         inputForms[input.position].let {
             when (it) {
-                is FormCheckVO -> {
-                    it.isSelected = input.isSelected
-                }
-                is FormTextVO -> {
-                    it.inputError = input.error
-                    it.inputText = input.value
-                    it.checkBox?.isSelected = input.isSelected
-                }
+                is FormTextVO -> applyTextChange(it, input)
+                is FormRadioVO -> applyRadioChange(it, input)
+                is FormCheckVO -> applyCheckChange(it, input)
             }
         }
-        onNotifyUpdateAt.invoke(input.position)
     }
 
     override fun listenFormUpdates(input: (Int) -> Unit, validation: (Boolean) -> Unit) {
         onNotifyUpdateAt = input
         onValidation = validation
+    }
+
+    private fun applyTextChange(formVO: FormTextVO, input: FormInput) {
+        formVO.error = input.error
+        formVO.text = input.value
+        formVO.checkBox?.isSelected = input.isSelected
+        onNotifyUpdateAt.invoke(input.position)
+    }
+
+    private fun applyCheckChange(formVO: FormCheckVO, input: FormInput) {
+        formVO.isSelected = input.isSelected
+        onNotifyUpdateAt.invoke(input.position)
+    }
+
+    private fun applyRadioChange(formVO: FormRadioVO, input: FormInput) {
+        val wow = inputForms.mapIndexed { index, vo ->
+            if (vo is FormRadioVO) {
+                vo.isSelected = false
+                onNotifyUpdateAt.invoke(index)
+            }
+        }
+        formVO.isSelected = input.isSelected
+        onNotifyUpdateAt.invoke(input.position)
     }
 }

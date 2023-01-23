@@ -48,16 +48,13 @@ class FormTextViewHolder(private val binding: InputTextViewBinding) : FormViewHo
                 } else {
                     edit.transformationMethod = null
                 }
-                if (data.requestFocus) {
-                    edit.requestFocus()
-                }
                 edit.setRawInputType(data.inputType)
                 edit.removeTextChangedListener(watcher)
-                edit.text = data.inputText.toEditable()
+                edit.text = data.text.toEditable()
                 edit.setSelection(edit.text?.length ?: 0)
                 edit.filters += InputFilter.LengthFilter(data.maxSize)
-                edit.error = data.inputError
-                edit.hint = data.inputHint
+                edit.error = data.error
+                edit.hint = data.hint
                 edit.addTextChangedListener(watcher)
             }
             if (data.checkBox == null) {

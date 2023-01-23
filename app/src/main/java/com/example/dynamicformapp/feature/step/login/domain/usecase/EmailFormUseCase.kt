@@ -17,7 +17,7 @@ class EmailFormUseCase @Inject constructor(
     var email = ""
 
     override val formVO: FormTextVO = FormTextVO(
-        inputHint = context.getString(R.string.login_email_input_hint),
+        hint = context.getString(R.string.login_email_input_hint),
         subtitle = context.getString(R.string.login_email_input_helper),
         maxSize = 50,
         minSize = 5,
@@ -32,7 +32,8 @@ class EmailFormUseCase @Inject constructor(
     }
 
     override fun onReadInput(input: FormInput) {
-        isValid = input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
+        isValid =
+            input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
         isValid = input.value.length < formVO.maxSize && input.value.length > formVO.minSize
         if (input.value.contains(" ")) {
             isValid = false

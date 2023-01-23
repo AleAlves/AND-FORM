@@ -2,6 +2,7 @@ package com.example.dynamicformapp.feature.form.presentation
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.CompoundButton
 
 class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatcher {
 
@@ -23,4 +24,13 @@ class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatche
     ) {
         onTextChanged.invoke(s.toString())
     }
+}
+
+class CheckWatcher(private val onSelectionChanged: (Boolean) -> Unit) :
+    CompoundButton.OnCheckedChangeListener {
+
+    override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+        onSelectionChanged.invoke(p1)
+    }
+
 }

@@ -11,7 +11,7 @@ class TermFormUseCase @Inject constructor() : BaseUseCase<FormCheckVO>() {
     override val formVO: FormCheckVO = FormCheckVO(
         text = "I accept the terms and stuff",
         isSelected = false,
-        ::onReadInput
+        onInput = ::onReadInput
     )
 
     override fun invoke(input: UseCaseInput): FormCheckVO {
