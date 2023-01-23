@@ -21,6 +21,7 @@ class EmailFormUseCase @Inject constructor(
         subtitle = context.getString(R.string.login_email_input_helper),
         maxSize = 50,
         minSize = 5,
+        requestFocus = true,
         onInput = ::onReadInput,
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
     )

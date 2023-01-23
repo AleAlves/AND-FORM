@@ -23,6 +23,7 @@ class PasswordFormUseCase @Inject constructor() :
             isSelected = false,
             ::onReadSelectionInput
         ),
+        requestFocus = true,
         onInput = ::onReadInput,
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
     )

@@ -9,17 +9,17 @@ import com.example.dynamicformapp.core.util.toEditable
 import com.example.dynamicformapp.databinding.InputTextViewBinding
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormTextVO
+import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewHolder
 import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
+
 
 class FormTextViewHolder(private val binding: InputTextViewBinding) : FormViewHolder(binding.root) {
 
     private val watcher = TextInputWatcher {
         onNewInput?.invoke(
             FormInput(
-                position = currentPosition,
-                value = it,
-                isSelected = binding.inputCheckbox.isChecked
+                position = currentPosition, value = it, isSelected = binding.inputCheckbox.isChecked
             )
         )
     }
@@ -38,7 +38,7 @@ class FormTextViewHolder(private val binding: InputTextViewBinding) : FormViewHo
         }
     }
 
-    override fun setupView(data: Any?) {
+    override fun setupView(data: FormVO?) {
         data as FormTextVO
         with(binding) {
             inputTextViewSubtitle.text = data.subtitle
@@ -47,6 +47,9 @@ class FormTextViewHolder(private val binding: InputTextViewBinding) : FormViewHo
                     edit.transformationMethod = PasswordTransformationMethod.getInstance()
                 } else {
                     edit.transformationMethod = null
+                }
+                if (data.requestFocus) {
+                    edit.requestFocus()
                 }
                 edit.setRawInputType(data.inputType)
                 edit.removeTextChangedListener(watcher)

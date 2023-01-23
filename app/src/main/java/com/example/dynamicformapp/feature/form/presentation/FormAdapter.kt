@@ -15,13 +15,13 @@ import com.example.dynamicformapp.feature.form.presentation.holder.*
 
 abstract class FormViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-    protected abstract fun setupView(data: Any?)
+    protected abstract fun setupView(data: FormVO?)
 
     var onNewInput: ((FormInput) -> Unit)? = null
 
     var data: FormVO? = null
         set(value) {
-            setupView(value as Any)
+            setupView(value)
             field = value
         }
 

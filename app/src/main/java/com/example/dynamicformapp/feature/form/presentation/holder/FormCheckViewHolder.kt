@@ -3,9 +3,11 @@ package com.example.dynamicformapp.feature.form.presentation.holder
 import com.example.dynamicformapp.databinding.InputCheckViewBinding
 import com.example.dynamicformapp.feature.form.model.FormCheckVO
 import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewHolder
 
-class FormCheckViewHolder(private val binding: InputCheckViewBinding) : FormViewHolder(binding.root) {
+class FormCheckViewHolder(private val binding: InputCheckViewBinding) :
+    FormViewHolder(binding.root) {
 
     init {
         binding.inputCheckbox.setOnCheckedChangeListener { view, isChecked ->
@@ -16,7 +18,7 @@ class FormCheckViewHolder(private val binding: InputCheckViewBinding) : FormView
         binding.inputCheckbox.text = "wowowowo"
     }
 
-    override fun setupView(data: Any?) {
+    override fun setupView(data: FormVO?) {
         data as FormCheckVO
         with(binding) {
             inputCheckbox.isChecked = data.isSelected
