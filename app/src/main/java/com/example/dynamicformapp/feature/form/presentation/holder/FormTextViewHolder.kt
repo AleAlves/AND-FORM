@@ -9,19 +9,33 @@ import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormTextVO
 import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
 
-class FormTextViewHolder(context: Context) : BaseFormViewHolderImpl(context), BaseFormViewHolder {
+class FormTextViewHolder(context: Context) : BaseFormViewHolder(context) {
 
     private val layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
 
-    private val watcher = TextInputWatcher {
-        onNewInput?.invoke(FormInput(currentPosition, value = it))
-    }
-
     private var binding = InputTextViewBinding.inflate(layoutInflater, this, true)
 
+    private val watcher = TextInputWatcher {
+        onNewInput?.invoke(
+            FormInput(
+                position = currentPosition,
+                value = it,
+                isSelected = binding.inputCheckbox.isChecked
+            )
+        )
+    }
+
     init {
-        binding.inputCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            onNewInput?.invoke(FormInput(currentPosition, isSelected = isChecked))
+        binding.inputCheckbox.setOnCheckedChangeListener { view, isChecked ->
+            if (isChecked != view.isChecked) {
+                onNewInput?.invoke(
+                    FormInput(
+                        position = currentPosition,
+                        value = binding.inputViewEditext.text.toString(),
+                        isSelected = isChecked
+                    )
+                )
+            }
         }
     }
 
@@ -43,6 +57,7 @@ class FormTextViewHolder(context: Context) : BaseFormViewHolderImpl(context), Ba
             } else {
                 binding.inputCheckbox.visibility = VISIBLE
                 binding.inputCheckbox.isChecked = data?.checkBox.isSelected
+                binding.inputCheckbox.text = data?.checkBox.text
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.dynamicformapp.feature.step.a.domain.usecase
+package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import com.example.dynamicformapp.core.domain.BaseUseCase
 import com.example.dynamicformapp.core.domain.UseCaseInput
@@ -21,9 +21,9 @@ class PasswordFormUseCase @Inject constructor() :
             checkBox = FormCheckVO(
                 text = "Remember me",
                 isSelected = false,
-                ::onReadInput
+                ::onReadSelectionInput
             ),
-            onReadInput = ::onReadInput
+            onInput = ::onReadInput
         )
     }
 
@@ -36,5 +36,9 @@ class PasswordFormUseCase @Inject constructor() :
         password = input.value
         input.error = errorMessage
         inputListener.invoke(input)
+    }
+
+    override fun onReadSelectionInput(input: FormInput) {
+        shouldSavePassword = input.isSelected
     }
 }

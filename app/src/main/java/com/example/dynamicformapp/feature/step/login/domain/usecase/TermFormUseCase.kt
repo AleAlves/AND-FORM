@@ -1,4 +1,4 @@
-package com.example.dynamicformapp.feature.step.a.domain.usecase
+package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import com.example.dynamicformapp.core.domain.BaseUseCase
 import com.example.dynamicformapp.core.domain.UseCaseInput
@@ -7,8 +7,6 @@ import com.example.dynamicformapp.feature.form.model.FormInput
 import javax.inject.Inject
 
 class TermFormUseCase @Inject constructor() : BaseUseCase<FormCheckVO>() {
-
-    var accpected = false
 
     override fun invoke(input: UseCaseInput): FormCheckVO {
         inputListener = input
@@ -20,7 +18,7 @@ class TermFormUseCase @Inject constructor() : BaseUseCase<FormCheckVO>() {
     }
 
     override fun onReadInput(input: FormInput) {
-        accpected = input.isSelected
+        isValid = input.isSelected
         inputListener.invoke(input)
     }
 }

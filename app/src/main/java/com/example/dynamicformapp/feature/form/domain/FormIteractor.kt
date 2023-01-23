@@ -1,8 +1,6 @@
 package com.example.dynamicformapp.feature.form.domain
 
-import com.example.dynamicformapp.feature.form.model.FormInput
-import com.example.dynamicformapp.feature.form.model.FormTextVO
-import com.example.dynamicformapp.feature.form.model.FormVO
+import com.example.dynamicformapp.feature.form.model.*
 
 interface FormInteractor {
     fun getForms(): List<FormVO>
@@ -20,18 +18,26 @@ abstract class BaseFormIteractor : FormInteractor {
     override fun getForms(): List<FormVO> = inputForms
 
     override fun onInput(input: FormInput) {
-        inputForms[input.position].onReadInput.invoke(input)
+        inputForms[input.position].onInput.invoke(input)
     }
 
     override fun onOutput(input: FormInput) {
         performValidation()
         inputForms[input.position].let {
-            it as FormTextVO
-            it.inputError = input.error
-            it.inputText = input.value
+            when (it) {
+                is FormCheckVO -> {
+                    it.isSelected = input.isSelected
+                }
+                is FormTextVO -> {
+                    it.inputError = input.error
+                    it.inputText = input.value
+                    it.checkBox?.isSelected = input.isSelected
+                }
+            }
         }
         onNotifyUpdateAt.invoke(input.position)
     }
+
     override fun listenFormUpdates(input: (Int) -> Unit, validation: (Boolean) -> Unit) {
         onNotifyUpdateAt = input
         onValidation = validation

@@ -1,10 +1,10 @@
-package com.example.dynamicformapp.feature.step.a.presentation
+package com.example.dynamicformapp.feature.step.login.presentation
 
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormVO
-import com.example.dynamicformapp.feature.step.a.domain.StepAInteractor
+import com.example.dynamicformapp.feature.step.login.domain.StepAInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

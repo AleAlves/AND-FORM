@@ -1,4 +1,4 @@
-package com.example.dynamicformapp.feature.step.a.domain.usecase
+package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import android.content.Context
 import com.example.dynamicformapp.R
@@ -21,12 +21,13 @@ class EmailFormUseCase @Inject constructor(
             inputHint = context.getString(R.string.login_email_input_hint),
             subtitle = context.getString(R.string.login_email_input_helper),
             maxCharacters = 50,
-            onReadInput = ::onReadInput
+            onInput = ::onReadInput
         )
     }
 
     override fun onReadInput(input: FormInput) {
-        isValid = input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
+        isValid =
+            input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
         if (input.value.contains(" ")) {
             isValid = false
             errorMessage = "Invalid email"

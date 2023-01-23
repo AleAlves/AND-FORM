@@ -4,11 +4,12 @@ import com.example.dynamicformapp.feature.form.model.FormInput
 
 typealias UseCaseInput = ((FormInput) -> Unit)
 
-interface UsaCaseValidations {
+interface FormUsaCase {
     fun onReadInput(input: FormInput)
+    fun onReadSelectionInput(input: FormInput) {}
 }
 
-abstract class BaseUseCase<T> : UsaCaseValidations {
+abstract class BaseUseCase<T> : FormUsaCase {
     var isValid: Boolean = false
         set(value) {
             errorMessage = null

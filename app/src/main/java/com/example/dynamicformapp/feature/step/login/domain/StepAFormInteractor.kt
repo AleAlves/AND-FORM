@@ -1,13 +1,12 @@
-package com.example.dynamicformapp.feature.step.a.domain
+package com.example.dynamicformapp.feature.step.login.domain
 
 import android.util.Log
 import com.example.dynamicformapp.feature.form.domain.BaseFormIteractor
 import com.example.dynamicformapp.feature.form.domain.FormInteractor
 import com.example.dynamicformapp.feature.form.model.FormVO
-import com.example.dynamicformapp.feature.step.a.domain.usecase.EmailFormUseCase
-import com.example.dynamicformapp.feature.step.a.domain.usecase.PasswordFormUseCase
-import com.example.dynamicformapp.feature.step.a.domain.usecase.SubscriptionFormUseCase
-import com.example.dynamicformapp.feature.step.a.domain.usecase.TermFormUseCase
+import com.example.dynamicformapp.feature.step.login.domain.usecase.EmailFormUseCase
+import com.example.dynamicformapp.feature.step.login.domain.usecase.PasswordFormUseCase
+import com.example.dynamicformapp.feature.step.login.domain.usecase.TermFormUseCase
 import javax.inject.Inject
 
 interface StepAInteractor : FormInteractor {
@@ -17,8 +16,7 @@ interface StepAInteractor : FormInteractor {
 class StepAInteractorImpl @Inject constructor(
     private val emailFormUseCase: EmailFormUseCase,
     private val passwordFormUseCase: PasswordFormUseCase,
-    private val termsUseCase: TermFormUseCase,
-    private val subscribeFormUseCase: SubscriptionFormUseCase,
+    private val termsUseCase: TermFormUseCase
 ) : BaseFormIteractor(), StepAInteractor {
 
     override var onValidation: ((Boolean) -> Unit) = {}
@@ -28,9 +26,7 @@ class StepAInteractorImpl @Inject constructor(
         emailFormUseCase(::onOutput),
         passwordFormUseCase(::onOutput),
         termsUseCase(::onOutput),
-    ).apply {
-        addAll(subscribeFormUseCase(::onOutput))
-    }
+    )
 
     override fun performValidation() {
         onValidation.invoke(
@@ -39,8 +35,8 @@ class StepAInteractorImpl @Inject constructor(
     }
 
     override fun doLoginCall() {
-        Log.d("XABLAU", "Request|email: ${emailFormUseCase.email}")
-        Log.d("XABLAU", "Request|password: ${passwordFormUseCase.password}")
-        Log.d("XABLAU", "Request|passwordsave: ${passwordFormUseCase.shouldSavePassword}")
+        Log.d("WOW", "Request|email: ${emailFormUseCase.email}")
+        Log.d("WOW", "Request|password: ${passwordFormUseCase.password}")
+        Log.d("WOW", "Request|passwordsave: ${passwordFormUseCase.shouldSavePassword}")
     }
 }

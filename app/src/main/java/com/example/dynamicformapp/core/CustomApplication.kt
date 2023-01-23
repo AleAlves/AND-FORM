@@ -7,5 +7,3 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class CustomMainApplication : Application()
-
-fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)

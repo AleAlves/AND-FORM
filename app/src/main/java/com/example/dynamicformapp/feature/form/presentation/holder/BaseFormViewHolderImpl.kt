@@ -5,9 +5,7 @@ import android.widget.LinearLayout
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormVO
 
-interface BaseFormViewHolder
-
-abstract class BaseFormViewHolderImpl(context: Context) : LinearLayout(context), BaseFormViewHolder {
+abstract class BaseFormViewHolder(context: Context) : LinearLayout(context) {
 
     protected abstract fun setupView(data: Any?)
 
