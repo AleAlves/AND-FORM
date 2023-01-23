@@ -1,15 +1,32 @@
 package com.example.dynamicformapp.feature.form.presentation
 
 
+import android.content.res.Resources.NotFoundException
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dynamicformapp.databinding.InputCheckViewBinding
+import com.example.dynamicformapp.databinding.InputTextViewBinding
 import com.example.dynamicformapp.feature.form.model.*
 import com.example.dynamicformapp.feature.form.presentation.holder.*
-import java.io.Serializable
 
-class FormViewHolder(val view: BaseFormViewHolder) : RecyclerView.ViewHolder(view)
+abstract class FormViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+
+    protected abstract fun setupView(data: Any?)
+
+    var onNewInput: ((FormInput) -> Unit)? = null
+
+    var data: FormVO? = null
+        set(value) {
+            setupView(value as Any)
+            field = value
+        }
+
+    var currentPosition = 0
+}
 
 class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
 
@@ -22,16 +39,16 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
     var onReadInput: ((FormInput) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
-        val inputType = when (viewType) {
-            TEXT -> FormTextViewHolder(parent.context)
-            CHECKBOX -> FormCheckViewHolder(parent.context)
-            else -> FormCheckViewHolder(parent.context)
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TEXT -> FormTextViewHolder(InputTextViewBinding.inflate(inflater, parent, false))
+            CHECKBOX -> FormCheckViewHolder(InputCheckViewBinding.inflate(inflater, parent, false))
+            else -> throw NotFoundException("Invalid Form")
         }
-        return FormViewHolder(inputType)
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
-        with(holder.view) {
+        with(holder) {
             data = differ.currentList[position]
             currentPosition = position
             onNewInput = this@FormAdapter.onReadInput

@@ -1,6 +1,7 @@
 package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import android.content.Context
+import android.text.InputType
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.core.domain.BaseUseCase
 import com.example.dynamicformapp.core.domain.UseCaseInput
@@ -15,19 +16,23 @@ class EmailFormUseCase @Inject constructor(
 
     var email = ""
 
+    override val formVO: FormTextVO = FormTextVO(
+        inputHint = context.getString(R.string.login_email_input_hint),
+        subtitle = context.getString(R.string.login_email_input_helper),
+        maxSize = 50,
+        minSize = 5,
+        onInput = ::onReadInput,
+        inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+    )
+
     override fun invoke(input: UseCaseInput): FormTextVO {
         inputListener = input
-        return FormTextVO(
-            inputHint = context.getString(R.string.login_email_input_hint),
-            subtitle = context.getString(R.string.login_email_input_helper),
-            maxCharacters = 50,
-            onInput = ::onReadInput
-        )
+        return formVO
     }
 
     override fun onReadInput(input: FormInput) {
-        isValid =
-            input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
+        isValid = input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
+        isValid = input.value.length < formVO.maxSize && input.value.length > formVO.minSize
         if (input.value.contains(" ")) {
             isValid = false
             errorMessage = "Invalid email"
@@ -36,4 +41,5 @@ class EmailFormUseCase @Inject constructor(
         input.error = errorMessage
         inputListener.invoke(input)
     }
+
 }

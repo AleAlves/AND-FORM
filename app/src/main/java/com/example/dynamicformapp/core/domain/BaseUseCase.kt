@@ -10,6 +10,9 @@ interface FormUsaCase {
 }
 
 abstract class BaseUseCase<T> : FormUsaCase {
+
+    protected abstract val formVO: T
+
     var isValid: Boolean = false
         set(value) {
             errorMessage = null
@@ -17,5 +20,6 @@ abstract class BaseUseCase<T> : FormUsaCase {
         }
     var errorMessage: String? = null
     var inputListener: UseCaseInput = { _ -> }
+
     abstract operator fun invoke(input: UseCaseInput): T
 }

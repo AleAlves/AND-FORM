@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dynamicformapp.databinding.FormViewBinding
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormVO
@@ -38,7 +39,9 @@ class FormInputView(
     }
 
     init {
-        binding.formInputRecycler.layoutManager = LinearLayoutManager(context)
+        binding.formInputRecycler.layoutManager = LinearLayoutManager(context).apply {
+            orientation = RecyclerView.VERTICAL
+        }
         binding.formInputRecycler.adapter = adapter
     }
 }

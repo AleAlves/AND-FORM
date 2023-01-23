@@ -9,18 +9,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class StepAViewModel @Inject constructor(
+class LoginViewModel @Inject constructor(
     private val interactor: StepAInteractor
 ) : BaseViewModel() {
 
     init {
-        state.value = StepAState.OnLoad(interactor.getForms())
+        state.value = StepAState.OnLoadForms(interactor.getForms())
         onFormOutput()
     }
 
     fun doLogin() = interactor.doLoginCall()
 
-    fun onFormInput(value: FormInput) {
+    fun onReadInput(value: FormInput) {
         interactor.onInput(value)
     }
 
@@ -33,7 +33,7 @@ class StepAViewModel @Inject constructor(
     }
 
     sealed class StepAState : ViewState {
-        data class OnLoad(val forms: List<FormVO>) : StepAState()
+        data class OnLoadForms(val forms: List<FormVO>) : StepAState()
         data class OnUpdate(val position: Int) : StepAState()
         data class OnButtonStatus(val isEnabled: Boolean) : StepAState()
     }

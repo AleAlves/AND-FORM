@@ -11,9 +11,9 @@ import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StepAFragment : StepFragment() {
+class LoginFragment : StepFragment() {
 
-    private val viewModel: StepAViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var binding: FragmentStepABinding
 
@@ -31,18 +31,18 @@ class StepAFragment : StepFragment() {
             viewModel.doLogin()
             super.getFlows()
         }
-        binding.inputView.onReadInput = viewModel::onFormInput
+        binding.inputView.onReadInput = viewModel::onReadInput
         listenChanges()
     }
 
     private fun listenChanges() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is StepAViewModel.StepAState.OnLoad ->
+                is LoginViewModel.StepAState.OnLoadForms ->
                     binding.inputView.setData(it.forms)
-                is StepAViewModel.StepAState.OnButtonStatus ->
+                is LoginViewModel.StepAState.OnButtonStatus ->
                     binding.buttonApi.isEnabled = it.isEnabled
-                is StepAViewModel.StepAState.OnUpdate -> binding.inputView.post {
+                is LoginViewModel.StepAState.OnUpdate -> binding.inputView.post {
                     binding.inputView.notifyChangeAt(it.position)
                 }
             }
@@ -51,6 +51,6 @@ class StepAFragment : StepFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = StepAFragment()
+        fun newInstance() = LoginFragment()
     }
 }

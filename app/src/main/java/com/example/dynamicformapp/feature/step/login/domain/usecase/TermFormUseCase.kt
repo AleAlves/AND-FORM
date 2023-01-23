@@ -8,17 +8,20 @@ import javax.inject.Inject
 
 class TermFormUseCase @Inject constructor() : BaseUseCase<FormCheckVO>() {
 
+    override val formVO: FormCheckVO = FormCheckVO(
+        text = "I accept the terms and stuff",
+        isSelected = false,
+        ::onReadInput
+    )
+
     override fun invoke(input: UseCaseInput): FormCheckVO {
         inputListener = input
-        return FormCheckVO(
-            text = "I accept the terms and stuff",
-            isSelected = false,
-            ::onReadInput
-        )
+        return formVO
     }
 
     override fun onReadInput(input: FormInput) {
         isValid = input.isSelected
         inputListener.invoke(input)
     }
+
 }

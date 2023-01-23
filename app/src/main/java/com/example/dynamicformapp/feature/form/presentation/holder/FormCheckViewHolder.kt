@@ -1,16 +1,11 @@
 package com.example.dynamicformapp.feature.form.presentation.holder
 
-import android.content.Context
-import android.view.LayoutInflater
 import com.example.dynamicformapp.databinding.InputCheckViewBinding
 import com.example.dynamicformapp.feature.form.model.FormCheckVO
 import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.presentation.FormViewHolder
 
-class FormCheckViewHolder(context: Context) : BaseFormViewHolder(context) {
-
-    private val layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
-
-    private var binding = InputCheckViewBinding.inflate(layoutInflater, this, true)
+class FormCheckViewHolder(private val binding: InputCheckViewBinding) : FormViewHolder(binding.root) {
 
     init {
         binding.inputCheckbox.setOnCheckedChangeListener { view, isChecked ->
@@ -18,6 +13,7 @@ class FormCheckViewHolder(context: Context) : BaseFormViewHolder(context) {
                 onNewInput?.invoke(FormInput(currentPosition, isSelected = isChecked))
             }
         }
+        binding.inputCheckbox.text = "wowowowo"
     }
 
     override fun setupView(data: Any?) {

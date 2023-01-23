@@ -5,8 +5,10 @@ data class FormTextVO(
     var inputHint: String = "",
     val subtitle: String = "",
     var inputText: String = "",
+    val inputType: Int,
+    val maxSize: Int,
+    val minSize: Int,
     var inputError: String? = null,
-    val maxCharacters: Int = 0,
     val checkBox: FormCheckVO? = null,
     override val onInput: ((FormInput) -> Unit)
 ) : FormVO(onInput)
