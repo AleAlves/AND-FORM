@@ -3,6 +3,7 @@ package com.example.dynamicformapp.feature.step.login.domain
 import android.util.Log
 import com.example.dynamicformapp.feature.form.domain.BaseFormIteractor
 import com.example.dynamicformapp.feature.form.domain.FormInteractor
+import com.example.dynamicformapp.feature.form.model.FormRadioVO
 import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.step.login.domain.usecase.EmailFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.NewsletterFormUseCase
@@ -28,9 +29,7 @@ class StepAInteractorImpl @Inject constructor(
         emailFormUseCase(::onOutput),
         passwordFormUseCase(::onOutput),
         termsUseCase(::onOutput),
-    ).apply {
-        addAll(newsLetterUseCase(::onOutput))
-    }
+    ).apply { addAll(newsLetterUseCase(::onOutput)) }
 
     override fun performValidation() {
         onValidate.invoke(

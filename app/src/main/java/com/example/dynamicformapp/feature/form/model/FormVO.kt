@@ -10,6 +10,7 @@ data class FormTextVO(
     val inputType: Int,
     val maxSize: Int,
     val minSize: Int,
+    val isSingleLine: Boolean = true,
     var error: String? = null,
     val checkBox: FormCheckVO? = null,
     override val onInput: ((FormInput) -> Unit)
