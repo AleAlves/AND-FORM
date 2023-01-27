@@ -14,13 +14,13 @@ class NewsletterFormUseCase @Inject constructor() : BaseUseCase<List<FormRadioVO
 
     override val formVO: List<FormRadioVO> = listOf(
         FormRadioVO(
-            id = UUID.randomUUID().toString(),
+            id = "yes123",
             text = "Yes, I want to reveice all news and offers",
             isSelected = false,
             onInput = ::onReadInput
         ),
         FormRadioVO(
-            id = UUID.randomUUID().toString(),
+            id = "no456",
             text = "No, only important communication",
             isSelected = false,
             onInput = ::onReadInput

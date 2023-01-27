@@ -1,62 +1,70 @@
 package com.example.dynamicformapp.feature.form.presentation.holder
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.text.InputFilter
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.annotation.RequiresApi
+import com.example.dynamicformapp.R
+import com.example.dynamicformapp.core.util.onListener
 import com.example.dynamicformapp.core.util.toEditable
 import com.example.dynamicformapp.databinding.InputTextViewBinding
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormTextVO
 import com.example.dynamicformapp.feature.form.model.FormVO
-import com.example.dynamicformapp.feature.form.presentation.FormViewHolder
 import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
 
 
-class FormTextViewHolder(private val binding: InputTextViewBinding) : FormViewHolder(binding.root) {
+class FormTextViewHolder(
+    private val binding: InputTextViewBinding
+) : FormViewHolder(binding.root) {
 
     private val watcher = TextInputWatcher {
-        onNewInput?.invoke(
-            FormInput(
-                position = currentPosition, value = it, isSelected = binding.inputCheckbox.isChecked
-            )
-        )
+        if (binding.inputViewEditext.hasFocus()) {
+            onNewInput?.invoke(FormInput(currentPosition, it, binding.inputCheckbox.isChecked))
+        }
     }
 
     init {
-        binding.inputCheckbox.setOnCheckedChangeListener { view, isChecked ->
-            if (isChecked != view.isChecked) {
-                onNewInput?.invoke(
-                    FormInput(
-                        position = currentPosition,
-                        value = binding.inputViewEditext.text.toString(),
-                        isSelected = isChecked
-                    )
-                )
-            }
+        binding.inputCheckbox.onListener {
+            onNewInput?.invoke(
+                FormInput(currentPosition, binding.inputViewEditext.text.toString(), it)
+            )
         }
     }
 
     override fun setupView(data: FormVO?) {
         data as FormTextVO
+        Log.e("WOW", currentPosition.toString())
         with(binding) {
             inputTextViewSubtitle.text = data.subtitle
             inputViewEditext.let { edit ->
+                edit.removeTextChangedListener(watcher)
                 if (data.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
                     edit.transformationMethod = PasswordTransformationMethod.getInstance()
                 } else {
                     edit.transformationMethod = null
                 }
                 edit.setRawInputType(data.inputType)
-                edit.removeTextChangedListener(watcher)
+                edit.filters = arrayOf(InputFilter.LengthFilter(data.maxSize))
                 edit.text = data.text.toEditable()
                 edit.setSelection(edit.text?.length ?: 0)
-                edit.filters += InputFilter.LengthFilter(data.maxSize)
                 edit.error = data.error
                 edit.hint = data.hint
                 edit.addTextChangedListener(watcher)
+                inputTextViewCounter.text = "${edit.text.length}/${data?.maxSize}"
+                if (edit.text.isNotEmpty() && edit.text.length < data.minSize) {
+                    inputTextViewCounter.setTextColor(view.context.getColor(R.color.red))
+                } else {
+                    inputTextViewCounter.setTextColor(view.context.getColor(R.color.white))
+                }
+                Log.e("WOW", "Max ${data.maxSize}")
             }
+
             if (data.checkBox == null) {
                 binding.inputCheckbox.visibility = GONE
             } else {

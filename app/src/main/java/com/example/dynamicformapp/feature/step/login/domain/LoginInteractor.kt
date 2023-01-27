@@ -21,19 +21,19 @@ class StepAInteractorImpl @Inject constructor(
     private val newsLetterUseCase: NewsletterFormUseCase
 ) : BaseFormIteractor(), StepAInteractor {
 
-    override var onValidation: ((Boolean) -> Unit) = {}
-    override var onNotifyUpdateAt: ((Int) -> Unit) = {}
+    override var onValidate: ((Boolean) -> Unit) = {}
+    override var onNotifyChangeAt: ((Int) -> Unit) = {}
 
     override var inputForms: ArrayList<FormVO> = arrayListOf(
         emailFormUseCase(::onOutput),
         passwordFormUseCase(::onOutput),
-        termsUseCase(::onOutput)
+        termsUseCase(::onOutput),
     ).apply {
         addAll(newsLetterUseCase(::onOutput))
     }
 
     override fun performValidation() {
-        onValidation.invoke(
+        onValidate.invoke(
             emailFormUseCase.isValid && passwordFormUseCase.isValid && termsUseCase.isValid
         )
     }

@@ -14,21 +14,6 @@ import com.example.dynamicformapp.databinding.InputTextViewBinding
 import com.example.dynamicformapp.feature.form.model.*
 import com.example.dynamicformapp.feature.form.presentation.holder.*
 
-abstract class FormViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-
-    protected abstract fun setupView(data: FormVO?)
-
-    var onNewInput: ((FormInput) -> Unit)? = null
-
-    var data: FormVO? = null
-        set(value) {
-            setupView(value)
-            field = value
-        }
-
-    var currentPosition = 0
-}
-
 class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
 
     companion object {
@@ -52,8 +37,8 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         with(holder) {
-            data = differ.currentList[position]
             currentPosition = position
+            data = differ.currentList[position]
             onNewInput = this@FormAdapter.onReadInput
         }
     }

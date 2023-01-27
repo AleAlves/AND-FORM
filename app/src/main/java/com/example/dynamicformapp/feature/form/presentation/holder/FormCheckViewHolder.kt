@@ -4,7 +4,6 @@ import com.example.dynamicformapp.databinding.InputCheckViewBinding
 import com.example.dynamicformapp.feature.form.model.FormCheckVO
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormVO
-import com.example.dynamicformapp.feature.form.presentation.FormViewHolder
 
 class FormCheckViewHolder(private val binding: InputCheckViewBinding) :
     FormViewHolder(binding.root) {

@@ -26,11 +26,11 @@ class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatche
     }
 }
 
-class CheckWatcher(private val onSelectionChanged: (Boolean) -> Unit) :
+class ChoiceSelectionWatcher(private val onSelectionChanged: (Boolean) -> Unit) :
     CompoundButton.OnCheckedChangeListener {
 
-    override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-        onSelectionChanged.invoke(p1)
+    override fun onCheckedChanged(view: CompoundButton?, isChecked: Boolean) {
+        onSelectionChanged.invoke(isChecked)
     }
 
 }

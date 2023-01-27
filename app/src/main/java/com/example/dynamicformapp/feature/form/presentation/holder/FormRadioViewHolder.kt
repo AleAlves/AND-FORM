@@ -4,15 +4,14 @@ import com.example.dynamicformapp.databinding.InputRadioViewBinding
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormRadioVO
 import com.example.dynamicformapp.feature.form.model.FormVO
-import com.example.dynamicformapp.feature.form.presentation.CheckWatcher
-import com.example.dynamicformapp.feature.form.presentation.FormViewHolder
+import com.example.dynamicformapp.feature.form.presentation.ChoiceSelectionWatcher
 
 class FormRadioViewHolder(private val binding: InputRadioViewBinding) :
     FormViewHolder(binding.root) {
 
     private var id = ""
 
-    private val watcher = CheckWatcher {
+    private val watcher = ChoiceSelectionWatcher {
         onNewInput?.invoke(FormInput(currentPosition, value = id, isSelected = it))
     }
 

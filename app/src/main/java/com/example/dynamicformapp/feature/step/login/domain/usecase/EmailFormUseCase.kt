@@ -32,8 +32,7 @@ class EmailFormUseCase @Inject constructor(
     }
 
     override fun onReadInput(input: FormInput) {
-        isValid =
-            input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
+        isValid = input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
         isValid = input.value.length < formVO.maxSize && input.value.length > formVO.minSize
         if (input.value.contains(" ")) {
             isValid = false
