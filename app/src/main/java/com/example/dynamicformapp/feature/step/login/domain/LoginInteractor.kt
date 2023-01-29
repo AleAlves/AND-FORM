@@ -1,9 +1,8 @@
 package com.example.dynamicformapp.feature.step.login.domain
 
 import android.util.Log
-import com.example.dynamicformapp.feature.form.domain.BaseFormIteractor
+import com.example.dynamicformapp.feature.form.domain.FormIteractorImpl
 import com.example.dynamicformapp.feature.form.domain.FormInteractor
-import com.example.dynamicformapp.feature.form.model.FormRadioVO
 import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.step.login.domain.usecase.EmailFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.NewsletterFormUseCase
@@ -19,11 +18,8 @@ class StepAInteractorImpl @Inject constructor(
     private val emailFormUseCase: EmailFormUseCase,
     private val passwordFormUseCase: PasswordFormUseCase,
     private val termsUseCase: TermFormUseCase,
-    private val newsLetterUseCase: NewsletterFormUseCase
-) : BaseFormIteractor(), StepAInteractor {
-
-    override var onValidate: ((Boolean) -> Unit) = {}
-    override var onNotifyChangeAt: ((Int) -> Unit) = {}
+    private val newsLetterUseCase: NewsletterFormUseCase,
+) : FormIteractorImpl(), StepAInteractor {
 
     override var inputForms: ArrayList<FormVO> = arrayListOf(
         emailFormUseCase(::onOutput),
@@ -33,7 +29,9 @@ class StepAInteractorImpl @Inject constructor(
 
     override fun performValidation() {
         onValidate.invoke(
-            emailFormUseCase.isValid && passwordFormUseCase.isValid && termsUseCase.isValid
+            emailFormUseCase.isValid
+                .and(passwordFormUseCase.isValid)
+                .and(termsUseCase.isValid)
         )
     }
 

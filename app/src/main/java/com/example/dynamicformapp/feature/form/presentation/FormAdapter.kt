@@ -3,7 +3,6 @@ package com.example.dynamicformapp.feature.form.presentation
 
 import android.content.res.Resources.NotFoundException
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil

@@ -13,6 +13,8 @@ import com.example.dynamicformapp.databinding.InputTextViewBinding
 import com.example.dynamicformapp.feature.form.model.FormInput
 import com.example.dynamicformapp.feature.form.model.FormTextVO
 import com.example.dynamicformapp.feature.form.model.FormVO
+import com.example.dynamicformapp.feature.form.presentation.CheckSelectionWatcher
+import com.example.dynamicformapp.feature.form.presentation.ChoiceSelectionWatcher
 import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
 
 
@@ -20,18 +22,20 @@ class FormTextViewHolder(
     private val binding: InputTextViewBinding
 ) : FormViewHolder(binding.root) {
 
-    private val watcher = TextInputWatcher {
+    private val textWatcher = TextInputWatcher {
         if (binding.inputViewEditext.hasFocus()) {
             onNewInput?.invoke(FormInput(currentPosition, it, binding.inputCheckbox.isChecked))
         }
     }
 
-    init {
-        binding.inputCheckbox.onListener {
-            onNewInput?.invoke(
-                FormInput(currentPosition, binding.inputViewEditext.text.toString(), it)
+    private val checkWatcher = CheckSelectionWatcher {
+        onNewInput?.invoke(
+            FormInput(
+                currentPosition,
+                value = binding.inputViewEditext.text.toString(),
+                isSelected = it
             )
-        }
+        )
     }
 
     override fun setupView(data: FormVO?) {
@@ -40,7 +44,7 @@ class FormTextViewHolder(
         with(binding) {
             inputTextViewSubtitle.text = data.subtitle
             inputViewEditext.let { edit ->
-                edit.removeTextChangedListener(watcher)
+                edit.removeTextChangedListener(textWatcher)
                 if (data.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
                     edit.transformationMethod = PasswordTransformationMethod.getInstance()
                 } else {
@@ -52,7 +56,7 @@ class FormTextViewHolder(
                 edit.setSelection(edit.text?.length ?: 0)
                 edit.error = data.error
                 edit.hint = data.hint
-                edit.addTextChangedListener(watcher)
+                edit.addTextChangedListener(textWatcher)
                 inputTextViewCounter.text = "${edit.text.toString().length}/${data?.maxSize}"
                 if (edit.text.toString()
                         .isNotEmpty() && edit.text.toString().length < data.minSize
@@ -67,9 +71,11 @@ class FormTextViewHolder(
             if (data.checkBox == null) {
                 binding.inputCheckbox.visibility = GONE
             } else {
+                binding.inputCheckbox.setOnCheckedChangeListener(null)
                 binding.inputCheckbox.visibility = VISIBLE
                 binding.inputCheckbox.isChecked = data.checkBox.isSelected
                 binding.inputCheckbox.text = data.checkBox.text
+                binding.inputCheckbox.setOnCheckedChangeListener(checkWatcher)
             }
         }
     }

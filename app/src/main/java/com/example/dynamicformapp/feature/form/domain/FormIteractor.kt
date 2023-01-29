@@ -6,13 +6,16 @@ interface FormInteractor {
     fun getForms(): List<FormVO>
     fun onInput(input: FormInput)
     fun onOutput(input: FormInput)
-    fun listenFormUpdates(input: (Int) -> Unit, validation: (Boolean) -> Unit)
+    suspend fun listenFormUpdates(
+        notifyAt: (Int) -> Unit,
+        validation: (Boolean) -> Unit
+    )
 }
 
-abstract class BaseFormIteractor : FormInteractor {
+abstract class FormIteractorImpl : FormInteractor {
     protected abstract var inputForms: ArrayList<FormVO>
-    protected abstract var onValidate: ((Boolean) -> Unit)
-    protected abstract var onNotifyChangeAt: ((Int) -> Unit)
+    protected var onValidate: ((Boolean) -> Unit) = {}
+    private var onNotifyOutputAt: ((Int) -> Unit) = {}
     protected abstract fun performValidation()
 
     override fun getForms(): List<FormVO> = inputForms
@@ -32,8 +35,11 @@ abstract class BaseFormIteractor : FormInteractor {
         }
     }
 
-    override fun listenFormUpdates(input: (Int) -> Unit, validation: (Boolean) -> Unit) {
-        onNotifyChangeAt = input
+    override suspend fun listenFormUpdates(
+        notifyAt: (Int) -> Unit,
+        validation: (Boolean) -> Unit
+    ) {
+        onNotifyOutputAt = notifyAt
         onValidate = validation
     }
 
@@ -41,22 +47,23 @@ abstract class BaseFormIteractor : FormInteractor {
         formVO.error = input.error
         formVO.text = input.value
         formVO.checkBox?.isSelected = input.isSelected
-        onNotifyChangeAt.invoke(input.position)
+        onNotifyOutputAt.invoke(input.position)
     }
 
     private fun applyCheckChange(formVO: FormCheckVO, input: FormInput) {
         formVO.isSelected = input.isSelected
-        onNotifyChangeAt.invoke(input.position)
+        onNotifyOutputAt.invoke(input.position)
     }
 
     private fun applyRadioChange(formVO: FormRadioVO, input: FormInput) {
+        var first = 0
+        var last = 0
         inputForms.mapIndexed { index, vo ->
             if (vo is FormRadioVO) {
-                vo.isSelected = false
-                onNotifyChangeAt.invoke(index)
+                vo.isSelected = vo == formVO && input.isSelected
+                onNotifyOutputAt.invoke(index)
             }
         }
-        formVO.isSelected = input.isSelected
-        onNotifyChangeAt.invoke(input.position)
     }
+
 }

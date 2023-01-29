@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.dynamicformapp.databinding.FragmentLoginBinding
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
+import com.example.dynamicformapp.feature.form.model.FormVO
+import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,25 +33,35 @@ class LoginFragment : StepFragment() {
             viewModel.doLogin()
             super.getFlows()
         }
-        binding.inputView.onReadInput = viewModel::onReadInput
+        binding.inputView.onReadInput = viewModel::onFormInput
         listenChanges()
     }
 
     private fun listenChanges() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is LoginViewModel.StepAState.OnLoadForms ->
-                    binding.inputView.setData(it.forms)
-                is LoginViewModel.StepAState.OnButtonStatus ->
-                    binding.buttonApi.isEnabled = it.isEnabled
-                is LoginViewModel.StepAState.OnUpdate -> binding.inputView.post {
-                    binding.inputView.notifyChangeAt(it.position)
-                }
+                is FormViewModel.FormState.OnValidation -> buttonValidationToggle(it.isEnabled)
+                is FormViewModel.FormState.OnInitForms -> setFormData(it.forms)
+                is FormViewModel.FormState.OnFormOutput -> notifyOutputAt(it.position)
             }
         }
     }
 
-    companion object {
+    private fun buttonValidationToggle(enabled: Boolean) {
+        binding.buttonApi.isEnabled = enabled
+    }
+
+    private fun setFormData(forms: List<FormVO>) {
+        binding.inputView.setData(forms)
+    }
+
+    private fun notifyOutputAt(position: Int) {
+        binding.inputView.notifyChangeAt(position)
+    }
+
+    companion
+
+    object {
         @JvmStatic
         fun newInstance() = LoginFragment()
     }

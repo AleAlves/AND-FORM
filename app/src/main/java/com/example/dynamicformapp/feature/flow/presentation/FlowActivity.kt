@@ -39,12 +39,12 @@ class FormActivity : FragmentActivity(), FlowActions {
     private fun listen() {
         viewModel.viewState.observe(this) { state ->
             when (state) {
-                is FlowViewModel.FormState.OnRemoveStepAt -> onRemoveAt(state.position)
-                is FlowViewModel.FormState.OnForwardStep -> onGoToStep(state.position)
-                is FlowViewModel.FormState.OnBackwardStep -> onGoToStep(state.position)
-                is FlowViewModel.FormState.OnLoadSteps -> onLoadSteps(state.steps)
-                is FlowViewModel.FormState.OnRemoveSteps -> onRemoveSteps(state.steps)
-                is FlowViewModel.FormState.OnUpdate -> onUpdate(state.steps)
+                is FlowViewModel.FlowState.OnRemoveStepAt -> onRemoveAt(state.position)
+                is FlowViewModel.FlowState.OnForwardStep -> onGoToStep(state.position)
+                is FlowViewModel.FlowState.OnBackwardStep -> onGoToStep(state.position)
+                is FlowViewModel.FlowState.OnLoadSteps -> onLoadSteps(state.steps)
+                is FlowViewModel.FlowState.OnRemoveSteps -> onRemoveSteps(state.steps)
+                is FlowViewModel.FlowState.OnUpdate -> onUpdate(state.steps)
             }
         }
     }

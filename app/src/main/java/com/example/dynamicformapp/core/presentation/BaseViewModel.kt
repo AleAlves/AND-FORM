@@ -1,25 +1,16 @@
 package com.example.dynamicformapp.core.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 
-abstract class BaseViewModel() : ViewModel() {
+abstract class BaseViewModel<T : ViewState> : ViewModel() {
 
-    internal val state: MutableLiveData<ViewState> = MutableLiveData()
+    private val _state: MutableLiveData<T> = MutableLiveData()
+    val state: LiveData<T> = _state
 
-    fun setViewState(state: ViewState) {
-        this.state.postValue(state)
-    }
-}
-
-inline fun <reified T> SavedStateHandle.getExtra(
-    key: String
-): Lazy<T> = lazy {
-    if (keys().contains(key)) {
-        get(key) as? T ?: throw ClassNotFoundException()
-    } else {
-        throw Exception()
+    fun setViewState(newState: ViewState) {
+        _state.value = newState as T
     }
 }
