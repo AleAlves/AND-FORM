@@ -1,15 +1,15 @@
 package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import android.text.InputType
-import com.example.dynamicformapp.core.domain.BaseUseCase
-import com.example.dynamicformapp.core.domain.UseCaseInput
+import com.example.dynamicformapp.feature.form.domain.BaseFormUsaCase
+import com.example.dynamicformapp.feature.form.domain.FormInput
 import com.example.dynamicformapp.feature.form.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.model.FormData
 import com.example.dynamicformapp.feature.form.model.FormTextVO
 import javax.inject.Inject
 
 class PasswordFormUseCase @Inject constructor() :
-    BaseUseCase<FormTextVO>() {
+    BaseFormUsaCase<FormTextVO>() {
 
     var password = ""
     var shouldSavePassword = false
@@ -21,19 +21,22 @@ class PasswordFormUseCase @Inject constructor() :
         checkBox = FormCheckVO(
             text = "Remember me",
             isSelected = false,
+            isEnabled = true,
             onInput = ::onReadSelectionInput
         ),
-        requestFocus = true,
+        isEnabled = true,
+        isSingleLine = true,
+        requestFocus = false,
         onInput = ::onReadInput,
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
     )
 
-    override fun invoke(input: UseCaseInput): FormTextVO {
+    override fun invoke(input: FormInput): FormTextVO {
         inputListener = input
         return formVO
     }
 
-    override fun onReadInput(input: FormInput) {
+    override fun onReadInput(input: FormData) {
         isValid = input.value.isNotEmpty()
         isValid = input.value.length < formVO.maxSize && input.value.length > formVO.minSize
         if (input.value.length >= 15) {
@@ -45,7 +48,7 @@ class PasswordFormUseCase @Inject constructor() :
         inputListener.invoke(input)
     }
 
-    override fun onReadSelectionInput(input: FormInput) {
+    override fun onReadSelectionInput(input: FormData) {
         shouldSavePassword = input.isSelected
     }
 

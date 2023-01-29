@@ -1,25 +1,8 @@
 package com.example.dynamicformapp.core.domain
 
-import com.example.dynamicformapp.feature.form.model.FormInput
 
-typealias UseCaseInput = ((FormInput) -> Unit)
+abstract class BaseUseCase<T, S> {
 
-interface FormUsaCase {
-    fun onReadInput(input: FormInput)
-    fun onReadSelectionInput(input: FormInput) {}
+    abstract operator fun invoke(input: S): T
 }
 
-abstract class BaseUseCase<T> : FormUsaCase {
-
-    protected abstract val formVO: T
-
-    var isValid: Boolean = false
-        set(value) {
-            errorMessage = null
-            field = value
-        }
-    var errorMessage: String? = null
-    var inputListener: UseCaseInput = { _ -> }
-
-    abstract operator fun invoke(input: UseCaseInput): T
-}

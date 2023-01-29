@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dynamicformapp.databinding.FormViewBinding
-import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.model.FormData
 import com.example.dynamicformapp.feature.form.model.FormVO
 
 class FormInputView(
@@ -18,7 +18,7 @@ class FormInputView(
     private val adapter = FormAdapter()
     private val layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
 
-    var onReadInput: ((FormInput) -> Unit)? = null
+    var onReadInput: ((FormData) -> Unit)? = null
         set(value) {
             adapter.onReadInput = value
             field = value
@@ -31,7 +31,7 @@ class FormInputView(
     )
 
     fun setData(forms: List<FormVO>) {
-        adapter.differ.submitList(forms)
+        adapter.items.submitList(forms)
     }
 
     fun notifyChangeAt(position: Int) {

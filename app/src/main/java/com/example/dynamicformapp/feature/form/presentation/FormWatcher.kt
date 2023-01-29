@@ -3,7 +3,6 @@ package com.example.dynamicformapp.feature.form.presentation
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.CompoundButton
-import com.example.dynamicformapp.feature.form.model.FormInput
 
 class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatcher {
 
@@ -23,7 +22,7 @@ class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatche
         before: Int,
         count: Int
     ) {
-        onTextChanged.invoke(s.toString())
+         onTextChanged.invoke(s.toString())
     }
 }
 

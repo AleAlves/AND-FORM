@@ -2,9 +2,8 @@ package com.example.dynamicformapp.feature.form.presentation.holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.model.FormData
 import com.example.dynamicformapp.feature.form.model.FormVO
-import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
 
 abstract class FormViewHolder(
     val view: View
@@ -12,7 +11,7 @@ abstract class FormViewHolder(
 
     protected abstract fun setupView(data: FormVO?)
 
-    var onNewInput: ((FormInput) -> Unit)? = null
+    var onNewInput: ((FormData) -> Unit)? = null
 
     var data: FormVO? = null
         set(value) {

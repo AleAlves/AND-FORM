@@ -22,7 +22,7 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
         private const val UNKNOWN = 0
     }
 
-    var onReadInput: ((FormInput) -> Unit)? = null
+    var onReadInput: ((FormData) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,13 +37,13 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         with(holder) {
             currentPosition = position
-            data = differ.currentList[position]
+            data = items.currentList[position]
             onNewInput = this@FormAdapter.onReadInput
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (differ.currentList[position]) {
+        return when (items.currentList[position]) {
             is FormTextVO -> TEXT
             is FormRadioVO -> RADIO
             is FormCheckVO -> CHECKBOX
@@ -51,7 +51,7 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
         }
     }
 
-    val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<FormVO>() {
+    val items = AsyncListDiffer(this, object : DiffUtil.ItemCallback<FormVO>() {
         override fun areItemsTheSame(oldItem: FormVO, newItem: FormVO): Boolean {
             return oldItem == newItem
         }
@@ -61,5 +61,5 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
         }
     })
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int = items.currentList.size
 }

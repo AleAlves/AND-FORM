@@ -1,7 +1,7 @@
 package com.example.dynamicformapp.feature.form.presentation.holder
 
 import com.example.dynamicformapp.databinding.InputRadioViewBinding
-import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.model.FormData
 import com.example.dynamicformapp.feature.form.model.FormRadioVO
 import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.ChoiceSelectionWatcher
@@ -12,17 +12,18 @@ class FormRadioViewHolder(private val binding: InputRadioViewBinding) :
     private var id = ""
 
     private val watcher = ChoiceSelectionWatcher {
-        onNewInput?.invoke(FormInput(currentPosition, value = id, isSelected = it))
+        onNewInput?.invoke(FormData(currentPosition, value = id, isSelected = it))
     }
 
     override fun setupView(data: FormVO?) {
         data as FormRadioVO
         id = data.id
-        with(binding) {
-            inputRadio.setOnCheckedChangeListener(null)
-            inputRadio.isChecked = data.isSelected
-            inputRadio.text = data.text
-            inputRadio.setOnCheckedChangeListener(watcher)
+        with(binding.inputRadio) {
+            setOnCheckedChangeListener(null)
+            isChecked = data.isSelected
+            isEnabled = data.isEnabled
+            text = data.text
+            setOnCheckedChangeListener(watcher)
         }
     }
 }

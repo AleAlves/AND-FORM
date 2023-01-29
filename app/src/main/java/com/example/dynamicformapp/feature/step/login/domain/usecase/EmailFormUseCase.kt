@@ -3,16 +3,16 @@ package com.example.dynamicformapp.feature.step.login.domain.usecase
 import android.content.Context
 import android.text.InputType
 import com.example.dynamicformapp.R
-import com.example.dynamicformapp.core.domain.BaseUseCase
-import com.example.dynamicformapp.core.domain.UseCaseInput
-import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.domain.BaseFormUsaCase
+import com.example.dynamicformapp.feature.form.domain.FormInput
+import com.example.dynamicformapp.feature.form.model.FormData
 import com.example.dynamicformapp.feature.form.model.FormTextVO
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class EmailFormUseCase @Inject constructor(
     @ApplicationContext private val context: Context
-) : BaseUseCase<FormTextVO>() {
+) : BaseFormUsaCase<FormTextVO>() {
 
     var email = ""
 
@@ -22,17 +22,20 @@ class EmailFormUseCase @Inject constructor(
         maxSize = 50,
         minSize = 5,
         requestFocus = true,
+        isEnabled = true,
+        isSingleLine = true,
         onInput = ::onReadInput,
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
     )
 
-    override fun invoke(input: UseCaseInput): FormTextVO {
+    override fun invoke(input: FormInput): FormTextVO {
         inputListener = input
         return formVO
     }
 
-    override fun onReadInput(input: FormInput) {
-        isValid = input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
+    override fun onReadInput(input: FormData) {
+        isValid =
+            input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
         isValid = input.value.length < formVO.maxSize && input.value.length > formVO.minSize
         if (input.value.contains(" ")) {
             isValid = false
@@ -42,5 +45,4 @@ class EmailFormUseCase @Inject constructor(
         input.error = errorMessage
         inputListener.invoke(input)
     }
-
 }

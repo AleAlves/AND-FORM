@@ -1,20 +1,20 @@
 package com.example.dynamicformapp.feature.form.presentation.holder
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.text.InputFilter
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.annotation.RequiresApi
 import com.example.dynamicformapp.R
-import com.example.dynamicformapp.core.util.onListener
 import com.example.dynamicformapp.core.util.toEditable
 import com.example.dynamicformapp.databinding.InputTextViewBinding
-import com.example.dynamicformapp.feature.form.model.FormInput
+import com.example.dynamicformapp.feature.form.model.FormData
 import com.example.dynamicformapp.feature.form.model.FormTextVO
 import com.example.dynamicformapp.feature.form.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.CheckSelectionWatcher
-import com.example.dynamicformapp.feature.form.presentation.ChoiceSelectionWatcher
 import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
 
 
@@ -24,13 +24,19 @@ class FormTextViewHolder(
 
     private val textWatcher = TextInputWatcher {
         if (binding.inputViewEditext.hasFocus()) {
-            onNewInput?.invoke(FormInput(currentPosition, it, binding.inputCheckbox.isChecked))
+            onNewInput?.invoke(
+                FormData(
+                    position = currentPosition,
+                    value = it,
+                    isSelected = binding.inputCheckbox.isChecked
+                )
+            )
         }
     }
 
     private val checkWatcher = CheckSelectionWatcher {
         onNewInput?.invoke(
-            FormInput(
+            FormData(
                 currentPosition,
                 value = binding.inputViewEditext.text.toString(),
                 isSelected = it
@@ -38,9 +44,10 @@ class FormTextViewHolder(
         )
     }
 
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun setupView(data: FormVO?) {
         data as FormTextVO
-        Log.e("WOW", currentPosition.toString())
         with(binding) {
             inputTextViewSubtitle.text = data.subtitle
             inputViewEditext.let { edit ->
@@ -57,7 +64,7 @@ class FormTextViewHolder(
                 edit.error = data.error
                 edit.hint = data.hint
                 edit.addTextChangedListener(textWatcher)
-                inputTextViewCounter.text = "${edit.text.toString().length}/${data?.maxSize}"
+                inputTextViewCounter.text = "${edit.text.toString().length}/${data.maxSize}"
                 if (edit.text.toString()
                         .isNotEmpty() && edit.text.toString().length < data.minSize
                 ) {
@@ -65,7 +72,10 @@ class FormTextViewHolder(
                 } else {
                     inputTextViewCounter.setTextColor(view.context.getColor(R.color.white))
                 }
-                Log.e("WOW", "Max ${data.maxSize}")
+                if (data.requestFocus && !edit.hasFocus()) {
+                    edit.post { edit.requestFocus() }
+                }
+                edit.isEnabled = data.isEnabled
             }
 
             if (data.checkBox == null) {

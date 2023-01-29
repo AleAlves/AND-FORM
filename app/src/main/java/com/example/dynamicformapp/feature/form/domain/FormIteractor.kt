@@ -4,8 +4,8 @@ import com.example.dynamicformapp.feature.form.model.*
 
 interface FormInteractor {
     fun getForms(): List<FormVO>
-    fun onInput(input: FormInput)
-    fun onOutput(input: FormInput)
+    fun onInput(input: FormData)
+    fun onOutput(input: FormData)
     suspend fun listenFormUpdates(
         notifyAt: (Int) -> Unit,
         validation: (Boolean) -> Unit
@@ -20,11 +20,11 @@ abstract class FormIteractorImpl : FormInteractor {
 
     override fun getForms(): List<FormVO> = inputForms
 
-    override fun onInput(input: FormInput) {
+    override fun onInput(input: FormData) {
         inputForms[input.position].onInput.invoke(input)
     }
 
-    override fun onOutput(input: FormInput) {
+    override fun onOutput(input: FormData) {
         performValidation()
         inputForms[input.position].let {
             when (it) {
@@ -43,21 +43,19 @@ abstract class FormIteractorImpl : FormInteractor {
         onValidate = validation
     }
 
-    private fun applyTextChange(formVO: FormTextVO, input: FormInput) {
+    private fun applyTextChange(formVO: FormTextVO, input: FormData) {
         formVO.error = input.error
         formVO.text = input.value
         formVO.checkBox?.isSelected = input.isSelected
         onNotifyOutputAt.invoke(input.position)
     }
 
-    private fun applyCheckChange(formVO: FormCheckVO, input: FormInput) {
+    private fun applyCheckChange(formVO: FormCheckVO, input: FormData) {
         formVO.isSelected = input.isSelected
         onNotifyOutputAt.invoke(input.position)
     }
 
-    private fun applyRadioChange(formVO: FormRadioVO, input: FormInput) {
-        var first = 0
-        var last = 0
+    private fun applyRadioChange(formVO: FormRadioVO, input: FormData) {
         inputForms.mapIndexed { index, vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
