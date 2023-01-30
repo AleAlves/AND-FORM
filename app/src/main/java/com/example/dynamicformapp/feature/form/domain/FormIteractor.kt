@@ -7,7 +7,7 @@ interface FormInteractor {
     fun onInput(input: FormData)
     fun onOutput(input: FormData)
     suspend fun listenFormUpdates(
-        notifyAt: (Int) -> Unit,
+        notifyAt: (Int, String) -> Unit,
         validation: (Boolean) -> Unit
     )
 }
@@ -15,7 +15,7 @@ interface FormInteractor {
 abstract class FormIteractorImpl : FormInteractor {
     protected abstract var inputForms: ArrayList<FormVO>
     protected var onValidate: ((Boolean) -> Unit) = {}
-    private var onNotifyOutputAt: ((Int) -> Unit) = {}
+    private var onNotifyOutputAt: ((Int, String) -> Unit) = { _, _ -> }
     protected abstract fun performValidation()
 
     override fun getForms(): List<FormVO> = inputForms
@@ -36,7 +36,7 @@ abstract class FormIteractorImpl : FormInteractor {
     }
 
     override suspend fun listenFormUpdates(
-        notifyAt: (Int) -> Unit,
+        notifyAt: (Int, String) -> Unit,
         validation: (Boolean) -> Unit
     ) {
         onNotifyOutputAt = notifyAt
@@ -47,19 +47,19 @@ abstract class FormIteractorImpl : FormInteractor {
         formVO.error = input.error
         formVO.text = input.value
         formVO.checkBox?.isSelected = input.isSelected
-        onNotifyOutputAt.invoke(input.position)
+        onNotifyOutputAt.invoke(input.position, input.value)
     }
 
     private fun applyCheckChange(formVO: FormCheckVO, input: FormData) {
         formVO.isSelected = input.isSelected
-        onNotifyOutputAt.invoke(input.position)
+        onNotifyOutputAt.invoke(input.position, input.value)
     }
 
     private fun applyRadioChange(formVO: FormRadioVO, input: FormData) {
         inputForms.mapIndexed { index, vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
-                onNotifyOutputAt.invoke(index)
+                onNotifyOutputAt.invoke(index, input.value)
             }
         }
     }

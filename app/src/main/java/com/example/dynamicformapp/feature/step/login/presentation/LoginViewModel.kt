@@ -11,4 +11,9 @@ class LoginViewModel @Inject constructor(
 ) : FormViewModel(interactor) {
 
     fun doLogin() = interactor.doLoginCall()
+
+    sealed class LoginState : FormState() {
+        data class OnPasswordLengthRule(val isDone: Boolean) : LoginState()
+        data class OnPasswordCharactersRule(val isDone: Boolean) : LoginState()
+    }
 }

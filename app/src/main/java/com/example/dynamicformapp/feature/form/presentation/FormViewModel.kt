@@ -9,13 +9,24 @@ import com.example.dynamicformapp.feature.form.model.FormVO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+interface FormViewModelAction {
+    fun onInputValue(value: String) {}
+}
+
 abstract class FormViewModel(
     private val interactor: FormInteractor
-) : BaseViewModel<FormViewModel.FormState>() {
+) : BaseViewModel<FormViewModel.FormState>(), FormViewModelAction {
+
+    var inputValue = ""
 
     init {
         setViewState(FormState.OnInitForms(interactor.getForms()))
         onFormOutput()
+    }
+
+    override fun onInputValue(value: String) {
+        inputValue = value
     }
 
     private fun onFormOutput() {
@@ -27,17 +38,20 @@ abstract class FormViewModel(
         }
     }
 
-    private fun outputAt(position: Int) =
+    private fun outputAt(position: Int, value: String) {
+        onInputValue(value)
         setViewState(FormState.OnFormOutput(position))
+    }
 
-    private fun validation(isValid: Boolean) =
+    private fun validation(isValid: Boolean) {
         setViewState(FormState.OnValidation(isValid))
+    }
 
     fun onFormInput(value: FormData) {
         interactor.onInput(value)
     }
 
-    sealed class FormState : ViewState {
+    open class FormState : ViewState {
         data class OnInitForms(val forms: List<FormVO>) : FormState()
         data class OnFormOutput(val position: Int) : FormState()
         data class OnValidation(val isEnabled: Boolean) : FormState()
