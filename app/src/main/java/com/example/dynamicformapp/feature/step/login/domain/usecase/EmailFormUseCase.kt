@@ -32,9 +32,9 @@ class EmailFormUseCase @Inject constructor(
         requestFocus = true,
         isEnabled = true,
         isSingleLine = true,
-        onInput = ::onReadInput,
         validation = rules,
-        inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,
+        onInput = ::onInput
     )
 
     override fun onValidation(rules: FormRules) {

@@ -10,6 +10,6 @@ class TermFormUseCase @Inject constructor() : FormUsaCase<FormCheckVO>() {
         text = "I accept the terms and stuff",
         isSelected = false,
         isEnabled = true,
-        onInput = ::onReadInput
+        onInput = ::onInput
     )
 }

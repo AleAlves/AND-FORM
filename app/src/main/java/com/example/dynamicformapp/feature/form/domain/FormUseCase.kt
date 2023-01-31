@@ -9,8 +9,7 @@ typealias FormInput = ((FormData) -> Unit)
 typealias FormRules = ((FormData, FormValidation?) -> Unit)
 
 interface FormUsaCaseInput {
-    fun onReadInput(input: FormData)
-    fun onReadSelectionInput(input: FormData) {}
+    fun onInput(input: FormData)
     fun onValidation(rules: FormRules) {}
 }
 
@@ -29,7 +28,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
         return vo
     }
 
-    override fun onReadInput(input: FormData) {
+    override fun onInput(input: FormData) {
         when (vo) {
             is FormTextVO -> textInput(input)
             else -> selectionInput(input)

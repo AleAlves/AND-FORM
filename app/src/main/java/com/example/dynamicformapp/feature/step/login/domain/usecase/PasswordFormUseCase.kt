@@ -38,14 +38,14 @@ class PasswordFormUseCase @Inject constructor() :
             text = "Remember me",
             isSelected = false,
             isEnabled = true,
-            onInput = ::onReadSelectionInput
+            onInput = ::onInput
         ),
         validation = rules,
         isEnabled = true,
         isSingleLine = true,
         requestFocus = false,
-        onInput = ::onReadInput,
-        inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+        inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD,
+        onInput = ::onInput
     )
 
     override fun onValidation(rules: FormRules) {
