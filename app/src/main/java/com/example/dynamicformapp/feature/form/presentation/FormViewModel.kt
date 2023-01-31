@@ -17,9 +17,11 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
 
     protected abstract fun getValidations(): Boolean
 
-    fun initForms(forms: ArrayList<FormVO>) {
-        this.forms = forms
-        setViewState(FormState.OnInitForms(forms))
+    fun initForms(vararg forms: FormVO) {
+        forms.map {
+            this.forms.add(it)
+        }
+        setViewState(FormState.OnInitForms(forms.toList()))
         setupValidations()
     }
 

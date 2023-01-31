@@ -45,7 +45,7 @@ class PasswordFormUseCase @Inject constructor() :
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
     )
 
-    override fun onRulesValidations(rules: FormRules) {
+    override fun onValidation(rules: FormRules) {
         rulesListener = rules
     }
 }

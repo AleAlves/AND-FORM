@@ -1,5 +1,6 @@
 package com.example.dynamicformapp.feature.step.login.domain.usecase
 
+import com.example.dynamicformapp.feature.form.domain.FormRules
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.model.FormRadioVO
 import com.example.dynamicformapp.feature.form.model.FormValidation
@@ -30,4 +31,8 @@ class NewsletterFormUseCase @Inject constructor() : FormUsaCase<List<FormRadioVO
             onInput = ::onReadInput
         )
     )
+
+    override fun onValidation(rules: FormRules) {
+        rulesListener = rules
+    }
 }

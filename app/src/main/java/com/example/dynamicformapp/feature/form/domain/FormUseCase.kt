@@ -6,12 +6,12 @@ import com.example.dynamicformapp.feature.form.model.FormTextVO
 import com.example.dynamicformapp.feature.form.model.FormValidation
 
 typealias FormInput = ((FormData) -> Unit)
-typealias FormRules = ((String, FormValidation?) -> Unit)
+typealias FormRules = ((FormData, FormValidation?) -> Unit)
 
 interface FormUsaCaseInput {
     fun onReadInput(input: FormData)
     fun onReadSelectionInput(input: FormData) {}
-    fun onRulesValidations(rules: FormRules) {}
+    fun onValidation(rules: FormRules) {}
 }
 
 abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
@@ -57,13 +57,13 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
                     onRuleCallback.invoke(this)
                 }
             }
-            rulesListener.invoke(input.value, rules)
+            rulesListener.invoke(input, rules)
         }
     }
 
     private fun selectionInput(input: FormData) {
         isValid = input.isSelected
-        inputListener.invoke(input)
+        rulesListener.invoke(input, rules)
     }
 
     fun onRules(rules: FormValidation) {

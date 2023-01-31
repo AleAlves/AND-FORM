@@ -37,7 +37,7 @@ class EmailFormUseCase @Inject constructor(
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
     )
 
-    override fun onRulesValidations(rules: FormRules) {
+    override fun onValidation(rules: FormRules) {
         rulesListener = rules
     }
 }

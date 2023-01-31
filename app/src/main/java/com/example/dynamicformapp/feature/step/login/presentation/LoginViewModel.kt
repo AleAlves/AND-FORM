@@ -3,6 +3,7 @@ package com.example.dynamicformapp.feature.step.login.presentation
 import android.util.Log
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import com.example.dynamicformapp.feature.step.login.domain.usecase.EmailFormUseCase
+import com.example.dynamicformapp.feature.step.login.domain.usecase.NewsletterFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.PasswordFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.TermFormUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,32 +13,34 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val emailFormUseCase: EmailFormUseCase,
     private val passwordFormUseCase: PasswordFormUseCase,
-    private val termFormUseCase: TermFormUseCase
+    private val termFormUseCase: TermFormUseCase,
+    private val newsletterFormUseCase: NewsletterFormUseCase
 ) : FormViewModel() {
 
     private var email = ""
     private var password = ""
+    private var newsletter = ""
+    private var remeberPassword = false
 
     init {
         initForms(
-            arrayListOf(
-                emailFormUseCase(::onOutput),
-                passwordFormUseCase(::onOutput),
-                termFormUseCase(::onOutput)
-            )
+            emailFormUseCase(::onOutput),
+            passwordFormUseCase(::onOutput),
+            termFormUseCase(::onOutput),
+            *newsletterFormUseCase(::onOutput).toTypedArray()
         )
     }
 
     override fun setupValidations() {
-        emailFormUseCase.onRulesValidations { value, _ ->
-            email = value
+        emailFormUseCase.onValidation { input, _ ->
+            email = input.value
         }
-        passwordFormUseCase.onRulesValidations { value, rules ->
-            password = value
-            Log.d("WOW", "E:${rules?.hasErrors} ")
-            rules?.rules?.map {
-                Log.d("WOW", "V:${it.isValid} - ${it.error}")
-            }
+        newsletterFormUseCase.onValidation { input, _ ->
+            newsletter = input.value
+        }
+        passwordFormUseCase.onValidation { input, _ ->
+            password = input.value
+            remeberPassword = input.isSelected
         }
     }
 
@@ -47,7 +50,7 @@ class LoginViewModel @Inject constructor(
             .and(termFormUseCase.isValid)
 
     fun doLogin() {
-        Log.d("WOW", "Mail: $email Password: $password")
+        Log.d("WOW", "Mail: $email Password: $password Newsletter: $newsletter")
     }
 
     sealed class LoginState : FormState() {
