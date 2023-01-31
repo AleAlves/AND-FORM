@@ -20,8 +20,7 @@ class EmailFormUseCase @Inject constructor(
     override val rules: FormValidation = FormValidation(
         rules = listOf(
             FormRuleSet(
-                regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"),
-                error = "Invalid email",
+                regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
             )
         ),
         onRuleCallback = ::onRules

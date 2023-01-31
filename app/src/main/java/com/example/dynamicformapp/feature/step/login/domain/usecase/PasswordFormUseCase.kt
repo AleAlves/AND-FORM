@@ -15,17 +15,17 @@ class PasswordFormUseCase @Inject constructor() :
         rules = listOf(
             FormRuleSet(
                 regex = Regex(".*[0-9].*"),
-                text = "A senha precisa ter 8 números",
+                text = "The password must constains numbers",
                 error = "numbers needed"
             ),
             FormRuleSet(
                 regex = Regex(".*[a-zA-Z].*"),
-                text = "A senha precisa ter letras",
+                text = "The password must constain letter",
                 error = "letters needed"
             ),
             FormRuleSet(
                 regex = Regex("[\$&+,:;=?@#|'<>.^*()%!-]"),
-                text = "A senha precisa ter  caracter especial",
+                text = "The password must constain special character",
                 error = "chars needed"
             )
         ),
@@ -52,7 +52,6 @@ class PasswordFormUseCase @Inject constructor() :
 
     override fun onRules(rules: FormValidation) {
         isValid = rules.hasErrors.not()
-        rulesListener.invoke(vo.text, rules)
     }
 
     override fun onRulesValidations(rules: FormRules) {
