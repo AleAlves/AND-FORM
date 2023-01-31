@@ -1,59 +1,75 @@
 package com.example.dynamicformapp.feature.form.presentation
 
-import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
-import com.example.dynamicformapp.feature.form.domain.FormInteractor
-import com.example.dynamicformapp.feature.form.model.FormData
-import com.example.dynamicformapp.feature.form.model.FormVO
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.dynamicformapp.feature.form.model.*
 
-
-interface FormViewModelAction {
-    fun onInputValue(value: String) {}
+interface FormActions {
+    fun onInput(input: FormData)
+    fun onOutput(input: FormData)
 }
 
-abstract class FormViewModel(
-    private val interactor: FormInteractor
-) : BaseViewModel<FormViewModel.FormState>(), FormViewModelAction {
+abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormActions {
 
-    var inputValue = ""
+    private var forms: ArrayList<FormVO> = arrayListOf()
 
-    init {
-        setViewState(FormState.OnInitForms(interactor.getForms()))
-        onFormOutput()
+    protected abstract fun setupValidations()
+
+    protected abstract fun getValidations(): Boolean
+
+    fun initForms(forms: ArrayList<FormVO>) {
+        this.forms = forms
+        setViewState(FormState.OnInitForms(forms))
+        setupValidations()
     }
 
-    override fun onInputValue(value: String) {
-        inputValue = value
+    override fun onInput(input: FormData) {
+        forms[input.position].onInput.invoke(input)
     }
 
-    private fun onFormOutput() {
-        viewModelScope.launch(Dispatchers.IO) {
-            interactor.listenFormUpdates(
-                ::outputAt,
-                ::validation
-            )
+    override fun onOutput(input: FormData) {
+        forms[input.position].let {
+            when (it) {
+                is FormTextVO -> applyTextChange(it, input)
+                is FormRadioVO -> applyRadioChange(it, input)
+                is FormCheckVO -> applyCheckChange(it, input)
+            }
+        }
+        validation()
+    }
+
+    private fun applyTextChange(formVO: FormTextVO, input: FormData) {
+        formVO.error = input.error
+        formVO.text = input.value
+        formVO.checkBox?.isSelected = input.isSelected
+        outputAt(input.position)
+    }
+
+    private fun applyCheckChange(formVO: FormCheckVO, input: FormData) {
+        formVO.isSelected = input.isSelected
+        outputAt(input.position)
+    }
+
+    private fun applyRadioChange(formVO: FormRadioVO, input: FormData) {
+        forms.mapIndexed { index, vo ->
+            if (vo is FormRadioVO) {
+                vo.isSelected = vo == formVO && input.isSelected
+                outputAt(index)
+            }
         }
     }
 
-    private fun outputAt(position: Int, value: String) {
-        onInputValue(value)
+    private fun outputAt(position: Int) {
         setViewState(FormState.OnFormOutput(position))
     }
 
-    private fun validation(isValid: Boolean) {
-        setViewState(FormState.OnValidation(isValid))
-    }
-
-    fun onFormInput(value: FormData) {
-        interactor.onInput(value)
+    private fun validation() {
+        setViewState(FormState.OnValidation(getValidations()))
     }
 
     open class FormState : ViewState {
         data class OnInitForms(val forms: List<FormVO>) : FormState()
         data class OnFormOutput(val position: Int) : FormState()
-        data class OnValidation(val isEnabled: Boolean) : FormState()
+        data class OnValidation(val isValid: Boolean) : FormState()
     }
 }

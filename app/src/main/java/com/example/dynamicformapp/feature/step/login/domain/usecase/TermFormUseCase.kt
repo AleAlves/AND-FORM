@@ -1,28 +1,20 @@
 package com.example.dynamicformapp.feature.step.login.domain.usecase
 
-import com.example.dynamicformapp.feature.form.domain.BaseFormUsaCase
-import com.example.dynamicformapp.feature.form.domain.FormInput
+import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.model.FormData
+import com.example.dynamicformapp.feature.form.model.FormValidation
 import javax.inject.Inject
 
-class TermFormUseCase @Inject constructor() : BaseFormUsaCase<FormCheckVO>() {
+class TermFormUseCase @Inject constructor() : FormUsaCase<FormCheckVO>() {
 
-    override val formVO: FormCheckVO = FormCheckVO(
+    override var isValid: Boolean = false
+
+    override val rules: FormValidation = FormValidation(listOf(), false, {})
+
+    override val vo: FormCheckVO = FormCheckVO(
         text = "I accept the terms and stuff",
         isSelected = false,
         isEnabled = true,
         onInput = ::onReadInput
     )
-
-    override fun invoke(input: FormInput): FormCheckVO {
-        inputListener = input
-        return formVO
-    }
-
-    override fun onReadInput(input: FormData) {
-        isValid = input.isSelected
-        inputListener.invoke(input)
-    }
-
 }

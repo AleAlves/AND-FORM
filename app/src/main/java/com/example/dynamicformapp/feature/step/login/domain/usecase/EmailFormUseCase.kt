@@ -3,20 +3,31 @@ package com.example.dynamicformapp.feature.step.login.domain.usecase
 import android.content.Context
 import android.text.InputType
 import com.example.dynamicformapp.R
-import com.example.dynamicformapp.feature.form.domain.BaseFormUsaCase
-import com.example.dynamicformapp.feature.form.domain.FormInput
-import com.example.dynamicformapp.feature.form.model.FormData
+import com.example.dynamicformapp.feature.form.domain.FormRules
+import com.example.dynamicformapp.feature.form.domain.FormUsaCase
+import com.example.dynamicformapp.feature.form.model.FormRuleSet
 import com.example.dynamicformapp.feature.form.model.FormTextVO
+import com.example.dynamicformapp.feature.form.model.FormValidation
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class EmailFormUseCase @Inject constructor(
     @ApplicationContext private val context: Context
-) : BaseFormUsaCase<FormTextVO>() {
+) : FormUsaCase<FormTextVO>() {
 
-    var email = ""
+    override var isValid: Boolean = false
 
-    override val formVO: FormTextVO = FormTextVO(
+    override val rules: FormValidation = FormValidation(
+        rules = listOf(
+            FormRuleSet(
+                regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"),
+                error = "Invalid email",
+            )
+        ),
+        onRuleCallback = ::onRules
+    )
+
+    override val vo: FormTextVO = FormTextVO(
         hint = context.getString(R.string.login_email_input_hint),
         subtitle = context.getString(R.string.login_email_input_helper),
         maxSize = 50,
@@ -25,24 +36,15 @@ class EmailFormUseCase @Inject constructor(
         isEnabled = true,
         isSingleLine = true,
         onInput = ::onReadInput,
+        validation = rules,
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
     )
 
-    override fun invoke(input: FormInput): FormTextVO {
-        inputListener = input
-        return formVO
+    override fun onRulesValidations(rules: FormRules) {
+        rulesListener = rules
     }
 
-    override fun onReadInput(input: FormData) {
-        isValid =
-            input.value.contains("@") && input.value.contains(".").and(input.value.isNotEmpty())
-        isValid = input.value.length < formVO.maxSize && input.value.length > formVO.minSize
-        if (input.value.contains(" ")) {
-            isValid = false
-            errorMessage = "Invalid email"
-        }
-        email = input.value
-        input.error = errorMessage
-        inputListener.invoke(input)
+    override fun onRules(rules: FormValidation) {
+        isValid = rules.hasErrors.not()
     }
 }

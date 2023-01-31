@@ -1,20 +1,38 @@
 package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import android.text.InputType
-import com.example.dynamicformapp.feature.form.domain.BaseFormUsaCase
-import com.example.dynamicformapp.feature.form.domain.FormInput
-import com.example.dynamicformapp.feature.form.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.model.FormData
-import com.example.dynamicformapp.feature.form.model.FormTextVO
+import com.example.dynamicformapp.feature.form.domain.FormRules
+import com.example.dynamicformapp.feature.form.domain.FormUsaCase
+import com.example.dynamicformapp.feature.form.model.*
 import javax.inject.Inject
 
 class PasswordFormUseCase @Inject constructor() :
-    BaseFormUsaCase<FormTextVO>() {
+    FormUsaCase<FormTextVO>() {
 
-    var password = ""
-    var shouldSavePassword = false
+    override var isValid: Boolean = false
 
-    override val formVO: FormTextVO = FormTextVO(
+    override val rules: FormValidation = FormValidation(
+        rules = listOf(
+            FormRuleSet(
+                regex = Regex(".*[0-9].*"),
+                text = "A senha precisa ter 8 números",
+                error = "numbers needed"
+            ),
+            FormRuleSet(
+                regex = Regex(".*[a-zA-Z].*"),
+                text = "A senha precisa ter letras",
+                error = "letters needed"
+            ),
+            FormRuleSet(
+                regex = Regex("[\$&+,:;=?@#|'<>.^*()%!-]"),
+                text = "A senha precisa ter  caracter especial",
+                error = "chars needed"
+            )
+        ),
+        onRuleCallback = ::onRules
+    )
+
+    override val vo: FormTextVO = FormTextVO(
         hint = "Password",
         maxSize = 15,
         minSize = 6,
@@ -24,6 +42,7 @@ class PasswordFormUseCase @Inject constructor() :
             isEnabled = true,
             onInput = ::onReadSelectionInput
         ),
+        validation = rules,
         isEnabled = true,
         isSingleLine = true,
         requestFocus = false,
@@ -31,25 +50,12 @@ class PasswordFormUseCase @Inject constructor() :
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
     )
 
-    override fun invoke(input: FormInput): FormTextVO {
-        inputListener = input
-        return formVO
+    override fun onRules(rules: FormValidation) {
+        isValid = rules.hasErrors.not()
+        rulesListener.invoke(vo.text, rules)
     }
 
-    override fun onReadInput(input: FormData) {
-        isValid = input.value.isNotEmpty()
-        isValid = input.value.length < formVO.maxSize && input.value.length > formVO.minSize
-        if (input.value.length >= 15) {
-            isValid = false
-            errorMessage = "Easy! do you want to protect account till the end of the next universe?"
-        }
-        password = input.value
-        input.error = errorMessage
-        inputListener.invoke(input)
+    override fun onRulesValidations(rules: FormRules) {
+        rulesListener = rules
     }
-
-    override fun onReadSelectionInput(input: FormData) {
-        shouldSavePassword = input.isSelected
-    }
-
 }
