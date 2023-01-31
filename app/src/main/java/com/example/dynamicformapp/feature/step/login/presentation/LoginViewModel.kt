@@ -34,8 +34,8 @@ class LoginViewModel @Inject constructor(
         }
         passwordFormUseCase.onRulesValidations { value, rules ->
             password = value
-            Log.d("WOW", "E:${rules.hasErrors} ")
-            rules.rules.map {
+            Log.d("WOW", "E:${rules?.hasErrors} ")
+            rules?.rules?.map {
                 Log.d("WOW", "V:${it.isValid} - ${it.error}")
             }
         }

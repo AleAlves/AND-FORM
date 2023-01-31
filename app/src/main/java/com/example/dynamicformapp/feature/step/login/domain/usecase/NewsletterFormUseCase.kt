@@ -7,8 +7,6 @@ import javax.inject.Inject
 
 class NewsletterFormUseCase @Inject constructor() : FormUsaCase<List<FormRadioVO>>() {
 
-    override var isValid: Boolean = false
-
     override val vo: List<FormRadioVO> = listOf(
         FormRadioVO(
             id = "yes123",
@@ -32,5 +30,4 @@ class NewsletterFormUseCase @Inject constructor() : FormUsaCase<List<FormRadioVO
             onInput = ::onReadInput
         )
     )
-    override val rules: FormValidation = FormValidation(listOf(), false, {})
 }

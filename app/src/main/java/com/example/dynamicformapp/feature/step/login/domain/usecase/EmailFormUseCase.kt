@@ -15,9 +15,7 @@ class EmailFormUseCase @Inject constructor(
     @ApplicationContext private val context: Context
 ) : FormUsaCase<FormTextVO>() {
 
-    override var isValid: Boolean = false
-
-    override val rules: FormValidation = FormValidation(
+    override var rules: FormValidation = FormValidation(
         rules = listOf(
             FormRuleSet(
                 regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
@@ -41,9 +39,5 @@ class EmailFormUseCase @Inject constructor(
 
     override fun onRulesValidations(rules: FormRules) {
         rulesListener = rules
-    }
-
-    override fun onRules(rules: FormValidation) {
-        isValid = rules.hasErrors.not()
     }
 }
