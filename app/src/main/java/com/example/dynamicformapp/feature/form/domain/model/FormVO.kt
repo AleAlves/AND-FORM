@@ -1,4 +1,4 @@
-package com.example.dynamicformapp.feature.form.model
+package com.example.dynamicformapp.feature.form.domain.model
 
 abstract class FormVO {
     abstract val onInput: ((FormData) -> Unit)

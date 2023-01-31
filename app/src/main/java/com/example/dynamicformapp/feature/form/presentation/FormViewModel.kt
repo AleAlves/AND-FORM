@@ -2,6 +2,7 @@ package com.example.dynamicformapp.feature.form.presentation
 
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
+import com.example.dynamicformapp.feature.form.domain.model.*
 import com.example.dynamicformapp.feature.form.model.*
 
 interface FormActions {

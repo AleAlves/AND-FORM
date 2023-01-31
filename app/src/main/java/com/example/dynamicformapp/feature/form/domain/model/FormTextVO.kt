@@ -1,4 +1,4 @@
-package com.example.dynamicformapp.feature.form.model
+package com.example.dynamicformapp.feature.form.domain.model
 
 data class FormTextVO(
     var text: String = "",

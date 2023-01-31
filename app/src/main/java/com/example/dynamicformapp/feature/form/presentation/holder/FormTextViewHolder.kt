@@ -11,9 +11,9 @@ import androidx.annotation.RequiresApi
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.core.util.toEditable
 import com.example.dynamicformapp.databinding.InputTextViewBinding
-import com.example.dynamicformapp.feature.form.model.FormData
-import com.example.dynamicformapp.feature.form.model.FormTextVO
-import com.example.dynamicformapp.feature.form.model.FormVO
+import com.example.dynamicformapp.feature.form.domain.model.FormData
+import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
+import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.CheckSelectionWatcher
 import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
 

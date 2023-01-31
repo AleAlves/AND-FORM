@@ -2,8 +2,8 @@ package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import com.example.dynamicformapp.feature.form.domain.FormRules
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
-import com.example.dynamicformapp.feature.form.model.FormRadioVO
-import com.example.dynamicformapp.feature.form.model.FormValidation
+import com.example.dynamicformapp.feature.form.domain.model.FormRadioVO
+import com.example.dynamicformapp.feature.form.domain.model.FormValidation
 import javax.inject.Inject
 
 class NewsletterFormUseCase @Inject constructor() : FormUsaCase<List<FormRadioVO>>() {

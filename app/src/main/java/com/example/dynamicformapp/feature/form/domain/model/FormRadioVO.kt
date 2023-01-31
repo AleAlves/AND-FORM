@@ -1,6 +1,7 @@
-package com.example.dynamicformapp.feature.form.model
+package com.example.dynamicformapp.feature.form.domain.model
 
-data class FormCheckVO(
+data class FormRadioVO(
+    val id: String,
     var text: String = "",
     var isEnabled: Boolean,
     var isSelected: Boolean,

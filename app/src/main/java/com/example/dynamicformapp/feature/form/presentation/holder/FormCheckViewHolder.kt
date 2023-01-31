@@ -1,9 +1,9 @@
 package com.example.dynamicformapp.feature.form.presentation.holder
 
 import com.example.dynamicformapp.databinding.InputCheckViewBinding
-import com.example.dynamicformapp.feature.form.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.model.FormData
-import com.example.dynamicformapp.feature.form.model.FormVO
+import com.example.dynamicformapp.feature.form.domain.model.FormCheckVO
+import com.example.dynamicformapp.feature.form.domain.model.FormData
+import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.CheckSelectionWatcher
 
 class FormCheckViewHolder(private val binding: InputCheckViewBinding) :

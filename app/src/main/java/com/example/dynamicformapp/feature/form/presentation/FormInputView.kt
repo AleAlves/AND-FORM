@@ -7,8 +7,8 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dynamicformapp.databinding.FormViewBinding
-import com.example.dynamicformapp.feature.form.model.FormData
-import com.example.dynamicformapp.feature.form.model.FormVO
+import com.example.dynamicformapp.feature.form.domain.model.FormData
+import com.example.dynamicformapp.feature.form.domain.model.FormVO
 
 class FormInputView(
     context: Context,

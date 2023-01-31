@@ -2,8 +2,8 @@ package com.example.dynamicformapp.feature.form.presentation.holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dynamicformapp.feature.form.model.FormData
-import com.example.dynamicformapp.feature.form.model.FormVO
+import com.example.dynamicformapp.feature.form.domain.model.FormData
+import com.example.dynamicformapp.feature.form.domain.model.FormVO
 
 abstract class FormViewHolder(
     val view: View

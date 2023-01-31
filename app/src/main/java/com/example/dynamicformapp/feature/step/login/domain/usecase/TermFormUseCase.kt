@@ -1,8 +1,8 @@
 package com.example.dynamicformapp.feature.step.login.domain.usecase
 
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
-import com.example.dynamicformapp.feature.form.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.model.FormValidation
+import com.example.dynamicformapp.feature.form.domain.model.FormCheckVO
+import com.example.dynamicformapp.feature.form.domain.model.FormValidation
 import javax.inject.Inject
 
 class TermFormUseCase @Inject constructor() : FormUsaCase<FormCheckVO>() {

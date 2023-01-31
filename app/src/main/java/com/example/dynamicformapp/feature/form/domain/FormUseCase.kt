@@ -1,9 +1,9 @@
 package com.example.dynamicformapp.feature.form.domain
 
 import com.example.dynamicformapp.core.domain.BaseUseCase
-import com.example.dynamicformapp.feature.form.model.FormData
-import com.example.dynamicformapp.feature.form.model.FormTextVO
-import com.example.dynamicformapp.feature.form.model.FormValidation
+import com.example.dynamicformapp.feature.form.domain.model.FormData
+import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
+import com.example.dynamicformapp.feature.form.domain.model.FormValidation
 
 typealias FormInput = ((FormData) -> Unit)
 typealias FormRules = ((FormData, FormValidation?) -> Unit)
