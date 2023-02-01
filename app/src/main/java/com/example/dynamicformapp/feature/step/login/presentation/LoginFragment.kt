@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.dynamicformapp.databinding.FragmentLoginBinding
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
-import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
+import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,7 +61,7 @@ class LoginFragment : StepFragment() {
         binding.inputView.notifyChangeAt(position)
     }
 
-    private fun onLoadRules(rules: List<FormRuleSet>?) {
+    private fun onLoadRules(rules: List<FormRule>?) {
         binding.inputViewRules.setData(rules)
     }
 

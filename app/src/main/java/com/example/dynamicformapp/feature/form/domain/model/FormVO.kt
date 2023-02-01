@@ -1,12 +1,14 @@
 package com.example.dynamicformapp.feature.form.domain.model
 
 abstract class FormVO {
-    abstract val onInput: ((FormData) -> Unit)
+    abstract var text: String
+    abstract var isEnabled: Boolean
+    abstract val onInput: ((FormIO) -> Unit)
 }
 
-data class FormData(
+data class FormIO(
     val position: Int,
     val value: String = "",
-    val isSelected: Boolean = false,
-    var error: String? = null
+    var error: String? = null,
+    val isSelected: Boolean = false
 )

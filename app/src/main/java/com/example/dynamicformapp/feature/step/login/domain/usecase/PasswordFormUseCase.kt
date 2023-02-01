@@ -4,7 +4,7 @@ import android.text.InputType
 import com.example.dynamicformapp.feature.form.domain.FormRules
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
+import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormValidation
 import javax.inject.Inject
@@ -13,22 +13,22 @@ class PasswordFormUseCase @Inject constructor() :
     FormUsaCase<FormTextVO>() {
 
     override val rules: FormValidation = FormValidation(
-        validations = listOf(
-            FormRuleSet(
+        rules = listOf(
+            FormRule(
                 regex = Regex("^.{6}\$"),
-                text = "The password size must be 6",
+                name = "The password size must be 6",
             ),
-            FormRuleSet(
+            FormRule(
                 regex = Regex(".*[0-9].*"),
-                text = "The password must constains numbers",
+                name = "The password must constains numbers",
             ),
-            FormRuleSet(
+            FormRule(
                 regex = Regex(".*[a-zA-Z].*"),
-                text = "The password must constain letter",
+                name = "The password must constain letter",
             ),
-            FormRuleSet(
+            FormRule(
                 regex = Regex("[\$&+,:;=?@#|'<>.^*()%!-]"),
-                text = "The password must constain special character",
+                name = "The password must constain special character",
             )
         ),
         onRuleCallback = ::onRules
@@ -40,12 +40,9 @@ class PasswordFormUseCase @Inject constructor() :
         minSize = 6,
         checkBox = FormCheckVO(
             text = "Remember me",
-            isSelected = false,
-            isEnabled = true,
             onInput = ::onInput
         ),
-        rules = rules,
-        isEnabled = true,
+        validation = rules,
         isSingleLine = true,
         requestFocus = false,
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD,

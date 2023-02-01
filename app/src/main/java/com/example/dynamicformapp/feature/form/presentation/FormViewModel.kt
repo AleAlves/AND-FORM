@@ -7,8 +7,8 @@ import com.example.dynamicformapp.feature.form.domain.model.*
 import kotlinx.coroutines.launch
 
 interface FormActions {
-    fun onInput(input: FormData)
-    fun onOutput(input: FormData)
+    fun onInput(input: FormIO)
+    fun onOutput(input: FormIO)
 }
 
 abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormActions {
@@ -23,49 +23,47 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         forms.map {
             this.forms.add(it)
         }
-        viewModelScope.launch {
-            setViewState(FormState.OnInitForms(forms.toList()))
-        }
+        setViewState(FormState.OnInitForms(forms.toList()))
         setupValidations()
     }
 
-    override fun onInput(input: FormData) {
+    override fun onInput(input: FormIO) {
         forms[input.position].onInput.invoke(input)
     }
 
-    override fun onOutput(input: FormData) {
+    override fun onOutput(input: FormIO) {
         forms[input.position].let {
             when (it) {
-                is FormTextVO -> applyTextChange(it, input)
-                is FormRadioVO -> applyRadioChange(it, input)
-                is FormCheckVO -> applyCheckChange(it, input)
+                is FormTextVO -> onTextOutput(it, input)
+                is FormRadioVO -> onRadioOutput(it, input)
+                is FormCheckVO -> onCheckOutput(it, input)
             }
         }
         validation()
     }
 
-    private fun applyTextChange(formVO: FormTextVO, input: FormData) {
+    private fun onTextOutput(formVO: FormTextVO, input: FormIO) {
         formVO.error = input.error
         formVO.text = input.value
         formVO.checkBox?.isSelected = input.isSelected
-        outputAt(input.position)
+        notifyOutputAt(input.position)
     }
 
-    private fun applyCheckChange(formVO: FormCheckVO, input: FormData) {
+    private fun onCheckOutput(formVO: FormCheckVO, input: FormIO) {
         formVO.isSelected = input.isSelected
-        outputAt(input.position)
+        notifyOutputAt(input.position)
     }
 
-    private fun applyRadioChange(formVO: FormRadioVO, input: FormData) {
+    private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) {
         forms.mapIndexed { index, vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
-                outputAt(index)
+                notifyOutputAt(index)
             }
         }
     }
 
-    private fun outputAt(position: Int) {
+    private fun notifyOutputAt(position: Int) {
         setViewState(FormState.OnFormOutput(position))
     }
 

@@ -1,7 +1,7 @@
 package com.example.dynamicformapp.feature.step.login.presentation
 
 import android.util.Log
-import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
+import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import com.example.dynamicformapp.feature.step.login.domain.usecase.EmailFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.NewsletterFormUseCase
@@ -47,7 +47,7 @@ class LoginViewModel @Inject constructor(
         passwordFormUseCase.onValidation { input, rules ->
             password = input.value
             rememberPassword = input.isSelected
-            setRules(rules?.validations)
+            setRules(rules?.rules)
         }
     }
 
@@ -56,7 +56,7 @@ class LoginViewModel @Inject constructor(
             .and(passwordFormUseCase.isValid)
             .and(termFormUseCase.isValid)
 
-    private fun setRules(validations: List<FormRuleSet>?) {
+    private fun setRules(validations: List<FormRule>?) {
         setViewState(LoginState.OnLoadPasswordRules(validations))
     }
 
@@ -65,6 +65,6 @@ class LoginViewModel @Inject constructor(
     }
 
     sealed class LoginState : FormState() {
-        data class OnLoadPasswordRules(val rules: List<FormRuleSet>?) : LoginState()
+        data class OnLoadPasswordRules(val rules: List<FormRule>?) : LoginState()
     }
 }

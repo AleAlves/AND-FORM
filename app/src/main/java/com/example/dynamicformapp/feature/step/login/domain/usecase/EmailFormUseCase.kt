@@ -5,7 +5,7 @@ import android.text.InputType
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.feature.form.domain.FormRules
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
-import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
+import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormValidation
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,8 +16,8 @@ class EmailFormUseCase @Inject constructor(
 ) : FormUsaCase<FormTextVO>() {
 
     override var rules: FormValidation = FormValidation(
-        validations = listOf(
-            FormRuleSet(
+        rules = listOf(
+            FormRule(
                 regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
             )
         ),
@@ -30,9 +30,8 @@ class EmailFormUseCase @Inject constructor(
         maxSize = 50,
         minSize = 5,
         requestFocus = true,
-        isEnabled = true,
         isSingleLine = true,
-        rules = rules,
+        validation = rules,
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,
         onInput = ::onInput
     )

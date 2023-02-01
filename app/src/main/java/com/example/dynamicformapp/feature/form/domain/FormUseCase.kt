@@ -1,15 +1,15 @@
 package com.example.dynamicformapp.feature.form.domain
 
 import com.example.dynamicformapp.core.domain.BaseUseCase
-import com.example.dynamicformapp.feature.form.domain.model.FormData
+import com.example.dynamicformapp.feature.form.domain.model.FormIO
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormValidation
 
-typealias FormInput = ((FormData) -> Unit)
-typealias FormRules = ((FormData, FormValidation?) -> Unit)
+typealias FormInput = ((FormIO) -> Unit)
+typealias FormRules = ((FormIO, FormValidation?) -> Unit)
 
 interface FormUsaCaseInput {
-    fun onInput(input: FormData)
+    fun onInput(input: FormIO)
     fun onValidation(rules: FormRules) {}
 }
 
@@ -26,7 +26,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
         return vo
     }
 
-    override fun onInput(input: FormData) {
+    override fun onInput(input: FormIO) {
         when (vo) {
             is FormTextVO -> textInput(input)
             else -> selectionInput(input)
@@ -34,13 +34,13 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
         inputListener.invoke(input)
     }
 
-    private fun textInput(input: FormData) {
+    private fun textInput(input: FormIO) {
         (vo as FormTextVO).let {
             if (input.value.length > it.maxSize && input.value.length < it.minSize) {
                 isValid = false
             } else {
-                with(it.rules) {
-                    validations.map { rule ->
+                with(it.validation) {
+                    rules.map { rule ->
                         if (input.value.contains(rule.regex)) {
                             rule.isValid = true
                             input.error = null
@@ -49,7 +49,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
                             rule.isValid = false
                         }
                     }
-                    isValid = validations.none { rule -> !rule.isValid }
+                    isValid = rules.none { rule -> !rule.isValid }
                     hasErrors = !isValid
                     onRuleCallback.invoke(this)
                 }
@@ -58,9 +58,8 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
         }
     }
 
-    private fun selectionInput(input: FormData) {
+    private fun selectionInput(input: FormIO) {
         isValid = input.isSelected
-        rulesListener.invoke(input, rules)
     }
 
     fun onRules(rules: FormValidation) {

@@ -11,21 +11,16 @@ class NewsletterFormUseCase @Inject constructor() : FormUsaCase<Array<FormRadioV
         FormRadioVO(
             id = "yes123",
             text = "Yes, I want to reveice all news and offers",
-            isSelected = false,
-            isEnabled = true,
             onInput = ::onInput
         ),
         FormRadioVO(
             id = "no456",
             text = "No, only important communication",
-            isSelected = false,
-            isEnabled = true,
             onInput = ::onInput
         ),
         FormRadioVO(
             id = "never789",
             text = "No communication",
-            isSelected = false,
             isEnabled = false,
             onInput = ::onInput
         )
