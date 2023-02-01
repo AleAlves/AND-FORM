@@ -13,7 +13,11 @@ class PasswordFormUseCase @Inject constructor() :
     FormUsaCase<FormTextVO>() {
 
     override val rules: FormValidation = FormValidation(
-        rules = listOf(
+        validations = listOf(
+            FormRuleSet(
+                regex = Regex("^.{6}\$"),
+                text = "The password size must be 6",
+            ),
             FormRuleSet(
                 regex = Regex(".*[0-9].*"),
                 text = "The password must constains numbers",
@@ -32,7 +36,7 @@ class PasswordFormUseCase @Inject constructor() :
 
     override val vo: FormTextVO = FormTextVO(
         hint = "Password",
-        maxSize = 15,
+        maxSize = 6,
         minSize = 6,
         checkBox = FormCheckVO(
             text = "Remember me",
@@ -40,7 +44,7 @@ class PasswordFormUseCase @Inject constructor() :
             isEnabled = true,
             onInput = ::onInput
         ),
-        validation = rules,
+        rules = rules,
         isEnabled = true,
         isSingleLine = true,
         requestFocus = false,

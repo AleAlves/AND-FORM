@@ -5,15 +5,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dynamicformapp.feature.form.domain.model.FormData
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 
-abstract class FormViewHolder(
+abstract class FormViewHolder<T>(
     val view: View
 ) : RecyclerView.ViewHolder(view) {
 
-    protected abstract fun setupView(data: FormVO?)
+    protected abstract fun setupView(data: T?)
 
     var onNewInput: ((FormData) -> Unit)? = null
 
-    var data: FormVO? = null
+    var data: T? = null
         set(value) {
             setupView(value)
             field = value

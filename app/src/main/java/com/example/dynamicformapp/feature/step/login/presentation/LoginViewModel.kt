@@ -1,6 +1,7 @@
 package com.example.dynamicformapp.feature.step.login.presentation
 
 import android.util.Log
+import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import com.example.dynamicformapp.feature.step.login.domain.usecase.EmailFormUseCase
 import com.example.dynamicformapp.feature.step.login.domain.usecase.NewsletterFormUseCase
@@ -20,15 +21,20 @@ class LoginViewModel @Inject constructor(
     private var email = ""
     private var password = ""
     private var newsletter = ""
-    private var remeberPassword = false
+    private var rememberPassword = false
 
     init {
         initForms(
             emailFormUseCase(::onOutput),
             passwordFormUseCase(::onOutput),
             termFormUseCase(::onOutput),
-            *newsletterFormUseCase(::onOutput).toTypedArray()
+            *newsletterFormUseCase(::onOutput)
         )
+        loadSave()
+    }
+
+    private fun loadSave() {
+        emailFormUseCase.vo.text = "wow"
     }
 
     override fun setupValidations() {
@@ -38,9 +44,10 @@ class LoginViewModel @Inject constructor(
         newsletterFormUseCase.onValidation { input, _ ->
             newsletter = input.value
         }
-        passwordFormUseCase.onValidation { input, _ ->
+        passwordFormUseCase.onValidation { input, rules ->
             password = input.value
-            remeberPassword = input.isSelected
+            rememberPassword = input.isSelected
+            setRules(rules?.validations)
         }
     }
 
@@ -49,12 +56,15 @@ class LoginViewModel @Inject constructor(
             .and(passwordFormUseCase.isValid)
             .and(termFormUseCase.isValid)
 
+    private fun setRules(validations: List<FormRuleSet>?) {
+        setViewState(LoginState.OnLoadPasswordRules(validations))
+    }
+
     fun doLogin() {
         Log.d("WOW", "Mail: $email Password: $password Newsletter: $newsletter")
     }
 
     sealed class LoginState : FormState() {
-        data class OnPasswordLengthRule(val isDone: Boolean) : LoginState()
-        data class OnPasswordCharactersRule(val isDone: Boolean) : LoginState()
+        data class OnLoadPasswordRules(val rules: List<FormRuleSet>?) : LoginState()
     }
 }

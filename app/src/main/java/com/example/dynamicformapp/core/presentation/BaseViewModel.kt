@@ -10,7 +10,7 @@ abstract class BaseViewModel<T : ViewState> : ViewModel() {
     private val _state: MutableLiveData<T> = MutableLiveData()
     val state: LiveData<T> = _state
 
-    fun setViewState(newState: ViewState) {
-        _state.value = newState as T
+    protected fun setViewState(newState: T) {
+        _state.value = newState
     }
 }

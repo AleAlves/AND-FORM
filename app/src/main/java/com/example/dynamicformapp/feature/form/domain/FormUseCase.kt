@@ -15,12 +15,10 @@ interface FormUsaCaseInput {
 
 abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
 
-    protected abstract val vo: T
     protected open val rules: FormValidation? = null
     protected var rulesListener: FormRules = { _, _ -> }
-
     private var inputListener: FormInput = { _ -> }
-
+    abstract val vo: T
     var isValid: Boolean = false
 
     override fun invoke(input: FormInput): T {
@@ -38,11 +36,11 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
 
     private fun textInput(input: FormData) {
         (vo as FormTextVO).let {
-            if (input.value.length >= it.maxSize && input.value.length <= it.minSize) {
+            if (input.value.length > it.maxSize && input.value.length < it.minSize) {
                 isValid = false
             } else {
-                with(it.validation) {
-                    rules.map { rule ->
+                with(it.rules) {
+                    validations.map { rule ->
                         if (input.value.contains(rule.regex)) {
                             rule.isValid = true
                             input.error = null
@@ -51,7 +49,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
                             rule.isValid = false
                         }
                     }
-                    isValid = rules.none { rule -> !rule.isValid }
+                    isValid = validations.none { rule -> !rule.isValid }
                     hasErrors = !isValid
                     onRuleCallback.invoke(this)
                 }

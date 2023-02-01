@@ -16,7 +16,7 @@ class EmailFormUseCase @Inject constructor(
 ) : FormUsaCase<FormTextVO>() {
 
     override var rules: FormValidation = FormValidation(
-        rules = listOf(
+        validations = listOf(
             FormRuleSet(
                 regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
             )
@@ -32,7 +32,7 @@ class EmailFormUseCase @Inject constructor(
         requestFocus = true,
         isEnabled = true,
         isSingleLine = true,
-        validation = rules,
+        rules = rules,
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,
         onInput = ::onInput
     )

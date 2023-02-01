@@ -6,8 +6,8 @@ import com.example.dynamicformapp.feature.form.domain.model.FormRadioVO
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.ChoiceSelectionWatcher
 
-class FormRadioViewHolder(private val binding: InputRadioViewBinding) :
-    FormViewHolder(binding.root) {
+class FormRadioViewHolder<T>(private val binding: InputRadioViewBinding) :
+    FormViewHolder<T>(binding.root) {
 
     private var id = ""
 
@@ -15,7 +15,7 @@ class FormRadioViewHolder(private val binding: InputRadioViewBinding) :
         onNewInput?.invoke(FormData(currentPosition, value = id, isSelected = it))
     }
 
-    override fun setupView(data: FormVO?) {
+    override fun setupView(data: T?) {
         data as FormRadioVO
         id = data.id
         with(binding.inputRadio) {

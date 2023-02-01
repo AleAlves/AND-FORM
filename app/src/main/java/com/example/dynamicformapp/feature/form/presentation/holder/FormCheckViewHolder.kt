@@ -3,17 +3,16 @@ package com.example.dynamicformapp.feature.form.presentation.holder
 import com.example.dynamicformapp.databinding.InputCheckViewBinding
 import com.example.dynamicformapp.feature.form.domain.model.FormCheckVO
 import com.example.dynamicformapp.feature.form.domain.model.FormData
-import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.CheckSelectionWatcher
 
-class FormCheckViewHolder(private val binding: InputCheckViewBinding) :
-    FormViewHolder(binding.root) {
+class FormCheckViewHolder<T>(private val binding: InputCheckViewBinding) :
+    FormViewHolder<T>(binding.root) {
 
     private val watcher = CheckSelectionWatcher {
         onNewInput?.invoke(FormData(currentPosition, isSelected = it))
     }
 
-    override fun setupView(data: FormVO?) {
+    override fun setupView(data: T?) {
         data as FormCheckVO
         with(binding.inputCheckbox) {
             setOnCheckedChangeListener(null)

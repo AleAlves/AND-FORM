@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.dynamicformapp.databinding.FragmentLoginBinding
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
+import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,9 +41,10 @@ class LoginFragment : StepFragment() {
     private fun listenChanges() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is FormViewModel.FormState.OnValidation -> buttonValidationToggle(it.isValid)
                 is FormViewModel.FormState.OnInitForms -> setFormData(it.forms)
                 is FormViewModel.FormState.OnFormOutput -> notifyOutputAt(it.position)
+                is FormViewModel.FormState.OnValidation -> buttonValidationToggle(it.isValid)
+                is LoginViewModel.LoginState.OnLoadPasswordRules -> onLoadRules(it.rules)
             }
         }
     }
@@ -57,6 +59,10 @@ class LoginFragment : StepFragment() {
 
     private fun notifyOutputAt(position: Int) {
         binding.inputView.notifyChangeAt(position)
+    }
+
+    private fun onLoadRules(rules: List<FormRuleSet>?) {
+        binding.inputViewRules.setData(rules)
     }
 
     companion

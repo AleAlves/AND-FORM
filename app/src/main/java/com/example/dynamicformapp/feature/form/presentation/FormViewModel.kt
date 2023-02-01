@@ -1,9 +1,10 @@
 package com.example.dynamicformapp.feature.form.presentation
 
+import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.form.domain.model.*
-import com.example.dynamicformapp.feature.form.model.*
+import kotlinx.coroutines.launch
 
 interface FormActions {
     fun onInput(input: FormData)
@@ -22,7 +23,9 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         forms.map {
             this.forms.add(it)
         }
-        setViewState(FormState.OnInitForms(forms.toList()))
+        viewModelScope.launch {
+            setViewState(FormState.OnInitForms(forms.toList()))
+        }
         setupValidations()
     }
 

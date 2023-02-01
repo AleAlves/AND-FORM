@@ -11,10 +11,9 @@ import com.example.dynamicformapp.databinding.InputCheckViewBinding
 import com.example.dynamicformapp.databinding.InputRadioViewBinding
 import com.example.dynamicformapp.databinding.InputTextViewBinding
 import com.example.dynamicformapp.feature.form.domain.model.*
-import com.example.dynamicformapp.feature.form.model.*
 import com.example.dynamicformapp.feature.form.presentation.holder.*
 
-class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
+class FormAdapter : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
 
     companion object {
         private const val TEXT = 1
@@ -25,17 +24,23 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder>() {
 
     var onReadInput: ((FormData) -> Unit)? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder<FormVO> {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            TEXT -> FormTextViewHolder(InputTextViewBinding.inflate(inflater, parent, false))
+            TEXT -> FormTextViewHolder(
+                InputTextViewBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
             RADIO -> FormRadioViewHolder(InputRadioViewBinding.inflate(inflater, parent, false))
             CHECKBOX -> FormCheckViewHolder(InputCheckViewBinding.inflate(inflater, parent, false))
             else -> throw NotFoundException("Invalid Form")
         }
     }
 
-    override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FormViewHolder<FormVO>, position: Int) {
         with(holder) {
             currentPosition = position
             data = items.currentList[position]

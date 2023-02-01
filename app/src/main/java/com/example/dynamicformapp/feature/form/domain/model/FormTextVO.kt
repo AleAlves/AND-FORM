@@ -12,12 +12,12 @@ data class FormTextVO(
     val isSingleLine: Boolean,
     var error: String? = null,
     val checkBox: FormCheckVO? = null,
-    val validation: FormValidation,
+    val rules: FormValidation,
     override val onInput: ((FormData) -> Unit)
 ) : FormVO()
 
 data class FormValidation(
-    var rules: List<FormRuleSet>,
+    var validations: List<FormRuleSet>,
     var hasErrors: Boolean = false,
     val onRuleCallback: (FormValidation) -> Unit
 )

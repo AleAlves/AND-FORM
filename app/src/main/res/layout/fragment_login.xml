@@ -12,18 +12,11 @@
         android:text="Name"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textview_password_rule_one"
+    <com.example.dynamicformapp.feature.form.presentation.FormRulesView
+        android:id="@+id/input_view_rules"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/textview_password_rule_two" />
-
-    <TextView
-        android:id="@+id/textview_password_rule_two"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toTopOf="@+id/input_view" />
 
     <com.example.dynamicformapp.feature.form.presentation.FormInputView

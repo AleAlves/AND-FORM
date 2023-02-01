@@ -18,9 +18,9 @@ import com.example.dynamicformapp.feature.form.presentation.CheckSelectionWatche
 import com.example.dynamicformapp.feature.form.presentation.TextInputWatcher
 
 
-class FormTextViewHolder(
+class FormTextViewHolder<T>(
     private val binding: InputTextViewBinding
-) : FormViewHolder(binding.root) {
+) : FormViewHolder<T>(binding.root) {
 
     private val textWatcher = TextInputWatcher {
         if (binding.inputViewEditext.hasFocus()) {
@@ -46,7 +46,7 @@ class FormTextViewHolder(
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.M)
-    override fun setupView(data: FormVO?) {
+    override fun setupView(data: T?) {
         data as FormTextVO
         with(binding) {
             inputTextViewSubtitle.text = data.subtitle
