@@ -23,15 +23,13 @@ class FormTextViewHolder<T>(
 ) : FormViewHolder<T>(binding.root) {
 
     private val textWatcher = TextInputWatcher {
-        if (binding.inputViewEditext.hasFocus()) {
-            onNewInput?.invoke(
-                FormIO(
-                    position = currentPosition,
-                    value = it,
-                    isSelected = binding.inputCheckbox.isChecked
-                )
+        onNewInput?.invoke(
+            FormIO(
+                position = currentPosition,
+                value = it,
+                isSelected = binding.inputCheckbox.isChecked
             )
-        }
+        )
     }
 
     private val checkWatcher = CheckSelectionWatcher {

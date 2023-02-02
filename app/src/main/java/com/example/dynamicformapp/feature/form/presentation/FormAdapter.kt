@@ -39,8 +39,8 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
     override fun onBindViewHolder(holder: FormViewHolder<FormVO>, position: Int) {
         with(holder) {
             currentPosition = position
-            data = items.currentList[position]
             onNewInput = this@FormAdapter.onReadInput
+            data = items.currentList[position]
         }
     }
 

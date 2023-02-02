@@ -20,7 +20,4 @@ abstract class FormViewHolder<T>(
         }
 
     var currentPosition = 0
-        set(value) {
-            field = value
-        }
 }

@@ -6,6 +6,8 @@ import android.widget.CompoundButton
 
 class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatcher {
 
+    private var value: String = ""
+
     override fun afterTextChanged(s: Editable) {}
 
     override fun beforeTextChanged(
@@ -22,7 +24,10 @@ class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatche
         before: Int,
         count: Int
     ) {
-         onTextChanged.invoke(s.toString())
+        if (value != s.toString()) {
+            value = s.toString()
+            onTextChanged.invoke(s.toString())
+        }
     }
 }
 
