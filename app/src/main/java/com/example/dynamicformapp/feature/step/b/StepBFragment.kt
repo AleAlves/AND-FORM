@@ -37,13 +37,13 @@ class StepBFragment : StepFragment() {
         view.findViewById<Button>(R.id.button_back).setOnClickListener {
             super.onPrevious()
         }
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it) {
-                is StepBViewModel.StepBState.OnLoadName -> {
-                    print("")
-                }
-            }
-        }
+//        viewModel.state.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is StepBViewModel.StepBState.OnLoadName -> {
+//                    print("")
+//                }
+//            }
+//        }
     }
 
     companion object {

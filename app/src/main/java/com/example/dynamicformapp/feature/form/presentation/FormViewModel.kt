@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.form.domain.model.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface FormActions {
@@ -25,6 +26,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         }
         setViewState(FormState.OnInitForms(forms.toList()))
         setupValidations()
+        validation()
     }
 
     override fun onInput(input: FormIO) {
@@ -64,14 +66,19 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     }
 
     private fun notifyOutputAt(position: Int) {
-        setViewState(FormState.OnFormOutput(position))
+        viewModelScope.launch(Dispatchers.Main) {
+            setViewState(FormState.OnFormOutput(position))
+        }
     }
 
     private fun validation() {
-        setViewState(FormState.OnValidation(getValidations()))
+        viewModelScope.launch(Dispatchers.Main) {
+            setViewState(FormState.OnValidation(getValidations()))
+        }
     }
 
     open class FormState : ViewState {
+        object Init : FormState()
         data class OnInitForms(val forms: List<FormVO>) : FormState()
         data class OnFormOutput(val position: Int) : FormState()
         data class OnValidation(val isValid: Boolean) : FormState()

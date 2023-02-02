@@ -39,22 +39,28 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
             if (input.value.length > it.maxSize && input.value.length < it.minSize) {
                 isValid = false
             } else {
+                doTextValidation(it, input)
                 with(it.validation) {
-                    rules.map { rule ->
-                        if (input.value.contains(rule.regex)) {
-                            rule.isValid = true
-                            input.error = null
-                        } else {
-                            input.error = rule.error
-                            rule.isValid = false
-                        }
-                    }
-                    isValid = rules.none { rule -> !rule.isValid }
                     hasErrors = !isValid
                     onRuleCallback.invoke(this)
                 }
             }
             rulesListener.invoke(input, rules)
+        }
+    }
+
+    private fun doTextValidation(vo: FormTextVO, input: FormIO) {
+        with(vo.validation.rules) {
+            map { rule ->
+                if (input.value.contains(rule.regex)) {
+                    rule.isValid = true
+                    input.error = null
+                } else {
+                    input.error = rule.error
+                    rule.isValid = false
+                }
+            }
+            isValid = this.none { rule -> !rule.isValid }
         }
     }
 

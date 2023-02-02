@@ -7,6 +7,7 @@ import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.core.util.toEditable
@@ -47,10 +48,15 @@ class FormTextViewHolder<T>(
     @RequiresApi(Build.VERSION_CODES.M)
     override fun setupView(data: T?) {
         data as FormTextVO
+
+        binding.root.layoutParams = LinearLayout.LayoutParams(
+            if (data.fill) LinearLayout.LayoutParams.MATCH_PARENT else LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
         with(binding) {
             inputTextViewSubtitle.text = data.subtitle
             inputViewEditext.let { edit ->
-                edit.removeTextChangedListener(textWatcher)
                 if (data.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
                     edit.transformationMethod = PasswordTransformationMethod.getInstance()
                 } else {
@@ -62,30 +68,36 @@ class FormTextViewHolder<T>(
                 edit.setSelection(edit.text?.length ?: 0)
                 edit.error = data.error
                 edit.hint = data.hint
-                edit.addTextChangedListener(textWatcher)
                 inputTextViewCounter.text = "${edit.text.toString().length}/${data.maxSize}"
-                if (edit.text.toString()
-                        .isNotEmpty() && edit.text.toString().length < data.minSize
-                ) {
-                    inputTextViewCounter.setTextColor(view.context.getColor(R.color.red))
+                if (data.isReadOnly) {
+                    edit.isEnabled = false
+                    inputTextViewCounter.visibility = GONE
+                    if (data.subtitle.isNullOrEmpty()) {
+                        inputTextViewSubtitle.visibility = GONE
+                    }
                 } else {
-                    inputTextViewCounter.setTextColor(view.context.getColor(R.color.white))
+                    edit.isEnabled = data.isEnabled
                 }
                 if (data.requestFocus && !edit.hasFocus()) {
                     edit.post { edit.requestFocus() }
                 }
-                edit.isEnabled = data.isEnabled
             }
 
-            if (data.checkBox == null) {
-                binding.inputCheckbox.visibility = GONE
-            } else {
-                binding.inputCheckbox.setOnCheckedChangeListener(null)
-                binding.inputCheckbox.visibility = VISIBLE
-                binding.inputCheckbox.isChecked = data.checkBox.isSelected
-                binding.inputCheckbox.text = data.checkBox.text
-                binding.inputCheckbox.setOnCheckedChangeListener(checkWatcher)
+            with(binding.inputCheckbox) {
+                if (data.checkBox == null) {
+                    binding.inputCheckbox.visibility = GONE
+                } else {
+                    visibility = VISIBLE
+                    isChecked = data.checkBox.isSelected
+                    text = data.checkBox.text
+                }
             }
         }
     }
+
+    override fun setupClickListeners() {
+        binding.inputViewEditext.addTextChangedListener(textWatcher)
+        binding.inputCheckbox.setOnCheckedChangeListener(checkWatcher)
+    }
+
 }

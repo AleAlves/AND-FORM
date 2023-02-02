@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.dynamicformapp.databinding.FragmentLoginBinding
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : StepFragment() {
@@ -35,11 +37,11 @@ class LoginFragment : StepFragment() {
             super.getFlows()
         }
         binding.inputView.onReadInput = viewModel::onInput
-        listenChanges()
+        lifecycleScope.launch { listenChanges() }
     }
 
-    private fun listenChanges() {
-        viewModel.state.observe(viewLifecycleOwner) {
+    private suspend fun listenChanges() {
+        viewModel.state.collect {
             when (it) {
                 is FormViewModel.FormState.OnInitForms -> setFormData(it.forms)
                 is FormViewModel.FormState.OnFormOutput -> notifyOutputAt(it.position)
@@ -65,9 +67,7 @@ class LoginFragment : StepFragment() {
         binding.inputViewRules.setData(rules)
     }
 
-    companion
-
-    object {
+    companion object {
         @JvmStatic
         fun newInstance() = LoginFragment()
     }

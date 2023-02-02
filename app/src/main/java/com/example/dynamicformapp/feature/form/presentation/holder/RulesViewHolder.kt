@@ -20,4 +20,8 @@ class RulesViewHolder<T>(
             }
         }
     }
+
+    override fun setupClickListeners() {
+
+    }
 }

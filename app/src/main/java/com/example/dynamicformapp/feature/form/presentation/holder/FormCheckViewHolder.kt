@@ -15,11 +15,13 @@ class FormCheckViewHolder<T>(private val binding: InputCheckViewBinding) :
     override fun setupView(data: T?) {
         data as FormCheckVO
         with(binding.inputCheckbox) {
-            setOnCheckedChangeListener(null)
             isChecked = data.isSelected
             isEnabled = data.isEnabled
             text = data.text
-            setOnCheckedChangeListener(watcher)
         }
+    }
+
+    override fun setupClickListeners() {
+        binding.inputCheckbox.setOnCheckedChangeListener(watcher)
     }
 }

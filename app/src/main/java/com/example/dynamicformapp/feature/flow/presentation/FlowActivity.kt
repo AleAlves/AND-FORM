@@ -7,11 +7,13 @@ import androidx.activity.viewModels
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.widget.ViewPager2
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.feature.flow.domain.model.StepVO
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FormActivity : FragmentActivity(), FlowActions {
@@ -24,8 +26,10 @@ class FormActivity : FragmentActivity(), FlowActions {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
-        listen()
         setupPager()
+        lifecycleScope.launch {
+            listen()
+        }
     }
 
     private fun setupPager() {
@@ -36,8 +40,8 @@ class FormActivity : FragmentActivity(), FlowActions {
         }
     }
 
-    private fun listen() {
-        viewModel.viewState.observe(this) { state ->
+    private suspend fun listen() {
+        viewModel.state.collect { state ->
             when (state) {
                 is FlowViewModel.FlowState.OnRemoveStepAt -> onRemoveAt(state.position)
                 is FlowViewModel.FlowState.OnForwardStep -> onGoToStep(state.position)
@@ -45,6 +49,7 @@ class FormActivity : FragmentActivity(), FlowActions {
                 is FlowViewModel.FlowState.OnLoadSteps -> onLoadSteps(state.steps)
                 is FlowViewModel.FlowState.OnRemoveSteps -> onRemoveSteps(state.steps)
                 is FlowViewModel.FlowState.OnUpdate -> onUpdate(state.steps)
+                else -> {}
             }
         }
     }

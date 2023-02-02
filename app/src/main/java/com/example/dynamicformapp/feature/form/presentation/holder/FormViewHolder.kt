@@ -9,6 +9,7 @@ abstract class FormViewHolder<T>(
 ) : RecyclerView.ViewHolder(view) {
 
     protected abstract fun setupView(data: T?)
+    abstract fun setupClickListeners()
 
     var onNewInput: ((FormIO) -> Unit)? = null
 

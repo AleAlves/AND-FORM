@@ -18,11 +18,13 @@ class FormRadioViewHolder<T>(private val binding: InputRadioViewBinding) :
         data as FormRadioVO
         id = data.id
         with(binding.inputRadio) {
-            setOnCheckedChangeListener(null)
             isChecked = data.isSelected
             isEnabled = data.isEnabled
             text = data.text
-            setOnCheckedChangeListener(watcher)
         }
+    }
+
+    override fun setupClickListeners() {
+        binding.inputRadio.setOnCheckedChangeListener(watcher)
     }
 }
