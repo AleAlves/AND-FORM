@@ -22,6 +22,7 @@ abstract class FormViewHolder<T>(
 
     var onInput: ((FormIO) -> Unit)? = null
 
+    protected var id = ""
     var data: T? = null
         set(value) {
             setupView(value)
@@ -43,7 +44,8 @@ abstract class FormViewHolder<T>(
         onInput(
             FormIO(
                 position = adapterPosition,
-                isSelected = isSelected
+                isSelected = isSelected,
+                value = id
             )
         )
     }

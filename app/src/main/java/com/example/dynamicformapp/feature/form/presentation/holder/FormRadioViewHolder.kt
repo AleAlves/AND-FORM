@@ -6,8 +6,6 @@ import com.example.dynamicformapp.feature.form.domain.model.FormRadioVO
 class FormRadioViewHolder<T>(private val binding: InputRadioViewBinding) :
     FormViewHolder<T>(binding.root) {
 
-    private var id = ""
-
     override fun setupView(data: T?) {
         data as FormRadioVO
         id = data.id

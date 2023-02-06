@@ -31,7 +31,7 @@ class PasswordFormUseCase @Inject constructor() :
                 name = "The password must constain special character",
             )
         ),
-        onRuleCallback = ::onRules
+        onRuleCallback = ::onRuleValidation
     )
 
     override val vo: FormTextVO = FormTextVO(

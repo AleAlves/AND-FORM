@@ -14,7 +14,7 @@ class AddressUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
                 regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
             )
         ),
-        onRuleCallback = ::onRules
+        onRuleCallback = ::onRuleValidation
     )
 
     override val vo: FormTextVO = FormTextVO(

@@ -5,7 +5,6 @@ import android.text.InputType
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.feature.form.domain.FormRules
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
-import com.example.dynamicformapp.feature.form.domain.model.FormIO
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormValidation
@@ -22,7 +21,7 @@ class EmailFormUseCase @Inject constructor(
                 regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
             )
         ),
-        onRuleCallback = ::onRules
+        onRuleCallback = ::onRuleValidation
     )
 
     override val vo: FormTextVO = FormTextVO(
