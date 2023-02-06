@@ -20,6 +20,4 @@ class RulesViewHolder<T>(
             }
         }
     }
-
-    override fun onTextChange(value: String) {}
 }

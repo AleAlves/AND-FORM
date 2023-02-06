@@ -5,17 +5,15 @@ import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.CompoundButton
 import android.widget.LinearLayout
 import com.example.dynamicformapp.core.util.toEditable
 import com.example.dynamicformapp.databinding.InputTextViewBinding
-import com.example.dynamicformapp.feature.form.domain.model.FormIO
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 
 
 class FormTextViewHolder<T>(
     private val binding: InputTextViewBinding
-) : FormViewHolder<T>(binding.root), CompoundButton.OnCheckedChangeListener {
+) : FormViewHolder<T>(binding.root) {
 
     override fun setupView(data: T?) {
         data as FormTextVO
@@ -44,7 +42,7 @@ class FormTextViewHolder<T>(
                 if (data.isReadOnly) {
                     edit.isEnabled = false
                     inputTextViewCounter.visibility = GONE
-                    if (data.subtitle.isNullOrEmpty()) {
+                    if (data.subtitle.isEmpty()) {
                         inputTextViewSubtitle.visibility = GONE
                     }
                 } else {
@@ -68,23 +66,5 @@ class FormTextViewHolder<T>(
                 setOnCheckedChangeListener(this@FormTextViewHolder)
             }
         }
-    }
-
-    override fun onCheckedChanged(view: CompoundButton, isChecked: Boolean) {
-        onInput()
-    }
-
-    override fun onTextChange(value: String) {
-        onInput()
-    }
-
-    private fun onInput() {
-        onInput?.invoke(
-            FormIO(
-                position = adapterPosition,
-                value = binding.inputViewEditext.text.toString(),
-                isSelected = binding.inputCheckbox.isChecked
-            )
-        )
     }
 }
