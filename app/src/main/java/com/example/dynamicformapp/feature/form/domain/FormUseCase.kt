@@ -6,17 +6,18 @@ import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormValidation
 
 typealias FormInput = ((FormIO) -> Unit)
-typealias FormRules = ((FormIO, FormValidation?) -> Unit)
+typealias FormRules = ((String, Boolean, FormValidation?) -> Unit)
 
 interface FormUsaCaseInput {
     fun onInput(input: FormIO)
     fun onValidation(rules: FormRules) {}
+    fun runValidations() {}
 }
 
 abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
 
     protected open val rules: FormValidation? = null
-    protected var rulesListener: FormRules = { _, _ -> }
+    protected var rulesListener: FormRules = { _, _, _ -> }
     private var inputListener: FormInput = { _ -> }
     abstract val vo: T
     var isValid: Boolean = false
@@ -45,7 +46,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
                     onRuleCallback.invoke(this)
                 }
             }
-            rulesListener.invoke(input, rules)
+            rulesListener.invoke(input.value, input.isSelected, rules)
         }
     }
 
@@ -66,7 +67,17 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
 
     private fun selectionInput(input: FormIO) {
         isValid = input.isSelected
-        rulesListener.invoke(input, rules)
+        rulesListener.invoke(input.value, input.isSelected, rules)
+    }
+
+    protected fun doValidateRules(vo: FormTextVO) {
+        with(vo.validation.rules) {
+            map { rule ->
+                rule.isValid = vo.text.contains(rule.regex)
+            }
+            isValid = this.none { rule -> !rule.isValid }
+        }
+        rulesListener.invoke(vo.text, isValid, vo.validation)
     }
 
     fun onRuleValidation(rules: FormValidation) {

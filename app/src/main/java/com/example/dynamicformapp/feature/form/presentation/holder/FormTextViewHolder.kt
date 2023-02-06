@@ -18,6 +18,9 @@ class FormTextViewHolder<T>(
     override fun setupView(data: T?) {
         data as FormTextVO
 
+        inputValue = data.text
+        inputSelected = data.checkBox?.isSelected ?: false
+
         binding.root.layoutParams = LinearLayout.LayoutParams(
             if (data.fill) LinearLayout.LayoutParams.MATCH_PARENT else LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT

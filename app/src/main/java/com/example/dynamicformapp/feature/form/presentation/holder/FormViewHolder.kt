@@ -11,7 +11,7 @@ interface InputListeners : TextWatcher, CompoundButton.OnCheckedChangeListener {
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
     override fun afterTextChanged(p0: Editable?) {}
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {}
+    override fun onCheckedChanged(view: CompoundButton?, isSelected: Boolean) {}
 }
 
 abstract class FormViewHolder<T>(
@@ -22,7 +22,9 @@ abstract class FormViewHolder<T>(
 
     var onInput: ((FormIO) -> Unit)? = null
 
-    protected var id = ""
+    protected var inputValue = ""
+    protected var inputSelected = false
+
     var data: T? = null
         set(value) {
             setupView(value)
@@ -31,21 +33,24 @@ abstract class FormViewHolder<T>(
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         super.onTextChanged(s, start, before, count)
+        inputValue = s.toString()
         onInput(
             FormIO(
                 position = adapterPosition,
-                value = s.toString()
+                value = inputValue,
+                isSelected = inputSelected
             )
         )
     }
 
-    override fun onCheckedChanged(p0: CompoundButton?, isSelected: Boolean) {
-        super.onCheckedChanged(p0, isSelected)
+    override fun onCheckedChanged(view: CompoundButton?, isSelected: Boolean) {
+        super.onCheckedChanged(view, isSelected)
+        inputSelected = isSelected
         onInput(
             FormIO(
                 position = adapterPosition,
-                isSelected = isSelected,
-                value = id
+                value = inputValue,
+                isSelected = inputSelected
             )
         )
     }

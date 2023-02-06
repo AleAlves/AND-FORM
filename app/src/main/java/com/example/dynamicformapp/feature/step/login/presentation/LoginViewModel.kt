@@ -36,18 +36,19 @@ class LoginViewModel @Inject constructor(
 
     private fun loadSaved() {
         emailFormUseCase.vo.text = "wow@email.com"
+        emailFormUseCase.runValidations()
     }
 
     override fun setupValidations() {
-        emailFormUseCase.onValidation { input, _ ->
-            email = input.value
+        emailFormUseCase.onValidation { value, _, _ ->
+            email = value
         }
-        newsletterFormUseCase.onValidation { input, _ ->
-            newsletter = input.value
+        newsletterFormUseCase.onValidation { value, _, _ ->
+            newsletter = value
         }
-        passwordFormUseCase.onValidation { input, rules ->
-            password = input.value
-            rememberPassword = input.isSelected
+        passwordFormUseCase.onValidation { value, check, rules ->
+            password = value
+            rememberPassword = check
             setRules(rules?.rules)
         }
     }

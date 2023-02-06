@@ -8,7 +8,9 @@ class FormRadioViewHolder<T>(private val binding: InputRadioViewBinding) :
 
     override fun setupView(data: T?) {
         data as FormRadioVO
-        id = data.id
+        inputValue = data.id
+        inputSelected = data.isSelected
+
         with(binding.inputRadio) {
             setOnCheckedChangeListener(null)
             isChecked = data.isSelected
