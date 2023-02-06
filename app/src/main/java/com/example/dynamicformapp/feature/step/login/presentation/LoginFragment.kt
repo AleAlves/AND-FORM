@@ -36,7 +36,7 @@ class LoginFragment : StepFragment() {
             viewModel.doLogin()
             super.getFlows()
         }
-        binding.inputView.onReadInput = viewModel::onInput
+        binding.inputView.onInput = viewModel::onInput
         lifecycleScope.launch { listenChanges() }
     }
 

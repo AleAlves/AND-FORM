@@ -22,25 +22,29 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
         private const val UNKNOWN = 0
     }
 
-    var onReadInput: ((FormIO) -> Unit)? = null
+    var onInput: ((FormIO) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder<FormVO> {
         val inflater = LayoutInflater.from(parent.context)
         val view: FormViewHolder<FormVO> = when (viewType) {
-            TEXT -> FormTextViewHolder(InputTextViewBinding.inflate(inflater, parent, false))
-            RADIO -> FormRadioViewHolder(InputRadioViewBinding.inflate(inflater, parent, false))
-            CHECKBOX -> FormCheckViewHolder(InputCheckViewBinding.inflate(inflater, parent, false))
+            TEXT -> FormTextViewHolder(
+                InputTextViewBinding.inflate(inflater, parent, false)
+            )
+            RADIO -> FormRadioViewHolder(
+                InputRadioViewBinding.inflate(inflater, parent, false)
+            )
+            CHECKBOX -> FormCheckViewHolder(
+                InputCheckViewBinding.inflate(inflater, parent, false)
+            )
             else -> throw NotFoundException("Invalid Form")
         }
-        view.setupClickListeners()
         return view
     }
 
     override fun onBindViewHolder(holder: FormViewHolder<FormVO>, position: Int) {
         with(holder) {
-            currentPosition = position
-            onNewInput = this@FormAdapter.onReadInput
             data = items.currentList[position]
+            onInput = this@FormAdapter.onInput
         }
     }
 

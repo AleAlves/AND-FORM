@@ -39,6 +39,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
             if (input.value.length > it.maxSize && input.value.length < it.minSize) {
                 isValid = false
             } else {
+                isValid = runValidations(it, input.value)
                 doTextValidation(it, input)
                 with(it.validation) {
                     hasErrors = !isValid
@@ -61,6 +62,15 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
                 }
             }
             isValid = this.none { rule -> !rule.isValid }
+        }
+    }
+
+    private fun runValidations(vo: FormTextVO, input: String): Boolean {
+        with(vo.validation.rules) {
+            map { rule ->
+                rule.isValid = input.contains(rule.regex)
+            }
+            return this.none { rule -> !rule.isValid }
         }
     }
 

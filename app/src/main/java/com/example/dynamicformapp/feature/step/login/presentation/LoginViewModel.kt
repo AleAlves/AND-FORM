@@ -31,11 +31,11 @@ class LoginViewModel @Inject constructor(
             termFormUseCase(::onOutput),
             *newsletterFormUseCase(::onOutput)
         )
-        loadSave()
+        loadSaved()
     }
 
-    private fun loadSave() {
-        emailFormUseCase.vo.text = "wow@wow.com"
+    private fun loadSaved() {
+        emailFormUseCase.vo.text = "wow@email.com"
     }
 
     override fun setupValidations() {

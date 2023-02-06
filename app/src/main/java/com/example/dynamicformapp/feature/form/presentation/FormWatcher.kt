@@ -6,8 +6,6 @@ import android.widget.CompoundButton
 
 class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatcher {
 
-    private var value: String = ""
-
     override fun afterTextChanged(s: Editable) {}
 
     override fun beforeTextChanged(
@@ -24,26 +22,22 @@ class TextInputWatcher(private val onTextChanged: (String) -> Unit) : TextWatche
         before: Int,
         count: Int
     ) {
-        if (value != s.toString()) {
-            value = s.toString()
-            onTextChanged.invoke(s.toString())
-        }
+        onTextChanged.invoke(s.toString())
     }
 }
 
-class ChoiceSelectionWatcher(private val onSelectionChanged: (Boolean) -> Unit) :
+class RadioInputWatcher(private val onSelected: (Boolean) -> Unit) :
     CompoundButton.OnCheckedChangeListener {
 
     override fun onCheckedChanged(view: CompoundButton, isChecked: Boolean) {
-        onSelectionChanged.invoke(isChecked)
+        onSelected.invoke(isChecked)
     }
 }
 
-class CheckSelectionWatcher(private val onCheckChange: (Boolean) -> Unit) :
+class CheckInputWatcher(private val onCheckChange: (Boolean) -> Unit) :
     CompoundButton.OnCheckedChangeListener {
-    override fun onCheckedChanged(view: CompoundButton?, isChecked: Boolean) {
-        if (isChecked == view?.isChecked) {
-            onCheckChange.invoke(isChecked)
-        }
+
+    override fun onCheckedChanged(view: CompoundButton, isChecked: Boolean) {
+        onCheckChange.invoke(isChecked)
     }
 }

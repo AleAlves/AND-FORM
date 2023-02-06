@@ -21,7 +21,5 @@ class RulesViewHolder<T>(
         }
     }
 
-    override fun setupClickListeners() {
-
-    }
+    override fun onTextChange(value: String) {}
 }
