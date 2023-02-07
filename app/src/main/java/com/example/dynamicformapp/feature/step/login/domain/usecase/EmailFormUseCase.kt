@@ -39,9 +39,6 @@ class EmailFormUseCase @Inject constructor(
 
     override fun onValidation(rules: FormRules) {
         rulesListener = rules
-    }
-
-    override fun runValidations() {
-        doValidateRules(vo)
+        runRulesValidations(vo)
     }
 }

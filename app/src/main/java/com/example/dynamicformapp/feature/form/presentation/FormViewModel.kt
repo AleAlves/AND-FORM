@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface FormActions {
+    fun onSetupForms() {}
     fun onInput(input: FormIO)
     fun onOutput(input: FormIO)
 }
@@ -25,8 +26,9 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
             this.forms.add(it)
         }
         setViewState(FormState.OnInitForms(forms.toList()))
+        onSetupForms()
         setupValidations()
-        validation()
+        mainValidation()
     }
 
     override fun onInput(input: FormIO) {
@@ -41,7 +43,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
                 is FormCheckVO -> onCheckOutput(it, input)
             }
         }
-        validation()
+        mainValidation()
     }
 
     private fun onTextOutput(formVO: FormTextVO, input: FormIO) {
@@ -71,7 +73,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         }
     }
 
-    private fun validation() {
+    private fun mainValidation() {
         viewModelScope.launch(Dispatchers.Main) {
             setViewState(FormState.OnValidation(getValidations()))
         }

@@ -1,10 +1,13 @@
 package com.example.dynamicformapp.feature.step.login.presentation
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import com.example.dynamicformapp.feature.step.login.domain.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,7 +17,6 @@ class LoginViewModel @Inject constructor(
     private val termFormUseCase: TermFormUseCase,
     private val newsletterFormUseCase: NewsletterFormUseCase,
     private val addressUseCase: AddressUseCase,
-    private val stateUseCase: StateUseCase,
 ) : FormViewModel() {
 
     private var email = ""
@@ -25,19 +27,20 @@ class LoginViewModel @Inject constructor(
     init {
         initForms(
             addressUseCase(::onOutput),
-            stateUseCase(::onOutput),
             emailFormUseCase(::onOutput),
             passwordFormUseCase(::onOutput),
             termFormUseCase(::onOutput),
             *newsletterFormUseCase(::onOutput)
         )
-        loadSaved()
     }
 
-    private fun loadSaved() {
-        emailFormUseCase.vo.text = "wow@email.com"
-        emailFormUseCase.runValidations()
+    override fun onSetupForms() {
+        super.onSetupForms()
+        emailFormUseCase.let {
+            it.vo.text = "wow@email.com"
+        }
     }
+
 
     override fun setupValidations() {
         emailFormUseCase.onValidation { value, _, _ ->
@@ -49,7 +52,7 @@ class LoginViewModel @Inject constructor(
         passwordFormUseCase.onValidation { value, check, rules ->
             password = value
             rememberPassword = check
-            setRules(rules?.rules)
+            loadRules(rules?.rules)
         }
     }
 
@@ -60,8 +63,10 @@ class LoginViewModel @Inject constructor(
 
     override val initialState: FormState = FormState.Init
 
-    private fun setRules(validations: List<FormRule>?) {
-        setViewState(LoginState.OnLoadPasswordRules(validations))
+    private fun loadRules(validations: List<FormRule>?) {
+        viewModelScope.launch(Dispatchers.Main) {
+            setViewState(LoginState.OnLoadPasswordRules(validations))
+        }
     }
 
     fun doLogin() {

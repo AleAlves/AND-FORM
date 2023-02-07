@@ -70,7 +70,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
         rulesListener.invoke(input.value, input.isSelected, rules)
     }
 
-    protected fun doValidateRules(vo: FormTextVO) {
+    protected fun runRulesValidations(vo: FormTextVO) {
         with(vo.validation.rules) {
             map { rule ->
                 rule.isValid = vo.text.contains(rule.regex)
