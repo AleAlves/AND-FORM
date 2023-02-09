@@ -3,7 +3,7 @@ package com.example.dynamicformapp.feature.step.login.domain.usecase
 import android.content.Context
 import android.text.InputType
 import com.example.dynamicformapp.R
-import com.example.dynamicformapp.feature.form.domain.FormRules
+import com.example.dynamicformapp.feature.form.domain.RulesListener
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
@@ -21,7 +21,7 @@ class EmailFormUseCase @Inject constructor(
                 regex = Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
             )
         ),
-        onRuleCallback = ::onRuleValidation
+        onRuleCallback = ::onRuleSetValidation
     )
 
     override val formVO: FormTextVO = FormTextVO(
@@ -36,8 +36,8 @@ class EmailFormUseCase @Inject constructor(
         onInput = ::onInput,
     )
 
-    override fun onValidation(rules: FormRules) {
-        rulesListener = rules
+    override fun onValidation(rules: RulesListener) {
+        ruleSetListener = rules
         runRulesValidations(formVO)
     }
 }

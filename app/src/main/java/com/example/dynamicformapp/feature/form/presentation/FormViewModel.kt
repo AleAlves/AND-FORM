@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.form.domain.model.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -73,8 +74,9 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         }
     }
 
-    fun updateFormFields() {
+    fun updateFormFields(asyncBlockingQueue: suspend  CoroutineScope.() -> Unit) {
         viewModelScope.launch(Dispatchers.Main) {
+            asyncBlockingQueue()
             setViewState(FormState.OnUpdatingForms)
         }
     }

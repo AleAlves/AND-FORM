@@ -61,10 +61,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun getValidations(): Boolean =
-        emailForm.isValid
-            .and(passwordForm.isValid)
-            .and(termsForm.isValid)
+    override fun getValidations(): Boolean = emailForm.isValid
+        .and(passwordForm.isValid)
+        .and(termsForm.isValid)
 
     override val initialState: FormState = FormState.Init
 
@@ -75,9 +74,10 @@ class LoginViewModel @Inject constructor(
     }
 
     fun doLogin() {
-        cityForm.formVO.text = "Osasco"
+        updateFormFields {
+            cityForm.formVO.text = password
+        }
         Log.d("WOW", "Mail: $email Password: $password Newsletter: $newsletter")
-        updateFormFields()
     }
 
     sealed class LoginState : FormState() {

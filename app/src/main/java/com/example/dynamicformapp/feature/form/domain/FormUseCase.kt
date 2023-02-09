@@ -5,26 +5,26 @@ import com.example.dynamicformapp.feature.form.domain.model.FormIO
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 
-typealias FormInput = ((input: FormIO) -> Unit)
-typealias FormRules = ((value: String, isSelected: Boolean, ruleSet: FormRuleSet?) -> Unit)
+typealias IO = ((input: FormIO) -> Unit)
+typealias RulesListener = ((value: String, isSelected: Boolean, ruleSet: FormRuleSet?) -> Unit)
 
 interface FormUsaCaseInput {
     fun onInput(input: FormIO)
-    fun onValidation(rules: FormRules) {}
+    fun onValidation(rules: RulesListener) {}
 }
 
-abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
+abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<IO, T>() {
 
-    private var inputListener: FormInput = { _ -> }
+    private var outputListener: IO = { _ -> }
 
     protected open val ruleSet: FormRuleSet? = null
-    protected var rulesListener: FormRules = { _, _, _ -> }
+    protected var ruleSetListener: RulesListener = { _, _, _ -> }
 
     abstract val formVO: T
     var isValid: Boolean = false
 
-    override fun invoke(input: FormInput): T {
-        inputListener = input
+    override fun invoke(output: IO): T {
+        outputListener = output
         return formVO
     }
 
@@ -33,7 +33,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
             is FormTextVO -> textInput(input)
             else -> selectionInput(input)
         }
-        inputListener.invoke(input)
+        outputListener.invoke(input)
     }
 
     private fun textInput(input: FormIO) {
@@ -47,13 +47,13 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
                     onRuleCallback.invoke(this)
                 }
             }
-            rulesListener.invoke(input.value, input.isSelected, ruleSet)
+            ruleSetListener.invoke(input.value, input.isSelected, ruleSet)
         }
     }
 
     private fun selectionInput(input: FormIO) {
         isValid = input.isSelected
-        rulesListener.invoke(input.value, input.isSelected, ruleSet)
+        ruleSetListener.invoke(input.value, input.isSelected, ruleSet)
     }
 
     private fun doTextValidation(vo: FormTextVO, input: FormIO) {
@@ -65,7 +65,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
 
     protected fun runRulesValidations(vo: FormTextVO) {
         isValid = verifyRuleSet(vo)
-        rulesListener.invoke(vo.text, isValid, vo.ruleSet)
+        ruleSetListener.invoke(vo.text, isValid, vo.ruleSet)
     }
 
     private fun verifyRuleSet(
@@ -83,11 +83,11 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<T, FormInput>() {
                     }
                 }
             }
-            return this.none { rule -> !rule.isValid }
+            return this.none { rule -> rule.isValid.not() }
         }
     }
 
-    fun onRuleValidation(rules: FormRuleSet) {
+    fun onRuleSetValidation(rules: FormRuleSet) {
         isValid = rules.hasErrors.not()
     }
 }
