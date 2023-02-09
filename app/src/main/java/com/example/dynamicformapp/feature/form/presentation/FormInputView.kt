@@ -57,7 +57,7 @@ class FormInputView(
             animation = null
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             setHasFixedSize(true)
-            formAdapter
+            adapter = formAdapter
         }
     }
 }
