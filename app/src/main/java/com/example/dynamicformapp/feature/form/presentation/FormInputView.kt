@@ -18,12 +18,12 @@ class FormInputView(
 ) : LinearLayout(context, attributeSet) {
 
     private val layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
-    private val adapter = FormAdapter()
+    private val formAdapter = FormAdapter()
 
 
     var onInput: ((FormIO) -> Unit)? = null
         set(value) {
-            adapter.onInput = value
+            formAdapter.onInput = value
             field = value
         }
 
@@ -34,29 +34,30 @@ class FormInputView(
     )
 
     fun setData(forms: List<FormVO>) {
-        adapter.items.submitList(forms)
+        formAdapter.items.submitList(forms)
     }
 
     fun notifyChangeAt(position: Int) {
-        adapter.notifyItemChanged(position)
+        formAdapter.notifyItemChanged(position)
     }
 
-    fun refresh() {
-        adapter.notifyItemChanged(0, adapter.items.currentList.size)
+    fun updateForm() {
+        formAdapter.notifyItemChanged(0, formAdapter.items.currentList.size)
     }
 
     init {
-        binding.formInputRecycler.layoutManager = GridLayoutManager(context, 3).apply {
-            spanSizeLookup = object : SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return adapter.items.currentList[position].gridSpan
+        with(binding.formInputRecycler) {
+            layoutManager = GridLayoutManager(context, 3).apply {
+                spanSizeLookup = object : SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return formAdapter.items.currentList[position].gridSpan
+                    }
                 }
             }
+            animation = null
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            setHasFixedSize(true)
+            formAdapter
         }
-        (binding.formInputRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
-            false
-        binding.formInputRecycler.animation = null
-        binding.formInputRecycler.setHasFixedSize(true)
-        binding.formInputRecycler.adapter = adapter
     }
 }

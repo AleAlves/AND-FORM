@@ -31,6 +31,6 @@ class GenericFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
 
     override fun onValidation(rules: RulesListener) {
         ruleSetListener = rules
-        runRulesValidations(formVO)
+        onRuleSetValidations(formVO)
     }
 }

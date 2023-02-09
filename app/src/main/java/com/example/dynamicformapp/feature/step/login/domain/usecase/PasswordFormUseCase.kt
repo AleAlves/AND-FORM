@@ -51,6 +51,6 @@ class PasswordFormUseCase @Inject constructor() :
 
     override fun onValidation(rules: RulesListener) {
         ruleSetListener = rules
-        runRulesValidations(formVO)
+        onRuleSetValidations(formVO)
     }
 }

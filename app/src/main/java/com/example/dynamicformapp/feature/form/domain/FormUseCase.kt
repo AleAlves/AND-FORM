@@ -13,17 +13,17 @@ interface FormUsaCaseInput {
     fun onValidation(rules: RulesListener) {}
 }
 
-abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<IO, T>() {
+abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
 
     private var outputListener: IO = { _ -> }
 
     protected open val ruleSet: FormRuleSet? = null
     protected var ruleSetListener: RulesListener = { _, _, _ -> }
 
-    abstract val formVO: T
+    abstract val formVO: VO
     var isValid: Boolean = false
 
-    override fun invoke(output: IO): T {
+    override fun invoke(output: IO): VO {
         outputListener = output
         return formVO
     }
@@ -63,7 +63,7 @@ abstract class FormUsaCase<T> : FormUsaCaseInput, BaseUseCase<IO, T>() {
         }
     }
 
-    protected fun runRulesValidations(vo: FormTextVO) {
+    protected fun onRuleSetValidations(vo: FormTextVO) {
         isValid = verifyRuleSet(vo)
         ruleSetListener.invoke(vo.text, isValid, vo.ruleSet)
     }

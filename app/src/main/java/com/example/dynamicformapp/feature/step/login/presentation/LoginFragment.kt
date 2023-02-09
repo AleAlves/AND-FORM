@@ -64,7 +64,7 @@ class LoginFragment : StepFragment() {
     }
 
     private fun updateForms() {
-        binding.inputView.refresh()
+        binding.inputView.updateForm()
     }
 
     private fun onLoadRules(rules: List<FormRule>?) {
