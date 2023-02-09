@@ -34,7 +34,6 @@ class LoginFragment : StepFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonApi.setOnClickListener {
             viewModel.doLogin()
-            super.getFlows()
         }
         binding.inputView.onInput = viewModel::onInput
         lifecycleScope.launch { listenChanges() }
@@ -46,6 +45,7 @@ class LoginFragment : StepFragment() {
                 is FormViewModel.FormState.OnInitForms -> setFormData(it.forms)
                 is FormViewModel.FormState.OnFormOutput -> notifyOutputAt(it.position)
                 is FormViewModel.FormState.OnValidation -> buttonValidationToggle(it.isValid)
+                is FormViewModel.FormState.OnUpdatingForms -> updateForms()
                 is LoginViewModel.LoginState.OnLoadPasswordRules -> onLoadRules(it.rules)
             }
         }
@@ -61,6 +61,10 @@ class LoginFragment : StepFragment() {
 
     private fun notifyOutputAt(position: Int) {
         binding.inputView.notifyChangeAt(position)
+    }
+
+    private fun updateForms() {
+        binding.inputView.refresh()
     }
 
     private fun onLoadRules(rules: List<FormRule>?) {

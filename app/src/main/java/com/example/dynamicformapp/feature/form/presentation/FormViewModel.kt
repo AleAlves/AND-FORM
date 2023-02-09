@@ -73,6 +73,12 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         }
     }
 
+    fun updateFormFields() {
+        viewModelScope.launch(Dispatchers.Main) {
+            setViewState(FormState.OnUpdatingForms)
+        }
+    }
+
     private fun mainValidation() {
         viewModelScope.launch(Dispatchers.Main) {
             setViewState(FormState.OnValidation(getValidations()))
@@ -84,5 +90,6 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         data class OnInitForms(val forms: List<FormVO>) : FormState()
         data class OnFormOutput(val position: Int) : FormState()
         data class OnValidation(val isValid: Boolean) : FormState()
+        object OnUpdatingForms : FormState()
     }
 }

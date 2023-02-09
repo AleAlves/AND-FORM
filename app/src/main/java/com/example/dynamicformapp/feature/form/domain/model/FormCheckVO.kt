@@ -6,5 +6,6 @@ data class FormCheckVO(
     override var isEnabled: Boolean = true,
     override var isReadOnly: Boolean = false,
     override var fill: Boolean = true,
+    override var gridSpan: Int = 3,
     override val onInput: ((FormIO) -> Unit)
 ) : FormVO()

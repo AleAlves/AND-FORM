@@ -5,6 +5,7 @@ abstract class FormVO {
     abstract var isEnabled: Boolean
     abstract var isReadOnly: Boolean
     abstract var fill: Boolean
+    abstract var gridSpan: Int
     abstract val onInput: ((FormIO) -> Unit)
 }
 

@@ -12,11 +12,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val emailFormUseCase: EmailFormUseCase,
-    private val passwordFormUseCase: PasswordFormUseCase,
-    private val termFormUseCase: TermFormUseCase,
-    private val newsletterFormUseCase: NewsletterFormUseCase,
-    private val addressUseCase: AddressUseCase,
+    private val emailForm: EmailFormUseCase,
+    private val passwordForm: PasswordFormUseCase,
+    private val termsForm: TermsFormUseCase,
+    private val newsletterForm: NewsletterFormUseCase,
+    private val cityForm: GenericFormUseCase,
+    private val stateForm: GenericFormUseCase,
+    private val stateAcronymForm: GenericFormUseCase,
 ) : FormViewModel() {
 
     private var email = ""
@@ -26,51 +28,56 @@ class LoginViewModel @Inject constructor(
 
     init {
         initForms(
-            addressUseCase(::onOutput),
-            emailFormUseCase(::onOutput),
-            passwordFormUseCase(::onOutput),
-            termFormUseCase(::onOutput),
-            *newsletterFormUseCase(::onOutput)
+            cityForm(::onOutput),
+            stateForm(::onOutput),
+            stateAcronymForm(::onOutput),
+            emailForm(::onOutput),
+            passwordForm(::onOutput),
+            termsForm(::onOutput),
+            *newsletterForm(::onOutput)
         )
     }
 
     override fun onSetupForms() {
         super.onSetupForms()
-        emailFormUseCase.let {
-            it.vo.text = "wow@email.com"
-        }
+        emailForm.formVO.text = "wow@email.com"
+        cityForm.formVO.text = "São Paulo"
+        stateForm.formVO.text = "São Paulo"
+        stateAcronymForm.formVO.text = "SP"
     }
 
 
     override fun setupValidations() {
-        emailFormUseCase.onValidation { value, _, _ ->
+        emailForm.onValidation { value, _, _ ->
             email = value
         }
-        newsletterFormUseCase.onValidation { value, _, _ ->
+        newsletterForm.onValidation { value, _, _ ->
             newsletter = value
         }
-        passwordFormUseCase.onValidation { value, check, rules ->
+        passwordForm.onValidation { value, isSelected, ruleSet ->
             password = value
-            rememberPassword = check
-            loadRules(rules?.rules)
+            rememberPassword = isSelected
+            ruleSet?.rules?.let { loadRules(it) }
         }
     }
 
     override fun getValidations(): Boolean =
-        emailFormUseCase.isValid
-            .and(passwordFormUseCase.isValid)
-            .and(termFormUseCase.isValid)
+        emailForm.isValid
+            .and(passwordForm.isValid)
+            .and(termsForm.isValid)
 
     override val initialState: FormState = FormState.Init
 
-    private fun loadRules(validations: List<FormRule>?) {
+    private fun loadRules(validations: List<FormRule>) {
         viewModelScope.launch(Dispatchers.Main) {
             setViewState(LoginState.OnLoadPasswordRules(validations))
         }
     }
 
     fun doLogin() {
+        cityForm.formVO.text = "Osasco"
         Log.d("WOW", "Mail: $email Password: $password Newsletter: $newsletter")
+        updateFormFields()
     }
 
     sealed class LoginState : FormState() {

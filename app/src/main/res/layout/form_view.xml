@@ -3,4 +3,6 @@
     android:id="@+id/form_input_recycler"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="false"
+    android:animationCache="false"
     android:overScrollMode="never" />

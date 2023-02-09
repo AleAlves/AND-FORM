@@ -4,9 +4,9 @@ import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormCheckVO
 import javax.inject.Inject
 
-class TermFormUseCase @Inject constructor() : FormUsaCase<FormCheckVO>() {
+class TermsFormUseCase @Inject constructor() : FormUsaCase<FormCheckVO>() {
 
-    override val vo: FormCheckVO = FormCheckVO(
+    override val formVO: FormCheckVO = FormCheckVO(
         text = "I accept the terms and stuff",
         onInput = ::onInput
     )

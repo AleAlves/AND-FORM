@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class NewsletterFormUseCase @Inject constructor() : FormUsaCase<Array<FormRadioVO>>() {
 
-    override val vo: Array<FormRadioVO> = arrayOf(
+    override val formVO: Array<FormRadioVO> = arrayOf(
         FormRadioVO(
             id = "yes123",
             text = "Yes, I want to reveice all news and offers",

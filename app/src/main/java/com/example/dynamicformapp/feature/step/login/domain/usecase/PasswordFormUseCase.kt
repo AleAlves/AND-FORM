@@ -6,13 +6,13 @@ import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormCheckVO
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
-import com.example.dynamicformapp.feature.form.domain.model.FormValidation
+import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 import javax.inject.Inject
 
 class PasswordFormUseCase @Inject constructor() :
     FormUsaCase<FormTextVO>() {
 
-    override val rules: FormValidation = FormValidation(
+    override val ruleSet: FormRuleSet = FormRuleSet(
         rules = listOf(
             FormRule(
                 regex = Regex("^.{6}\$"),
@@ -34,7 +34,7 @@ class PasswordFormUseCase @Inject constructor() :
         onRuleCallback = ::onRuleValidation
     )
 
-    override val vo: FormTextVO = FormTextVO(
+    override val formVO: FormTextVO = FormTextVO(
         hint = "Password",
         maxSize = 6,
         minSize = 6,
@@ -42,7 +42,7 @@ class PasswordFormUseCase @Inject constructor() :
             text = "Remember me",
             onInput = ::onInput
         ),
-        validation = rules,
+        ruleSet = ruleSet,
         isSingleLine = true,
         requestFocus = false,
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD,
@@ -51,6 +51,6 @@ class PasswordFormUseCase @Inject constructor() :
 
     override fun onValidation(rules: FormRules) {
         rulesListener = rules
-        runRulesValidations(vo)
+        runRulesValidations(formVO)
     }
 }

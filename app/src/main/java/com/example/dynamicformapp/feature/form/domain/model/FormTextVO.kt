@@ -8,20 +8,22 @@ data class FormTextVO(
     val maxSize: Int,
     val minSize: Int,
     val isSingleLine: Boolean,
+    val hasCounter: Boolean = true,
     var error: String? = null,
     val checkBox: FormCheckVO? = null,
-    val validation: FormValidation,
+    val ruleSet: FormRuleSet,
     override var text: String = "",
     override var isEnabled: Boolean = true,
     override var isReadOnly: Boolean = false,
     override var fill: Boolean = true,
+    override var gridSpan: Int = 3,
     override val onInput: ((FormIO) -> Unit),
 ) : FormVO()
 
-data class FormValidation(
+data class FormRuleSet(
     var rules: List<FormRule>,
     var hasErrors: Boolean = false,
-    val onRuleCallback: (FormValidation) -> Unit
+    val onRuleCallback: (FormRuleSet) -> Unit
 )
 
 data class FormRule(
