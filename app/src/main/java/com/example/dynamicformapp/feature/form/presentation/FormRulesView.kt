@@ -1,6 +1,5 @@
 package com.example.dynamicformapp.feature.form.presentation
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -21,10 +20,8 @@ class FormRulesView(
         layoutInflater, this, true
     )
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setData(forms: List<FormRule>?) {
         adapter.items.submitList(forms)
-        adapter.notifyDataSetChanged()
     }
 
     init {
