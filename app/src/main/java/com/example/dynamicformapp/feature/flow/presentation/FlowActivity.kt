@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.widget.ViewPager2
 import com.example.dynamicformapp.R
+import com.example.dynamicformapp.databinding.ActivityFormBinding
+import com.example.dynamicformapp.databinding.FragmentLoginBinding
 import com.example.dynamicformapp.feature.flow.domain.model.StepVO
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -18,48 +20,25 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FormActivity : FragmentActivity(), FlowActions {
 
-    private lateinit var mPager: ViewPager2
-    private val pagerAdapter = FlowAdapter(this)
-
     private val viewModel: FlowViewModel by viewModels()
+
+    private lateinit var binding: ActivityFormBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_form)
-        setupPager()
+        binding = ActivityFormBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         lifecycleScope.launch {
             listen()
         }
     }
 
-    private fun setupPager() {
-        mPager = findViewById(R.id.view_pager_flow)
-        mPager.apply {
-            isUserInputEnabled = false
-            adapter = pagerAdapter
-        }
-    }
-
-    private suspend fun listen() {
-        viewModel.state.collect { state ->
-            when (state) {
-                is FlowViewModel.FlowState.OnRemoveStepAt -> onRemoveAt(state.position)
-                is FlowViewModel.FlowState.OnForwardStep -> onGoToStep(state.position)
-                is FlowViewModel.FlowState.OnBackwardStep -> onGoToStep(state.position)
-                is FlowViewModel.FlowState.OnLoadSteps -> onLoadSteps(state.steps)
-                is FlowViewModel.FlowState.OnRemoveSteps -> onRemoveSteps(state.steps)
-                is FlowViewModel.FlowState.OnUpdate -> onUpdate(state.steps)
-                else -> {}
-            }
-        }
-    }
-
     override fun onNext() {
-        viewModel.onNext(mPager.currentItem.plus(1))
+        viewModel.onNext()
     }
 
     override fun onPrevious() {
-        viewModel.onPrevious(mPager.currentItem.minus(1))
+        viewModel.onPrevious()
     }
 
     override fun getFlows() = viewModel.getFlows()
@@ -68,46 +47,38 @@ class FormActivity : FragmentActivity(), FlowActions {
         viewModel.remove(id)
     }
 
-    private fun onGoToStep(position: Int) {
-        mPager.apply {
-            currentItem = position
-        }
+    private fun onGoToStep() {
+
     }
 
     private fun onLoadSteps(steps: List<StepVO>) {
-        pagerAdapter.apply {
-            addAll(steps)
-            notifyItemRangeInserted(1, steps.size)
-        }.run {
-            mPager.adapter?.notifyItemRangeChanged(1, steps.size)
-            onNext()
-        }
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.framelayout_flow, steps.first().view)
+            .commit()
     }
 
     private fun onRemoveSteps(steps: List<StepVO>) {
-        pagerAdapter.apply {
-            removeAll(steps)
-            notifyItemRangeRemoved(0, steps.size)
-        }.run {
-            mPager.adapter?.notifyItemRangeRemoved(0, steps.size)
-        }
     }
 
     private fun onRemoveAt(position: Int) {
-        pagerAdapter.apply {
-            removeAt(position)
-            notifyItemRemoved(position)
-        }.run {
-            mPager.adapter?.notifyItemRemoved(position)
-        }
     }
 
     private fun onUpdate(steps: List<StepVO>) {
-        pagerAdapter.apply {
-            addAll(steps)
-            notifyItemRangeChanged(0, itemCount)
-        }.run {
-            notifyItemRangeChanged(0, mPager.size)
+
+    }
+
+    private suspend fun listen() {
+        viewModel.state.collect { state ->
+            when (state) {
+                is FlowViewModel.FlowState.OnRemoveStepAt -> onRemoveAt(state.position)
+                is FlowViewModel.FlowState.OnForwardStep -> onGoToStep()
+                is FlowViewModel.FlowState.OnBackwardStep -> onGoToStep()
+                is FlowViewModel.FlowState.OnLoadSteps -> onLoadSteps(state.steps)
+                is FlowViewModel.FlowState.OnRemoveSteps -> onRemoveSteps(state.steps)
+                is FlowViewModel.FlowState.OnUpdate -> onUpdate(state.steps)
+                else -> {}
+            }
         }
     }
 }

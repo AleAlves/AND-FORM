@@ -1,12 +1,9 @@
 package com.example.dynamicformapp.feature.flow.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.flow.domain.FlowInteractor
 import com.example.dynamicformapp.feature.flow.domain.model.StepVO
-import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,17 +24,17 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun onNext(position: Int) {
-        setViewState(FlowState.OnForwardStep(position))
+    fun onNext() {
+
     }
 
-    fun onPrevious(position: Int) {
-        if (position >= 0)
-            if (!steps[position].returnable) {
-                onPrevious(position - 1)
-            } else {
-                setViewState(FlowState.OnBackwardStep(position))
-            }
+    fun onPrevious() {
+//        if (position >= 0)
+//            if (!steps[position].returnable) {
+//                onPrevious(position - 1)
+//            } else {
+//                setViewState(FlowState.OnBackwardStep(position))
+//            }
     }
 
     fun remove(id: String) {

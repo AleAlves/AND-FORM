@@ -34,6 +34,7 @@ class LoginFragment : StepFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonApi.setOnClickListener {
             viewModel.doLogin()
+            super.getFlows()
         }
         binding.inputView.onInput = viewModel::onInput
         lifecycleScope.launch { listenChanges() }

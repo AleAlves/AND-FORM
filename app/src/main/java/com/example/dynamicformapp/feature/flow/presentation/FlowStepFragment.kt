@@ -10,7 +10,7 @@ interface FlowActions {
     fun remove(id: String)
 }
 
-open class StepFragment : Fragment(), FlowActions {
+abstract class StepFragment : Fragment(), FlowActions {
 
     private lateinit var actions: FlowActions
 

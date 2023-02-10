@@ -15,10 +15,10 @@ interface FormUsaCaseInput {
 
 abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
 
-    private var outputListener: IO = { _ -> }
+    private lateinit var outputListener: IO
 
     protected open val ruleSet: FormRuleSet? = null
-    protected var ruleSetListener: RulesListener = { _, _, _ -> }
+    protected var ruleSetListener: RulesListener? = null
 
     abstract val formVO: VO
     var isValid: Boolean = false
@@ -33,6 +33,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
             is FormTextVO -> textInput(input)
             else -> selectionInput(input)
         }
+        ruleSetListener?.invoke(input.value, input.isSelected, ruleSet)
         outputListener.invoke(input)
     }
 
@@ -47,13 +48,11 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
                     onRuleCallback.invoke(this)
                 }
             }
-            ruleSetListener.invoke(input.value, input.isSelected, ruleSet)
         }
     }
 
     private fun selectionInput(input: FormIO) {
         isValid = input.isSelected
-        ruleSetListener.invoke(input.value, input.isSelected, ruleSet)
     }
 
     private fun doTextValidation(vo: FormTextVO, input: FormIO) {
@@ -65,7 +64,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
 
     protected fun onRuleSetValidations(vo: FormTextVO) {
         isValid = verifyRuleSet(vo)
-        ruleSetListener.invoke(vo.text, isValid, vo.ruleSet)
+        ruleSetListener?.invoke(vo.text, isValid, vo.ruleSet)
     }
 
     private fun verifyRuleSet(
