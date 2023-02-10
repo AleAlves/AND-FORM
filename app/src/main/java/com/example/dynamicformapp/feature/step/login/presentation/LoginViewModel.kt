@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor(
     private var newsletter = ""
     private var rememberPassword = false
 
-    init {
+    override fun loadForms() {
         initForms(
             cityForm(::onOutput),
             stateForm(::onOutput),
@@ -41,6 +41,7 @@ class LoginViewModel @Inject constructor(
     override fun onSetupForms() {
         super.onSetupForms()
         emailForm.formVO.text = "wow@email.com"
+        passwordForm.formVO.text = "123@xx"
         cityForm.formVO.text = "São Paulo"
         stateForm.formVO.text = "São Paulo"
         stateAcronymForm.formVO.text = "SP"

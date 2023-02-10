@@ -13,7 +13,6 @@ import javax.inject.Inject
 interface FlowInteractor {
     fun getStartupStep(): List<StepVO>
     fun fetchFormSteps(): List<StepVO>
-    fun wow()
 }
 
 class FlowInteractorImpl @Inject constructor(
@@ -27,13 +26,8 @@ class FlowInteractorImpl @Inject constructor(
     override fun fetchFormSteps() = listOf(
         StepVO(id = "B1", flowId = "B", true, StepBFragment.newInstance()),
         StepVO(id = "B2", flowId = "B", true, StepB2Fragment.newInstance()),
-        StepVO(id = "B3", flowId = "B", false, StepB3Fragment.newInstance()),
+        StepVO(id = "B3", flowId = "B", true, StepB3Fragment.newInstance()),
         StepVO(id = "C1", flowId = "C", true, StepCFragment.newInstance()),
         StepVO(id = "D1", flowId = "D", true, StepDFragment.newInstance()),
     )
-
-    override fun wow() {
-        var response = repository.fetchFlows()
-        print("")
-    }
 }

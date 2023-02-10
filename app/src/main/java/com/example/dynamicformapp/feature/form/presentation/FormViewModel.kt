@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface FormActions {
+    fun loadForms()
     fun onSetupForms() {}
     fun onInput(input: FormIO)
     fun onOutput(input: FormIO)
@@ -74,7 +75,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         }
     }
 
-    fun updateFormFields(asyncBlockingQueue: suspend  CoroutineScope.() -> Unit) {
+    fun updateFormFields(asyncBlockingQueue: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch(Dispatchers.Main) {
             asyncBlockingQueue()
             setViewState(FormState.OnUpdatingForms)

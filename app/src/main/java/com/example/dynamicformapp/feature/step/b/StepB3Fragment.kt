@@ -15,10 +15,6 @@ class StepB3Fragment : StepFragment() {
 
     private val viewModel: StepBViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,7 +25,6 @@ class StepB3Fragment : StepFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<Button>(R.id.button_next).setOnClickListener {
-            super.remove("A")
             super.onNext()
         }
         view.findViewById<Button>(R.id.button_back).setOnClickListener {

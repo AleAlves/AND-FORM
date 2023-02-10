@@ -29,21 +29,12 @@ class StepBFragment : StepFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getName()
-
         view.findViewById<Button>(R.id.button_next).setOnClickListener {
             super.onNext()
         }
         view.findViewById<Button>(R.id.button_back).setOnClickListener {
             super.onPrevious()
         }
-//        viewModel.state.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is StepBViewModel.StepBState.OnLoadName -> {
-//                    print("")
-//                }
-//            }
-//        }
     }
 
     companion object {

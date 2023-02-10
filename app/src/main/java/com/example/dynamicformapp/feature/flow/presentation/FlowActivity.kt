@@ -1,18 +1,11 @@
 package com.example.dynamicformapp.feature.flow.presentation
 
-import android.app.Activity
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.activity.viewModels
-import androidx.core.view.size
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.viewbinding.ViewBinding
-import androidx.viewpager2.widget.ViewPager2
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.databinding.ActivityFormBinding
-import com.example.dynamicformapp.databinding.FragmentLoginBinding
 import com.example.dynamicformapp.feature.flow.domain.model.StepVO
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,56 +34,40 @@ class FormActivity : FragmentActivity(), FlowActions {
         viewModel.onPrevious()
     }
 
-    override fun getFlows() = viewModel.getFlows()
-
-    override fun remove(id: String) {
-        viewModel.remove(id)
+    override fun getFlows() {
+        viewModel.getFlows()
     }
 
-    private fun onGoToStep() {
-
+    override fun remove(vararg idSet: String) {
+        viewModel.remove(*idSet)
     }
 
-    private fun onLoadSteps(steps: List<StepVO>) {
+    private fun addStep(vo: StepVO) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.framelayout_flow, steps.first().view)
+            .add(R.id.framelayout_flow, vo.view)
             .commit()
     }
 
-    private fun onRemoveSteps(steps: List<StepVO>) {
+    private fun removeStep(vo: StepVO) {
+        supportFragmentManager
+            .beginTransaction()
+            .remove(vo.view)
+            .commit()
     }
 
-    private fun onRemoveAt(position: Int) {
-    }
-
-    private fun onUpdate(steps: List<StepVO>) {
-
+    @Deprecated("Deprecated in Java", ReplaceWith("onPrevious()"))
+    override fun onBackPressed() {
+        onPrevious()
     }
 
     private suspend fun listen() {
         viewModel.state.collect { state ->
             when (state) {
-                is FlowViewModel.FlowState.OnRemoveStepAt -> onRemoveAt(state.position)
-                is FlowViewModel.FlowState.OnForwardStep -> onGoToStep()
-                is FlowViewModel.FlowState.OnBackwardStep -> onGoToStep()
-                is FlowViewModel.FlowState.OnLoadSteps -> onLoadSteps(state.steps)
-                is FlowViewModel.FlowState.OnRemoveSteps -> onRemoveSteps(state.steps)
-                is FlowViewModel.FlowState.OnUpdate -> onUpdate(state.steps)
+                is FlowViewModel.FlowState.AddStep -> addStep(state.vo)
+                is FlowViewModel.FlowState.RemoveStep -> removeStep(state.vo)
                 else -> {}
             }
         }
     }
-}
-
-inline fun <reified T : ViewBinding> Activity.viewBiding(
-    crossinline inflater: (LayoutInflater) -> T
-) = lazy {
-    inflater(this.layoutInflater)
-}
-
-inline fun <reified T : ViewBinding> Fragment.viewBiding(
-    crossinline inflater: (LayoutInflater) -> T
-) = lazy {
-    inflater(this.layoutInflater)
 }

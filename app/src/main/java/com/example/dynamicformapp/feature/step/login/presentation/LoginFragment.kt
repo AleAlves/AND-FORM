@@ -23,8 +23,7 @@ class LoginFragment : StepFragment() {
     private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
@@ -36,8 +35,13 @@ class LoginFragment : StepFragment() {
             viewModel.doLogin()
             super.getFlows()
         }
-        binding.inputView.onInput = viewModel::onInput
+        setupView()
+    }
+
+    private fun setupView() {
         lifecycleScope.launch { listenChanges() }
+        binding.inputView.onInput = viewModel::onInput
+        viewModel.loadForms()
     }
 
     private suspend fun listenChanges() {

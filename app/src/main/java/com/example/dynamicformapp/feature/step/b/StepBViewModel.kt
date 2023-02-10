@@ -10,10 +10,6 @@ import javax.inject.Inject
 @HiltViewModel
 class StepBViewModel @Inject constructor() : BaseViewModel<StepBViewModel.StepBState>() {
 
-    fun getName() {
-//        state.value = StepBState.OnLoadName("")
-    }
-
     sealed class StepBState : ViewState {
         object Init : StepBState()
         data class OnLoadName(val name: String) : StepBState()
