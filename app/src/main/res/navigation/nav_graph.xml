@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/flowsFragment"
-        android:name="com.example.dynamicformapp.feature.step.d.presentation.StepDFragment"
+        android:name="com.example.dynamicformapp.feature.step.password.presentation.ui.PasswordFragment"
         android:label="FlowsFragment" >
         <action
             android:id="@+id/action_flowsFragment_to_stepIFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/stepIFragment"
-        android:name="com.example.dynamicformapp.feature.step.b.StepBFragment"
+        android:name="com.example.dynamicformapp.feature.step.address.presentation.ui.AddressZipCodeFragment"
         android:label="StepIFragment">
         <action
             android:id="@+id/action_stepIFragment_to_setpIIFragment"
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/stepIIIFragment"
-        android:name="com.example.dynamicformapp.feature.step.c.StepCFragment"
+        android:name="com.example.dynamicformapp.feature.step.role.presentation.RoleFragment"
         android:label="StepIIIFragment" />
 
 

@@ -15,4 +15,20 @@
     <!--    region Login-->
     <string name="login_email_input_hint">Email</string>
     <string name="login_email_input_helper">Provides us an valid email</string>
+
+    <string name="cpf_input_hint">CPF</string>
+    <string name="cpf_input_helper">Provides us an valid id</string>
+
+    <string name="address_zip_input_hint">ZIP code.</string>
+    <string name="address_zip_input_helper">Provides us an valid email</string>
+
+    <string name="address_name_input_hint">Name</string>
+    <string name="address_name_input_helper">Let us know your name</string>
+
+    <string name="address_number_input_hint">Number</string>
+    <string name="address_number_input_helper"></string>
+
+    <string name="address_complement_input_hint">Complement (Optional)</string>
+    <string name="address_complement_input_helper">Provides references to where you live</string>
+
 </resources>

@@ -11,7 +11,7 @@ data class FormTextVO(
     val hasCounter: Boolean = true,
     var error: String? = null,
     val checkBox: FormCheckVO? = null,
-    val ruleSet: FormRuleSet,
+    val ruleSet: FormRuleSet? = null,
     override var text: String = "",
     override var isEnabled: Boolean = true,
     override var isReadOnly: Boolean = false,

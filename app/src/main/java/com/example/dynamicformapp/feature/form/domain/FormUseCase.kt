@@ -2,6 +2,7 @@ package com.example.dynamicformapp.feature.form.domain
 
 import com.example.dynamicformapp.core.domain.BaseUseCase
 import com.example.dynamicformapp.feature.form.domain.model.FormIO
+import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 
@@ -39,14 +40,10 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
 
     private fun textInput(input: FormIO) {
         (formVO as FormTextVO).let {
-            if (input.value.length > it.maxSize && input.value.length < it.minSize) {
-                isValid = false
-            } else {
-                doTextValidation(it, input)
-                with(it.ruleSet) {
-                    hasErrors = !isValid
-                    onRuleCallback.invoke(this)
-                }
+            doTextValidation(it, input)
+            it.ruleSet?.let { set ->
+                set.hasErrors = !isValid
+                set.onRuleCallback.invoke(set)
             }
         }
     }
@@ -57,28 +54,31 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
 
     private fun doTextValidation(vo: FormTextVO, input: FormIO) {
         vo.text = input.value
-        isValid = verifyRuleSet(vo) { error ->
-            input.error = error
-        }
+        isValid = vo.ruleSet?.rules?.let {
+            verifyRuleSet(vo.text, it) { error ->
+                input.error = error
+            }
+        } ?: (input.value.length <= vo.maxSize && input.value.length >= vo.minSize)
     }
 
     protected fun onRuleSetValidations(vo: FormTextVO) {
-        isValid = verifyRuleSet(vo)
+        isValid = vo.ruleSet?.rules?.let { verifyRuleSet(vo.text, it) } ?: false
         ruleSetListener?.invoke(vo.text, isValid, vo.ruleSet)
     }
 
     private fun verifyRuleSet(
-        vo: FormTextVO,
+        value: String,
+        rules: List<FormRule>,
         onValidation: ((error: String?) -> Unit)? = null
     ): Boolean {
-        with(vo.ruleSet.rules) {
+        with(rules) {
             map { rule ->
-                vo.text.contains(rule.regex).let {
+                value.contains(rule.regex).let {
                     rule.isValid = it
                     if (it) {
-                        onValidation?.invoke(rule.error)
-                    } else {
                         onValidation?.invoke(null)
+                    } else {
+                        onValidation?.invoke(rule.error)
                     }
                 }
             }

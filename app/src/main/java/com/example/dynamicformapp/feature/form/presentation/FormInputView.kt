@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.dynamicformapp.databinding.FormViewBinding
 import com.example.dynamicformapp.feature.form.domain.model.FormIO
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
+import com.example.dynamicformapp.feature.form.presentation.adapter.FormAdapter
 
 
 class FormInputView(
