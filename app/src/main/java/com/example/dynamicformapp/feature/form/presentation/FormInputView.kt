@@ -21,7 +21,6 @@ class FormInputView(
     private val layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
     private val formAdapter = FormAdapter()
 
-
     var onInput: ((FormIO) -> Unit)? = null
         set(value) {
             formAdapter.onInput = value

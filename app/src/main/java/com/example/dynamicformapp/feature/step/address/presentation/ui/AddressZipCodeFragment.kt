@@ -30,8 +30,7 @@ class AddressZipCodeFragment : FormFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onSetupView() {
         with(binding.inputContainer) {
             buttonNext.setOnClickListener {
                 super.getFlows()

@@ -1,6 +1,8 @@
 package com.example.dynamicformapp.feature.form.presentation
 
 
+import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.lifecycle.lifecycleScope
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
@@ -14,6 +16,13 @@ abstract class FormFragment : StepFragment() {
     private lateinit var inputView: FormInputView
     private lateinit var buttonNext: Button
     private lateinit var viewModel: FormViewModel
+
+    abstract fun onSetupView()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onSetupView()
+    }
 
     fun setupFormView(
         inputView: FormInputView,
