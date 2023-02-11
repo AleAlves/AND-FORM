@@ -2,11 +2,12 @@ package com.example.dynamicformapp.feature.form.domain.model
 
 data class FormTextVO(
     var requestFocus: Boolean,
-    var hint: String = "",
-    val subtitle: String = "",
     val inputType: Int,
     val maxSize: Int,
     val minSize: Int,
+    val mask: String = "",
+    var hint: String = "",
+    val subtitle: String = "",
     val isSingleLine: Boolean,
     val hasCounter: Boolean = true,
     var error: String? = null,

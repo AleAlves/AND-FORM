@@ -13,7 +13,7 @@ class PhoneFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
     override val ruleSet: FormRuleSet = FormRuleSet(
         rules = listOf(
             FormRule(
-                regex = Regex("^.{11}\$"),
+                regex = Regex("^.{15}\$"),
             ), FormRule(
                 regex = Regex(".*[0-9].*"),
             )
@@ -23,11 +23,12 @@ class PhoneFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
     override val formVO: FormTextVO = FormTextVO(
         hint = "Phone",
         subtitle = "Don`t worry We wont spam you",
-        maxSize = 11,
-        minSize = 11,
+        maxSize = 15,
+        minSize = 15,
         ruleSet = ruleSet,
         isSingleLine = true,
         requestFocus = false,
+        mask = "(##) #####-####",
         inputType = InputType.TYPE_CLASS_PHONE,
         onInput = ::onInput
     )

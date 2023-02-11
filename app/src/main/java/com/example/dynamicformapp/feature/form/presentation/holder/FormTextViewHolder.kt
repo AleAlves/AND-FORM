@@ -20,6 +20,7 @@ class FormTextViewHolder<T>(
 
         inputValue = data.text
         inputSelected = data.checkBox?.isSelected ?: false
+        mask = data.mask
 
         binding.root.layoutParams = LinearLayout.LayoutParams(
             if (data.fill) LinearLayout.LayoutParams.MATCH_PARENT else LinearLayout.LayoutParams.WRAP_CONTENT,

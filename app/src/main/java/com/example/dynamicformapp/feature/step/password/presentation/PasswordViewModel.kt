@@ -24,6 +24,11 @@ class PasswordViewModel @Inject constructor(
         )
     }
 
+    override fun onSetupForms() {
+        super.onSetupForms()
+        passwordConfirmFormUseCase.formVO.hint = "Confirm password"
+    }
+
     override fun setupValidations() {
         passwordFormUseCase.onValidation { value, _, rules ->
             password = value

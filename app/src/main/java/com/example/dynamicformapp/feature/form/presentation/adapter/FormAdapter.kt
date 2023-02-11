@@ -14,7 +14,7 @@ import com.example.dynamicformapp.feature.form.domain.model.*
 import com.example.dynamicformapp.feature.form.presentation.holder.*
 
 
-class FormAdapter() : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
+class FormAdapter : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
 
     companion object {
         private const val TEXT = 1

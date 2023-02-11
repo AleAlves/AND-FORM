@@ -18,7 +18,7 @@ class CpfFormUseCase @Inject constructor(
     override var ruleSet: FormRuleSet = FormRuleSet(
         rules = listOf(
             FormRule(
-                regex = Regex("^.{11}\$")
+                regex = Regex("^.{14}\$")
             )
         ),
         onRuleCallback = ::onRuleSetValidation
@@ -27,11 +27,12 @@ class CpfFormUseCase @Inject constructor(
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.cpf_input_hint),
         subtitle = context.getString(R.string.cpf_input_helper),
-        maxSize = 11,
-        minSize = 11,
+        maxSize = 14,
+        minSize = 14,
         requestFocus = true,
         isSingleLine = true,
         ruleSet = ruleSet,
+        mask = "###.###.###-##",
         inputType = InputType.TYPE_CLASS_NUMBER,
         onInput = ::onInput,
     )

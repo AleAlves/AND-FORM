@@ -18,7 +18,7 @@ class ZipCodeFormUseCase @Inject constructor(
     override var ruleSet: FormRuleSet = FormRuleSet(
         rules = listOf(
             FormRule(
-                regex = Regex("^.{8}\$")
+                regex = Regex("^.{9}\$")
             )
         ),
         onRuleCallback = ::onRuleSetValidation
@@ -27,11 +27,12 @@ class ZipCodeFormUseCase @Inject constructor(
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.address_zip_input_hint),
         subtitle = context.getString(R.string.address_zip_input_helper),
-        maxSize = 8,
-        minSize = 8,
+        maxSize = 9,
+        minSize = 9,
         requestFocus = true,
         isSingleLine = true,
         ruleSet = ruleSet,
+        mask = "#####-###",
         inputType = InputType.TYPE_CLASS_NUMBER,
         onInput = ::onInput,
     )
