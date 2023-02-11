@@ -21,7 +21,7 @@ class NameFormUseCase @Inject constructor(
         subtitle = context.getString(R.string.address_name_input_helper),
         maxSize = 100,
         minSize = 3,
-        requestFocus = false,
+        requestFocus = true,
         isSingleLine = true,
         isEnabled = true,
         inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME,

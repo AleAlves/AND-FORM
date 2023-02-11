@@ -27,7 +27,7 @@ class PhoneFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
         minSize = 15,
         ruleSet = ruleSet,
         isSingleLine = true,
-        requestFocus = false,
+        requestFocus = true,
         mask = "(##) #####-####",
         inputType = InputType.TYPE_CLASS_PHONE,
         onInput = ::onInput

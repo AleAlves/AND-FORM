@@ -40,7 +40,7 @@ class PasswordFormUseCase @Inject constructor() :
         minSize = 6,
         ruleSet = ruleSet,
         isSingleLine = true,
-        requestFocus = false,
+        requestFocus = true,
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD,
         onInput = ::onInput
     )

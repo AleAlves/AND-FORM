@@ -39,14 +39,11 @@ class PhoneFragment : StepFragment() {
     }
 
     private fun setupView() {
-        binding.buttonNext.setOnClickListener {
+        binding.inputContainer.buttonNext.setOnClickListener {
             super.onNext()
         }
-        binding.buttonBack.setOnClickListener {
-            super.onPrevious()
-        }
         lifecycleScope.launch { listenChanges() }
-        binding.inputView.onInput = viewModel::onInput
+        binding.inputContainer.inputView.onInput = viewModel::onInput
         viewModel.loadForms()
     }
 
@@ -62,19 +59,19 @@ class PhoneFragment : StepFragment() {
     }
 
     private fun buttonValidationToggle(isValid: Boolean) {
-        binding.buttonNext.isEnabled = isValid
+        binding.inputContainer.buttonNext.isEnabled = isValid
     }
 
     private fun setFormData(forms: List<FormVO>) {
-        binding.inputView.setData(forms)
+        binding.inputContainer.inputView.setData(forms)
     }
 
     private fun notifyOutputAt(position: Int) {
-        binding.inputView.notifyChangeAt(position)
+        binding.inputContainer.inputView.notifyChangeAt(position)
     }
 
     private fun updateForms() {
-        binding.inputView.updateForm()
+        binding.inputContainer.inputView.updateForm()
     }
 
     companion object {

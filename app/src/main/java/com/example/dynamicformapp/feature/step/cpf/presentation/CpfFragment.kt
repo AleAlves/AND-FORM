@@ -30,7 +30,7 @@ class CpfFragment : StepFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonApi.setOnClickListener {
+        binding.inputContainer.buttonNext.setOnClickListener {
             super.getFlows()
         }
         setupView()
@@ -38,7 +38,7 @@ class CpfFragment : StepFragment() {
 
     private fun setupView() {
         lifecycleScope.launch { listenChanges() }
-        binding.inputView.onInput = viewModel::onInput
+        binding.inputContainer.inputView.onInput = viewModel::onInput
         viewModel.loadForms()
     }
 
@@ -54,19 +54,19 @@ class CpfFragment : StepFragment() {
     }
 
     private fun buttonValidationToggle(isValid: Boolean) {
-        binding.buttonApi.isEnabled = isValid
+        binding.inputContainer.buttonNext.isEnabled = isValid
     }
 
     private fun setFormData(forms: List<FormVO>) {
-        binding.inputView.setData(forms)
+        binding.inputContainer.inputView.setData(forms)
     }
 
     private fun notifyOutputAt(position: Int) {
-        binding.inputView.notifyChangeAt(position)
+        binding.inputContainer.inputView.notifyChangeAt(position)
     }
 
     private fun updateForms() {
-        binding.inputView.updateForm()
+        binding.inputContainer.inputView.updateForm()
     }
 
     companion object {
