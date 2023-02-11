@@ -1,21 +1,15 @@
-package com.example.dynamicformapp.feature.step.cpf.presentation
+package com.example.dynamicformapp.feature.step.cpf.presentation.ui
 
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.dynamicformapp.databinding.FragmentCpfBinding
-import com.example.dynamicformapp.feature.flow.presentation.StepFragment
-import com.example.dynamicformapp.feature.form.domain.model.FormVO
-import com.example.dynamicformapp.feature.form.presentation.FormFragment
-import com.example.dynamicformapp.feature.form.presentation.FormInputView
-import com.example.dynamicformapp.feature.form.presentation.FormViewModel
+import com.example.dynamicformapp.feature.form.presentation.ui.FormFragment
+import com.example.dynamicformapp.feature.step.cpf.presentation.CpfViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CpfFragment : FormFragment() {

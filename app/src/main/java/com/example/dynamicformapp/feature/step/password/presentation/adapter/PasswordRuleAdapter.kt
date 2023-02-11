@@ -11,7 +11,7 @@ import com.example.dynamicformapp.feature.form.domain.model.*
 import com.example.dynamicformapp.feature.form.presentation.holder.*
 import com.example.dynamicformapp.feature.step.password.presentation.ui.RulesViewHolder
 
-class FormRuleAdapter : RecyclerView.Adapter<FormViewHolder<FormRule>>() {
+class PasswordRuleAdapter : RecyclerView.Adapter<FormViewHolder<FormRule>>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

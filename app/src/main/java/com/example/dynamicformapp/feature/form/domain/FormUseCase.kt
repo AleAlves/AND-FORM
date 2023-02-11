@@ -7,11 +7,11 @@ import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 
 typealias IO = ((input: FormIO) -> Unit)
-typealias RulesListener = ((value: String, isSelected: Boolean, ruleSet: FormRuleSet?) -> Unit)
+typealias OutputListener = ((value: String, isSelected: Boolean, ruleSet: FormRuleSet?) -> Unit)
 
 interface FormUsaCaseInput {
     fun onInput(input: FormIO)
-    fun onValidation(rules: RulesListener) {}
+    fun onValidation(output: OutputListener) {}
 }
 
 abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
@@ -19,7 +19,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     private lateinit var outputListener: IO
 
     protected open val ruleSet: FormRuleSet? = null
-    protected var ruleSetListener: RulesListener? = null
+    protected var ruleSetListener: OutputListener? = null
 
     abstract val formVO: VO
     var isValid: Boolean = false
@@ -39,9 +39,9 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     }
 
     private fun textInput(input: FormIO) {
-        (formVO as FormTextVO).let {
-            doTextValidation(it, input)
-            it.ruleSet?.let { set ->
+        (formVO as FormTextVO).let { vo ->
+            doTextValidation(vo, input)
+            vo.ruleSet?.let { set ->
                 set.hasErrors = !isValid
                 set.onRuleCallback.invoke(set)
             }
@@ -54,8 +54,8 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
 
     private fun doTextValidation(vo: FormTextVO, input: FormIO) {
         vo.text = input.value
-        isValid = vo.ruleSet?.rules?.let {
-            verifyRuleSet(vo.text, it) { error ->
+        isValid = vo.ruleSet?.rules?.let { rules ->
+            verifyRuleSet(vo.text, rules) { error ->
                 input.error = error
             }
         } ?: (input.value.length <= vo.maxSize && input.value.length >= vo.minSize)
@@ -73,9 +73,9 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     ): Boolean {
         with(rules) {
             map { rule ->
-                value.contains(rule.regex).let {
-                    rule.isValid = it
-                    if (it) {
+                value.contains(rule.regex).let { isValid ->
+                    rule.isValid = isValid
+                    if (isValid) {
                         onValidation?.invoke(null)
                     } else {
                         onValidation?.invoke(rule.error)

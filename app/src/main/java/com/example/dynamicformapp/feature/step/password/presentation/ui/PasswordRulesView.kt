@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dynamicformapp.databinding.InputRulesViewBinding
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
-import com.example.dynamicformapp.feature.step.password.presentation.adapter.FormRuleAdapter
+import com.example.dynamicformapp.feature.step.password.presentation.adapter.PasswordRuleAdapter
 
-class FormRulesView(
+class PasswordRulesView(
     context: Context, attributeSet: AttributeSet
 ) : LinearLayout(context, attributeSet) {
 
-    private val adapter = FormRuleAdapter()
+    private val adapter = PasswordRuleAdapter()
     private val layoutInflater: LayoutInflater get() = LayoutInflater.from(context)
 
     private var binding = InputRulesViewBinding.inflate(

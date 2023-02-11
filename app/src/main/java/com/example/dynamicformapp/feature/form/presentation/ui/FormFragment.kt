@@ -1,4 +1,4 @@
-package com.example.dynamicformapp.feature.form.presentation
+package com.example.dynamicformapp.feature.form.presentation.ui
 
 
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.lifecycle.lifecycleScope
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
+import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,6 @@ abstract class FormFragment : StepFragment() {
         inputView.onInput = viewModel::onInput
         viewModel.loadForms()
     }
-
 
     private suspend fun listenChanges() {
         viewModel.state.collect {

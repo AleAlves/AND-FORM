@@ -3,12 +3,9 @@ package com.example.dynamicformapp.feature.step.name.domain
 import android.content.Context
 import android.text.InputType
 import com.example.dynamicformapp.R
-import com.example.dynamicformapp.feature.form.domain.RulesListener
+import com.example.dynamicformapp.feature.form.domain.OutputListener
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
-import com.example.dynamicformapp.feature.form.domain.model.FormCheckVO
-import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
-import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -28,8 +25,8 @@ class NameFormUseCase @Inject constructor(
         onInput = ::onInput,
     )
 
-    override fun onValidation(rules: RulesListener) {
-        ruleSetListener = rules
+    override fun onValidation(output: OutputListener) {
+        ruleSetListener = output
         onRuleSetValidations(formVO)
     }
 }

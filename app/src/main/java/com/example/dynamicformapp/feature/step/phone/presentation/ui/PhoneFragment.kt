@@ -1,24 +1,15 @@
-package com.example.dynamicformapp.feature.step.phone.presentation
+package com.example.dynamicformapp.feature.step.phone.presentation.ui
 
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.example.dynamicformapp.R
 import com.example.dynamicformapp.databinding.FragmentPhoneBinding
-import com.example.dynamicformapp.databinding.FragmentRoleBinding
-import com.example.dynamicformapp.feature.flow.presentation.StepFragment
-import com.example.dynamicformapp.feature.form.domain.model.FormVO
-import com.example.dynamicformapp.feature.form.presentation.FormFragment
-import com.example.dynamicformapp.feature.form.presentation.FormViewModel
-import com.example.dynamicformapp.feature.step.password.presentation.PasswordViewModel
-import com.example.dynamicformapp.feature.step.password.presentation.ui.PasswordFragment
+import com.example.dynamicformapp.feature.form.presentation.ui.FormFragment
+import com.example.dynamicformapp.feature.step.phone.presentation.PhoneViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PhoneFragment : FormFragment() {

@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/stepIIIFragment"
-        android:name="com.example.dynamicformapp.feature.step.role.presentation.RoleFragment"
+        android:name="com.example.dynamicformapp.feature.step.role.presentation.ui.RoleFragment"
         android:label="StepIIIFragment" />
 
 
