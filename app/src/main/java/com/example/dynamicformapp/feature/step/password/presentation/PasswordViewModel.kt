@@ -27,6 +27,7 @@ class PasswordViewModel @Inject constructor(
     override fun onSetupForms() {
         super.onSetupForms()
         passwordConfirmFormUseCase.formVO.hint = "Confirm password"
+        passwordConfirmFormUseCase.formVO.requestFocus = false
     }
 
     override fun setupValidations() {

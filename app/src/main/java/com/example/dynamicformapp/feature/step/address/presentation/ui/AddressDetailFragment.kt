@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.dynamicformapp.databinding.FragmentAddressDetailBinding
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
+import com.example.dynamicformapp.feature.form.presentation.FormFragment
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import com.example.dynamicformapp.feature.step.address.presentation.AddressDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AddressDetailFragment : StepFragment() {
+class AddressDetailFragment : FormFragment() {
 
     private val viewModel: AddressDetailViewModel by viewModels()
 
@@ -32,45 +33,17 @@ class AddressDetailFragment : StepFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupView()
-    }
-
-    private fun setupView() {
-        binding.inputContainer.buttonNext.setOnClickListener {
-            super.onNext()
-        }
-        lifecycleScope.launch { listenChanges() }
-        binding.inputContainer.inputView.onInput = viewModel::onInput
-        viewModel.loadForms()
-    }
-
-    private suspend fun listenChanges() {
-        viewModel.state.collect {
-            when (it) {
-                is FormViewModel.FormState.OnInitForms -> setFormData(it.forms)
-                is FormViewModel.FormState.OnFormOutput -> notifyOutputAt(it.position)
-                is FormViewModel.FormState.OnValidation -> buttonValidationToggle(it.isValid)
-                is FormViewModel.FormState.OnUpdatingForms -> updateForms()
+        with(binding.inputContainer) {
+            buttonNext.setOnClickListener {
+                super.getFlows()
             }
+            setupFormView(
+                inputView,
+                buttonNext,
+                viewModel
+            )
         }
     }
-
-    private fun buttonValidationToggle(isValid: Boolean) {
-        binding.inputContainer.buttonNext.isEnabled = isValid
-    }
-
-    private fun setFormData(forms: List<FormVO>) {
-        binding.inputContainer.inputView.setData(forms)
-    }
-
-    private fun notifyOutputAt(position: Int) {
-        binding.inputContainer.inputView.notifyChangeAt(position)
-    }
-
-    private fun updateForms() {
-        binding.inputContainer.inputView.updateForm()
-    }
-
 
     companion object {
 
