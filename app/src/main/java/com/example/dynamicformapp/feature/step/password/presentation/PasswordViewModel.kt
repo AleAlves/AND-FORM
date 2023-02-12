@@ -15,7 +15,7 @@ class PasswordViewModel @Inject constructor(
     private var password = ""
     private var passwordCounterPart = ""
 
-    override val initialState: FormState = FormState.Init
+    private val passWordRulesLiveData = intoMediator<PasswordState>()
 
     override fun loadForms() {
         initForms(
@@ -33,7 +33,7 @@ class PasswordViewModel @Inject constructor(
     override fun setupValidations() {
         passwordFormUseCase.onValidation { value, _, rules ->
             password = value
-            setViewState(PasswordState.LoadRules(rules = rules))
+            passWordRulesLiveData.postValue(PasswordState.LoadRules(rules = rules))
         }
         passwordConfirmFormUseCase.onValidation { value, _, _ ->
             passwordCounterPart = value

@@ -19,18 +19,27 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
 
     private var forms: ArrayList<FormVO> = arrayListOf()
 
+    private val formLiveData = intoMediator<FormState.Field>()
+    private val buttonLiveData = intoMediator<FormState.Button>()
+
     protected abstract fun setupValidations()
 
     protected abstract fun getValidations(): Boolean
 
     fun initForms(vararg forms: FormVO) {
-        forms.map {
-            this.forms.add(it)
+        this.forms.apply {
+            clear()
+            forms.map {
+                add(it)
+            }
         }
-        setViewState(FormState.OnInitForms(forms.toList()))
         onSetupForms()
         setupValidations()
-        mainValidation()
+        onFormValidation()
+    }
+
+    override fun onSetupForms() {
+        formLiveData.postValue(FormState.Field.OnInitForms(this.forms))
     }
 
     override fun onInput(input: FormIO) {
@@ -45,7 +54,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
                 is FormCheckVO -> onCheckOutput(it, input)
             }
         }
-        mainValidation()
+        onFormValidation()
     }
 
     private fun onTextOutput(formVO: FormTextVO, input: FormIO) {
@@ -64,35 +73,40 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         forms.mapIndexed { index, vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
-                notifyOutputAt(index)
             }
+            notifyOutputAt(index)
         }
     }
 
     private fun notifyOutputAt(position: Int) {
-        viewModelScope.launch(Dispatchers.Main) {
-            setViewState(FormState.OnFormOutput(position))
-        }
+        formLiveData.value = (FormState.Field.OnFormOutput(position))
     }
 
     fun updateFormFields(asyncBlockingQueue: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch(Dispatchers.Main) {
             asyncBlockingQueue()
-            setViewState(FormState.OnUpdatingForms)
+            notifyAllFields()
         }
     }
 
-    private fun mainValidation() {
-        viewModelScope.launch(Dispatchers.Main) {
-            setViewState(FormState.OnValidation(getValidations()))
-        }
+    private fun notifyAllFields() {
+        formLiveData.postValue(FormState.Field.OnUpdatingForms)
+    }
+
+    private fun onFormValidation() {
+        buttonLiveData.postValue(FormState.Button.OnValidation(getValidations()))
     }
 
     open class FormState : ViewState {
-        object Init : FormState()
-        data class OnInitForms(val forms: List<FormVO>) : FormState()
-        data class OnFormOutput(val position: Int) : FormState()
-        data class OnValidation(val isValid: Boolean) : FormState()
-        object OnUpdatingForms : FormState()
+
+        sealed class Field : FormState() {
+            object OnUpdatingForms : Field()
+            data class OnInitForms(val forms: List<FormVO>) : Field()
+            data class OnFormOutput(val position: Int) : Field()
+        }
+
+        sealed class Button : FormState() {
+            data class OnValidation(val isValid: Boolean) : Button()
+        }
     }
 }

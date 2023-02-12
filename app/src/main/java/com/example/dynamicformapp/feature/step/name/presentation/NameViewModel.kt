@@ -13,10 +13,8 @@ class NameViewModel @Inject constructor(
 
     private var name = ""
 
-    override val initialState: FormState = FormState.Init
-
     override fun loadForms() {
-        initForms(nameFormUseCase(::onOutput),)
+        initForms(nameFormUseCase(::onOutput))
     }
 
     override fun setupValidations() {

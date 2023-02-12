@@ -58,18 +58,18 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
             verifyRuleSet(vo.text, rules) { error ->
                 input.error = error
             }
-        } ?: (input.value.length <= vo.maxSize && input.value.length >= vo.minSize)
+        } ?: hasTextInputValidRange(vo)
     }
 
     protected fun onRuleSetValidations(vo: FormTextVO) {
-        isValid = vo.ruleSet?.rules?.let { verifyRuleSet(vo.text, it) } ?: false
+        isValid = vo.ruleSet?.rules?.let {
+            verifyRuleSet(vo.text, it)
+        } ?: hasTextInputValidRange(vo)
         ruleSetListener?.invoke(vo.text, isValid, vo.ruleSet)
     }
 
     private fun verifyRuleSet(
-        value: String,
-        rules: List<FormRule>,
-        onValidation: ((error: String?) -> Unit)? = null
+        value: String, rules: List<FormRule>, onValidation: ((error: String?) -> Unit)? = null
     ): Boolean {
         with(rules) {
             map { rule ->
@@ -85,6 +85,9 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
             return this.none { rule -> rule.isValid.not() }
         }
     }
+
+    private fun hasTextInputValidRange(vo: FormTextVO) =
+        vo.text.length <= vo.maxSize && vo.text.length >= vo.minSize
 
     fun onRuleSetValidation(rules: FormRuleSet) {
         isValid = rules.hasErrors.not()

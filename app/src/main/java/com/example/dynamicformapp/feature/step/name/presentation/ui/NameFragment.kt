@@ -27,7 +27,7 @@ class NameFragment : FormFragment() {
     override fun onSetupView() {
         with(binding.inputContainer) {
             buttonNext.setOnClickListener {
-                super.getFlows()
+                super.onNextStep()
             }
             setupFormView(
                 inputView,

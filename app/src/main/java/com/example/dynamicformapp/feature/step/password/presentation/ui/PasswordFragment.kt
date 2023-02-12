@@ -31,7 +31,7 @@ class PasswordFragment : FormFragment() {
     override fun onSetupView() {
         with(binding.inputContainer) {
             buttonNext.setOnClickListener {
-                super.getFlows()
+                super.onNextStep()
             }
             setupFormView(
                 inputView,
@@ -42,8 +42,8 @@ class PasswordFragment : FormFragment() {
         lifecycleScope.launch { listenChanges() }
     }
 
-    private suspend fun listenChanges() {
-        viewModel.state.collect {
+    private fun listenChanges() {
+        viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
                 is PasswordViewModel.PasswordState.LoadRules -> loadRules(it.rules)
             }

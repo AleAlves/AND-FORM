@@ -4,12 +4,10 @@ package com.example.dynamicformapp.feature.form.presentation.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import androidx.lifecycle.lifecycleScope
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 abstract class FormFragment : StepFragment() {
@@ -23,6 +21,7 @@ abstract class FormFragment : StepFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onSetupView()
+        viewModel.loadForms()
     }
 
     fun setupFormView(
@@ -30,25 +29,21 @@ abstract class FormFragment : StepFragment() {
         buttonNext: Button,
         viewModel: FormViewModel
     ) {
+        this.viewModel = viewModel
         this.inputView = inputView
         this.buttonNext = buttonNext
-        this.viewModel = viewModel
-        lifecycleScope.launch { listenChanges() }
-        setupView()
-    }
-
-    private fun setupView() {
         inputView.onInput = viewModel::onInput
-        viewModel.loadForms()
+        listenChanges()
     }
 
-    private suspend fun listenChanges() {
-        viewModel.state.collect {
+
+    private fun listenChanges() {
+        viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is FormViewModel.FormState.OnInitForms -> setFormData(it.forms)
-                is FormViewModel.FormState.OnFormOutput -> notifyOutputAt(it.position)
-                is FormViewModel.FormState.OnValidation -> buttonValidationToggle(it.isValid)
-                is FormViewModel.FormState.OnUpdatingForms -> updateForms()
+                is FormViewModel.FormState.Field.OnInitForms -> setFormData(it.forms)
+                is FormViewModel.FormState.Field.OnFormOutput -> notifyOutputAt(it.position)
+                is FormViewModel.FormState.Field.OnUpdatingForms -> updateForms()
+                is FormViewModel.FormState.Button.OnValidation -> buttonValidationToggle(it.isValid)
             }
         }
     }

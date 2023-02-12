@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 
 interface FlowActions {
-    fun onNext()
-    fun onPrevious()
-    fun getFlows()
+    fun onNextStep()
+    fun onPreviousStep()
+    fun getSteps()
     fun remove(vararg idSet: String)
 }
 
@@ -14,11 +14,11 @@ abstract class StepFragment : Fragment(), FlowActions {
 
     private lateinit var actions: FlowActions
 
-    override fun getFlows() = actions.getFlows()
+    override fun getSteps() = actions.getSteps()
 
-    override fun onNext() = actions.onNext()
+    override fun onNextStep() = actions.onNextStep()
 
-    override fun onPrevious() = actions.onPrevious()
+    override fun onPreviousStep() = actions.onPreviousStep()
 
     override fun remove(vararg idSet: String) = actions.remove(*idSet)
 

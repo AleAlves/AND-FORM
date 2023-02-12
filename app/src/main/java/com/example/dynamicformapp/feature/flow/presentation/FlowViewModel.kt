@@ -31,8 +31,8 @@ class FlowViewModel @Inject constructor(
 
     fun onPrevious() {
         if (position > 0) {
-            removeStep()
             position--
+            removeStep()
         }
     }
 
@@ -59,10 +59,7 @@ class FlowViewModel @Inject constructor(
     }
 
     sealed class FlowState : ViewState {
-        object Init : FlowState()
         data class AddStep(val vo: StepVO) : FlowState()
         data class RemoveStep(val vo: StepVO) : FlowState()
     }
-
-    override val initialState: FlowState = FlowState.Init
 }

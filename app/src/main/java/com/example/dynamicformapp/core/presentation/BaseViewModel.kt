@@ -1,20 +1,21 @@
 package com.example.dynamicformapp.core.presentation
 
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.dynamicformapp.core.presentation.ui.ViewState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 abstract class BaseViewModel<T : ViewState> : ViewModel() {
 
-    abstract val initialState: T
+    private val _uiState: MediatorLiveData<T> by lazy { MediatorLiveData() }
 
-    private val _uiState: MutableStateFlow<T> by lazy { MutableStateFlow(initialState) }
-
-    val state: StateFlow<T> get() = _uiState
+    val state: MediatorLiveData<T> get() = _uiState
 
     protected fun setViewState(newState: T) {
-        _uiState.value = newState
+        _uiState.postValue(newState)
     }
+
+    protected fun <U : ViewState> intoMediator(): MutableLiveData<U> = MutableLiveData<U>().apply {
+        _uiState.addSource(this) { t -> _uiState.value = (t as T) }
+    }
+
 }

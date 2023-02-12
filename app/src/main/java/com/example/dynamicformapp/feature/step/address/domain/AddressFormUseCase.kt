@@ -25,8 +25,8 @@ class AddressFormUseCase @Inject constructor(
     )
 
     override val formVO: FormTextVO = FormTextVO(
-        hint = context.getString(R.string.address_name_input_hint),
-        subtitle = context.getString(R.string.address_name_input_helper),
+        hint = context.getString(R.string.address_address_input_hint),
+        subtitle = context.getString(R.string.address_address_input_helper),
         maxSize = 50,
         minSize = 5,
         requestFocus = true,

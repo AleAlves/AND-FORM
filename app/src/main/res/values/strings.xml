@@ -25,6 +25,9 @@
     <string name="address_name_input_hint">Name</string>
     <string name="address_name_input_helper">Let us know your name</string>
 
+    <string name="address_address_input_hint">Avenue, Street, Viela</string>
+    <string name="address_address_input_helper">Tell us where is your place</string>
+
     <string name="address_number_input_hint">Number</string>
     <string name="address_number_input_helper"></string>
 

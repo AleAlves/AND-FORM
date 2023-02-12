@@ -27,6 +27,4 @@ class CpfViewModel @Inject constructor(
     }
 
     override fun getValidations(): Boolean = cpfFormUseCase.isValid.and(termsFormUseCase.isValid)
-
-    override val initialState: FormState = FormState.Init
 }

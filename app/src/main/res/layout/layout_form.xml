@@ -5,6 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <TextView
+        android:id="@+id/input_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Form"
+        app:layout_constraintBottom_toTopOf="@+id/input_view" />
+
     <com.example.dynamicformapp.feature.form.presentation.ui.FormInputView
         android:id="@+id/input_view"
         android:layout_width="match_parent"

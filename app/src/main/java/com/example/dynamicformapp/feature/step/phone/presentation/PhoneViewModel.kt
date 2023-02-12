@@ -13,8 +13,6 @@ class PhoneViewModel @Inject constructor(
 
     private var role = ""
 
-    override val initialState: FormState = FormState.Init
-
     override fun loadForms() {
         initForms(
             phoneFormUseCase(::onOutput),

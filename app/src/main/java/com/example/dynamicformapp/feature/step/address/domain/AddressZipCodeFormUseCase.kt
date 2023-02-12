@@ -11,7 +11,7 @@ import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ZipCodeFormUseCase @Inject constructor(
+class AddressZipCodeFormUseCase @Inject constructor(
     @ApplicationContext private val context: Context
 ) : FormUsaCase<FormTextVO>() {
 

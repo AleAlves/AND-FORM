@@ -17,8 +17,6 @@ class AddressDetailViewModel @Inject constructor(
     private val addressForm: AddressFormUseCase
 ) : FormViewModel() {
 
-    override val initialState: FormState = FormState.Init
-
     private var address = ""
     private var noNumber = false
 
@@ -34,6 +32,7 @@ class AddressDetailViewModel @Inject constructor(
     }
 
     override fun onSetupForms() {
+        super.onSetupForms()
         cityFormUseCase.formVO.text = "São Paulo"
         stateUseCase.formVO.text = "São Paulo"
         sateAcronymFormUseCase.formVO.text = "SP"
