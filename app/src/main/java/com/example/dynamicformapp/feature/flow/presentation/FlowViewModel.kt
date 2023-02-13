@@ -17,7 +17,10 @@ class FlowViewModel @Inject constructor(
 
     init {
         interactor.getStartupStep().let {
-            steps.addAll(it)
+            with(steps) {
+                clear()
+                steps.addAll(it)
+            }
             addStep()
         }
     }

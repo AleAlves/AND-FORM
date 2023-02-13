@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:cursorVisible="true"
         android:focusable="true"
+        android:focusableInTouchMode="true"
         android:imeOptions="actionNext"
         android:saveEnabled="false"
         android:singleLine="true"

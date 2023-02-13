@@ -43,11 +43,13 @@ class AddressDetailViewModel @Inject constructor(
             address = value
         }
 
-        addressNumberFormUseCase.onValidation { _, isSelected, _ ->
-            updateFormFields {
-                with(addressNumberFormUseCase.formVO) {
-                    isEnabled = isSelected.not()
-                    noNumber = isSelected
+        with(addressNumberFormUseCase) {
+            onValidation { _, isSelected, _ ->
+                updateFormFields {
+                    with(formVO) {
+                        isEnabled = isSelected.not()
+                        noNumber = isSelected
+                    }
                 }
             }
         }

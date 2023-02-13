@@ -39,7 +39,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     }
 
     override fun onSetupForms() {
-        formLiveData.postValue(FormState.Field.OnInitForms(this.forms))
+        formLiveData.value = FormState.Field.OnInitForms(this.forms)
     }
 
     override fun onInput(input: FormIO) {
@@ -79,22 +79,22 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     }
 
     private fun notifyOutputAt(position: Int) {
-        formLiveData.value = (FormState.Field.OnFormOutput(position))
+        formLiveData.value = FormState.Field.OnFormOutput(position)
     }
 
     fun updateFormFields(asyncBlockingQueue: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch(Dispatchers.Main) {
-            asyncBlockingQueue()
+            asyncBlockingQueue.invoke(this)
             notifyAllFields()
         }
     }
 
     private fun notifyAllFields() {
-        formLiveData.postValue(FormState.Field.OnUpdatingForms)
+        formLiveData.value = FormState.Field.OnUpdatingForms
     }
 
     private fun onFormValidation() {
-        buttonLiveData.postValue(FormState.Button.OnValidation(getValidations()))
+        buttonLiveData.value = FormState.Button.OnValidation(getValidations())
     }
 
     open class FormState : ViewState {

@@ -52,8 +52,8 @@ class FormTextViewHolder<T>(
                 } else {
                     edit.isEnabled = data.isEnabled
                 }
-                if (data.requestFocus && !edit.hasFocus()) {
-                    edit.post { edit.requestFocus() }
+                if (data.requestFocus) {
+                    edit.requestFocus()
                 }
                 edit.addTextChangedListener(this@FormTextViewHolder)
             }

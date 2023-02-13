@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DynamicFormApp"
+        android:windowSoftInputMode="stateAlwaysVisible"
         tools:targetApi="31">
         <activity
             android:name=".feature.flow.presentation.FormActivity"

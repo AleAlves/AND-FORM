@@ -2,6 +2,7 @@ package com.example.dynamicformapp.feature.flow.presentation
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.databinding.ActivityFormBinding
@@ -39,12 +40,15 @@ class FormActivity : FragmentActivity(), FlowActions {
     }
 
     private fun addStep(vo: StepVO) {
-        supportFragmentManager.beginTransaction().replace(R.id.framelayout_flow, vo.view).commit()
+        supportFragmentManager.beginTransaction().add(R.id.framelayout_flow, vo.step).commit()
     }
 
     private fun removeStep(vo: StepVO) {
-        supportFragmentManager.beginTransaction().replace(R.id.framelayout_flow, vo.view).commit()
+        with(supportFragmentManager) {
+            beginTransaction().remove(fragments.last()).commit()
+        }
     }
+
 
     @Deprecated("Deprecated in Java", ReplaceWith("onPrevious()"))
     override fun onBackPressed() {
@@ -56,7 +60,6 @@ class FormActivity : FragmentActivity(), FlowActions {
             when (state) {
                 is FlowViewModel.FlowState.AddStep -> addStep(state.vo)
                 is FlowViewModel.FlowState.RemoveStep -> removeStep(state.vo)
-                else -> {}
             }
         }
     }
