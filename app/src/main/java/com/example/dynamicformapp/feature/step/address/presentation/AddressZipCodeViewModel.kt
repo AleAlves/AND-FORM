@@ -25,6 +25,5 @@ class AddressZipCodeViewModel @Inject constructor(
         }
     }
 
-
     override fun getValidations(): Boolean = zipCodeForm.isValid
 }

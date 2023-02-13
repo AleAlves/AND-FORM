@@ -43,7 +43,7 @@ class FormActivity : FragmentActivity(), FlowActions {
         supportFragmentManager.beginTransaction().add(R.id.framelayout_flow, vo.step).commit()
     }
 
-    private fun removeStep(vo: StepVO) {
+    private fun removeStep() {
         with(supportFragmentManager) {
             beginTransaction().remove(fragments.last()).commit()
         }
@@ -59,7 +59,7 @@ class FormActivity : FragmentActivity(), FlowActions {
         viewModel.state.observe(this) { state ->
             when (state) {
                 is FlowViewModel.FlowState.AddStep -> addStep(state.vo)
-                is FlowViewModel.FlowState.RemoveStep -> removeStep(state.vo)
+                is FlowViewModel.FlowState.RemoveStep -> removeStep()
             }
         }
     }

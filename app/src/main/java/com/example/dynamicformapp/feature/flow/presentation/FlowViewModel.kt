@@ -58,11 +58,11 @@ class FlowViewModel @Inject constructor(
 
 
     private fun removeStep() {
-        setViewState(FlowState.RemoveStep(steps[position]))
+        setViewState(FlowState.RemoveStep)
     }
 
     sealed class FlowState : ViewState {
         data class AddStep(val vo: StepVO) : FlowState()
-        data class RemoveStep(val vo: StepVO) : FlowState()
+        object RemoveStep : FlowState()
     }
 }
