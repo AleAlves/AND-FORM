@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CpfFragment : FormFragment() {
 
+
     private val viewModel: CpfViewModel by viewModels()
 
     private lateinit var binding: FragmentCpfBinding

@@ -1,8 +1,8 @@
 package com.example.dynamicformapp.feature.flow.presentation
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.dynamicformapp.R
 import com.example.dynamicformapp.databinding.ActivityFormBinding
@@ -39,14 +39,16 @@ class FormActivity : FragmentActivity(), FlowActions {
         viewModel.remove(*idSet)
     }
 
-    private fun addStep(vo: StepVO) {
-        supportFragmentManager.beginTransaction().add(R.id.framelayout_flow, vo.step).commit()
-    }
+    private fun addStep(vo: StepVO) = updateStep(vo)
 
-    private fun removeStep() {
-        with(supportFragmentManager) {
-            beginTransaction().remove(fragments.last()).commit()
-        }
+    private fun removeStep(vo: StepVO) = updateStep(vo)
+
+    private fun updateStep(vo: StepVO) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.framelayout_flow, vo.step, vo.id)
+            .addToBackStack(vo.id)
+            .commit()
     }
 
 
@@ -58,8 +60,19 @@ class FormActivity : FragmentActivity(), FlowActions {
     private fun listen() {
         viewModel.state.observe(this) { state ->
             when (state) {
-                is FlowViewModel.FlowState.AddStep -> addStep(state.vo)
-                is FlowViewModel.FlowState.RemoveStep -> removeStep()
+                is FlowViewModel.FlowState.Steps.AddStep -> addStep(state.vo)
+                is FlowViewModel.FlowState.Steps.RemoveStep -> removeStep(state.vo)
+                is FlowViewModel.FlowState.Progress.OnUpdate -> {
+                    ObjectAnimator.ofInt(
+                        binding.inputProgress,
+                        "progress",
+                        binding.inputProgress.progress,
+                        state.progress
+                    ).apply {
+                        duration = 1000L
+                        start()
+                    }
+                }
             }
         }
     }

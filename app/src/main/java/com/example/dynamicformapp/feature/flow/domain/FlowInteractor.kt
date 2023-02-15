@@ -21,15 +21,15 @@ class FlowInteractorImpl @Inject constructor(
 ) : FlowInteractor {
 
     override fun getStartupStep(): List<StepVO> {
-        return listOf(StepVO(id = "Cpf", flowId = "Cpf", true, CpfFragment.newInstance()))
+        return listOf(StepVO(id = "CPF", true, CpfFragment.newInstance()))
     }
 
     override fun fetchFormSteps() = listOf(
-        StepVO(id = "Name", flowId = "Name", true, NameFragment.newInstance()),
-        StepVO(id = "Role", flowId = "Role", true, RoleFragment.newInstance()),
-        StepVO(id = "Phone", flowId = "Phone", true, PhoneFragment.newInstance()),
-        StepVO(id = "ZipCode", flowId = "Address", true, AddressZipCodeFragment.newInstance()),
-        StepVO(id = "Address", flowId = "Address", true, AddressDetailFragment.newInstance()),
-        StepVO(id = "Password", flowId = "Password", true, PasswordFragment.newInstance())
+        StepVO(id = "NAME", true, NameFragment.newInstance()),
+        StepVO(id = "ROLE", true, RoleFragment.newInstance()),
+        StepVO(id = "PHONE", true, PhoneFragment.newInstance()),
+        StepVO(id = "ADDRESS", true, AddressZipCodeFragment.newInstance()),
+        StepVO(id = "ADDRESS", true, AddressDetailFragment.newInstance()),
+        StepVO(id = "PASSWORD", true, PasswordFragment.newInstance()),
     )
 }

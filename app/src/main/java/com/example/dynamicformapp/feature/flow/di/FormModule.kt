@@ -25,7 +25,7 @@ abstract class FormModule {
     companion object {
 
         @Provides
-        fun providePicPayService(retrofit: Retrofit): FormService {
+        fun provideService(retrofit: Retrofit): FormService {
             return retrofit.create(FormService::class.java)
         }
     }

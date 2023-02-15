@@ -17,7 +17,7 @@ interface FormActions {
 
 abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormActions {
 
-    private var forms: ArrayList<FormVO> = arrayListOf()
+    private var formsVO: ArrayList<FormVO> = arrayListOf()
 
     private val formLiveData = intoMediator<FormState.Field>()
     private val buttonLiveData = intoMediator<FormState.Button>()
@@ -27,34 +27,40 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     protected abstract fun getValidations(): Boolean
 
     fun initForms(vararg forms: FormVO) {
-        this.forms.apply {
-            clear()
-            forms.map {
-                add(it)
+        viewModelScope.launch {
+            formsVO.apply {
+                clear()
+                forms.map {
+                    add(it)
+                }
             }
+            onSetupForms()
+            setupValidations()
+            onFormValidation()
         }
-        onSetupForms()
-        setupValidations()
-        onFormValidation()
     }
 
     override fun onSetupForms() {
-        formLiveData.value = FormState.Field.OnInitForms(this.forms)
+        formLiveData.value = FormState.Field.OnInitForms(this.formsVO)
     }
 
     override fun onInput(input: FormIO) {
-        forms[input.position].onInput.invoke(input)
+        viewModelScope.launch {
+            formsVO[input.position].onInput.invoke(input)
+        }
     }
 
     override fun onOutput(input: FormIO) {
-        forms[input.position].let {
-            when (it) {
-                is FormTextVO -> onTextOutput(it, input)
-                is FormRadioVO -> onRadioOutput(it, input)
-                is FormCheckVO -> onCheckOutput(it, input)
+        viewModelScope.launch {
+            formsVO[input.position].let {
+                when (it) {
+                    is FormTextVO -> onTextOutput(it, input)
+                    is FormRadioVO -> onRadioOutput(it, input)
+                    is FormCheckVO -> onCheckOutput(it, input)
+                }
             }
+            onFormValidation()
         }
-        onFormValidation()
     }
 
     private fun onTextOutput(formVO: FormTextVO, input: FormIO) {
@@ -70,7 +76,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     }
 
     private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) {
-        forms.mapIndexed { index, vo ->
+        formsVO.mapIndexed { index, vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
             }

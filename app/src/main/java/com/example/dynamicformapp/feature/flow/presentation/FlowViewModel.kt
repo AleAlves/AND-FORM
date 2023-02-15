@@ -1,10 +1,13 @@
 package com.example.dynamicformapp.feature.flow.presentation
 
+import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.flow.domain.FlowInteractor
 import com.example.dynamicformapp.feature.flow.domain.model.StepVO
+import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -12,16 +15,20 @@ class FlowViewModel @Inject constructor(
     private val interactor: FlowInteractor
 ) : BaseViewModel<FlowViewModel.FlowState>() {
 
-    private var steps = mutableListOf<StepVO>()
+    private var steps: MutableList<StepVO> = mutableListOf()
+    private val formLiveData = intoMediator<FlowState.Steps>()
+    private var progressLiveData = intoMediator<FlowState.Progress>()
     private var position = 0
 
     init {
-        interactor.getStartupStep().let {
-            with(steps) {
-                clear()
-                steps.addAll(it)
+        viewModelScope.launch {
+            interactor.getStartupStep().let {
+                with(steps) {
+                    clear()
+                    steps.addAll(it)
+                    addStep()
+                }
             }
-            addStep()
         }
     }
 
@@ -41,7 +48,7 @@ class FlowViewModel @Inject constructor(
 
     fun remove(vararg idSet: String) {
         idSet.map { id ->
-            steps = steps.filter { it.id != id && it.flowId != id }.toMutableList()
+            steps = steps.filter { it.id != id }.toMutableList()
         }
     }
 
@@ -53,16 +60,34 @@ class FlowViewModel @Inject constructor(
     }
 
     private fun addStep() {
-        setViewState(FlowState.AddStep(steps[position]))
+        updateProgress()
+        formLiveData.postValue(FlowState.Steps.AddStep(steps[position]))
     }
-
 
     private fun removeStep() {
-        setViewState(FlowState.RemoveStep)
+        updateProgress()
+        formLiveData.postValue(FlowState.Steps.RemoveStep(steps[position]))
     }
 
+    private fun updateProgress() {
+        progressLiveData.postValue(FlowState.Progress.OnUpdate(getProgress()))
+    }
+
+    private fun getProgress() =
+        position.plus(0).toDouble()
+            .div(steps.size.toDouble())
+            .times(100)
+            .toInt()
+
     sealed class FlowState : ViewState {
-        data class AddStep(val vo: StepVO) : FlowState()
-        object RemoveStep : FlowState()
+
+        sealed class Steps : FlowState() {
+            data class AddStep(val vo: StepVO) : Steps()
+            data class RemoveStep(val vo: StepVO) : Steps()
+        }
+
+        sealed class Progress : FlowState() {
+            data class OnUpdate(val progress: Int) : Progress()
+        }
     }
 }
