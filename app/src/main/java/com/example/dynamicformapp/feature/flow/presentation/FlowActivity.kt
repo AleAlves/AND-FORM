@@ -21,6 +21,7 @@ class FormActivity : FragmentActivity(), FlowActions {
         binding = ActivityFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
         listen()
+        viewModel.getFlows()
     }
 
     override fun onNextStep() {
@@ -29,10 +30,6 @@ class FormActivity : FragmentActivity(), FlowActions {
 
     override fun onPreviousStep() {
         viewModel.onPrevious()
-    }
-
-    override fun getSteps() {
-        viewModel.getFlows()
     }
 
     override fun remove(vararg idSet: String) {
@@ -44,11 +41,12 @@ class FormActivity : FragmentActivity(), FlowActions {
     private fun removeStep(vo: StepVO) = updateStep(vo)
 
     private fun updateStep(vo: StepVO) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.framelayout_flow, vo.step, vo.id)
-            .addToBackStack(vo.id)
-            .commit()
+        with(supportFragmentManager) {
+            this.beginTransaction().replace(
+                R.id.framelayout_flow,
+                findFragmentByTag(vo.id) ?: vo.fragment.newInstance(), vo.id
+            ).addToBackStack(vo.id).commit()
+        }
     }
 
 

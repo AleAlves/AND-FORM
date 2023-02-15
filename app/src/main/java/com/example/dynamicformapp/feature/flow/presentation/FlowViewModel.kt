@@ -18,19 +18,7 @@ class FlowViewModel @Inject constructor(
     private var steps: MutableList<StepVO> = mutableListOf()
     private val formLiveData = intoMediator<FlowState.Steps>()
     private var progressLiveData = intoMediator<FlowState.Progress>()
-    private var position = 0
-
-    init {
-        viewModelScope.launch {
-            interactor.getStartupStep().let {
-                with(steps) {
-                    clear()
-                    steps.addAll(it)
-                    addStep()
-                }
-            }
-        }
-    }
+    private var position = -1
 
     fun onNext() {
         if (position < steps.size) {
@@ -42,7 +30,11 @@ class FlowViewModel @Inject constructor(
     fun onPrevious() {
         if (position > 0) {
             position--
-            removeStep()
+            if (steps[position].returnable) {
+                removeStep()
+            } else {
+                onPrevious()
+            }
         }
     }
 
@@ -74,7 +66,7 @@ class FlowViewModel @Inject constructor(
     }
 
     private fun getProgress() =
-        position.plus(0).toDouble()
+        position.plus(1).toDouble()
             .div(steps.size.toDouble())
             .times(100)
             .toInt()

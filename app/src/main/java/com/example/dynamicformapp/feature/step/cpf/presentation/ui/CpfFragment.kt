@@ -29,7 +29,7 @@ class CpfFragment : FormFragment() {
     override fun onSetupView() {
         with(binding.inputContainer) {
             buttonNext.setOnClickListener {
-                super.getSteps()
+                super.onNextStep()
             }
             setupFormView(
                 inputView,

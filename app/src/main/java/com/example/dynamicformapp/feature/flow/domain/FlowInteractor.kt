@@ -12,7 +12,6 @@ import com.example.dynamicformapp.feature.step.role.presentation.ui.RoleFragment
 import javax.inject.Inject
 
 interface FlowInteractor {
-    fun getStartupStep(): List<StepVO>
     fun fetchFormSteps(): List<StepVO>
 }
 
@@ -20,16 +19,13 @@ class FlowInteractorImpl @Inject constructor(
     private val repository: FlowRepository
 ) : FlowInteractor {
 
-    override fun getStartupStep(): List<StepVO> {
-        return listOf(StepVO(id = "CPF", true, CpfFragment.newInstance()))
-    }
-
     override fun fetchFormSteps() = listOf(
-        StepVO(id = "NAME", true, NameFragment.newInstance()),
-        StepVO(id = "ROLE", true, RoleFragment.newInstance()),
-        StepVO(id = "PHONE", true, PhoneFragment.newInstance()),
-        StepVO(id = "ADDRESS", true, AddressZipCodeFragment.newInstance()),
-        StepVO(id = "ADDRESS", true, AddressDetailFragment.newInstance()),
-        StepVO(id = "PASSWORD", true, PasswordFragment.newInstance()),
+        StepVO(id = "ID", true, CpfFragment::class.java),
+        StepVO(id = "NAME", true, NameFragment::class.java),
+        StepVO(id = "ROLE", true, RoleFragment::class.java),
+        StepVO(id = "PHONE", true, PhoneFragment::class.java),
+        StepVO(id = "ADDRESS_ZIP", true, AddressZipCodeFragment::class.java),
+        StepVO(id = "ADDRESS_DETAIL", false, AddressDetailFragment::class.java),
+        StepVO(id = "PASSWORD", true, PasswordFragment::class.java),
     )
 }
