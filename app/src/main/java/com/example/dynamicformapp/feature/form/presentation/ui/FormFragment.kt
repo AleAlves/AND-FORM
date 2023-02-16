@@ -1,9 +1,11 @@
 package com.example.dynamicformapp.feature.form.presentation.ui
 
 
+import android.app.Activity
 import android.os.Bundle
-import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import com.example.dynamicformapp.core.util.hideKeyboard
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
@@ -24,6 +26,7 @@ abstract class FormFragment : StepFragment() {
         viewModel.loadForms()
     }
 
+
     fun setupFormView(
         inputView: FormInputView,
         buttonNext: Button,
@@ -33,6 +36,7 @@ abstract class FormFragment : StepFragment() {
         this.inputView = inputView
         this.buttonNext = buttonNext
         inputView.onInput = viewModel::onInput
+        inputView.softInput = ::onSoftInput
         listenChanges()
     }
 
@@ -40,9 +44,9 @@ abstract class FormFragment : StepFragment() {
     private fun listenChanges() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
-                is FormViewModel.FormState.Field.OnInitForms -> setFormData(it.forms)
-                is FormViewModel.FormState.Field.OnFormOutput -> notifyOutputAt(it.position)
-                is FormViewModel.FormState.Field.OnUpdatingForms -> updateForms()
+                is FormViewModel.FormState.OnLoadForm -> setFormData(it.forms)
+                is FormViewModel.FormState.Field.OnFieldOutput -> notifyOutputAt(it.position)
+                is FormViewModel.FormState.Field.OnUpdateFields -> updateForms()
                 is FormViewModel.FormState.Button.OnValidation -> buttonValidationToggle(it.isValid)
             }
         }
@@ -62,5 +66,9 @@ abstract class FormFragment : StepFragment() {
 
     private fun updateForms() {
         inputView.updateForm()
+    }
+
+    private fun onSoftInput(shouldShow: Boolean) {
+
     }
 }

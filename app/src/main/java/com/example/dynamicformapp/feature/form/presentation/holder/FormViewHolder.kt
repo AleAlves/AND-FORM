@@ -22,6 +22,7 @@ abstract class FormViewHolder<T>(
     protected abstract fun setupView(data: T?)
 
     var onInput: ((FormIO) -> Unit)? = null
+    var softInput: ((Boolean) -> Unit)? = null
 
     protected var inputValue = ""
     protected var inputSelected = false

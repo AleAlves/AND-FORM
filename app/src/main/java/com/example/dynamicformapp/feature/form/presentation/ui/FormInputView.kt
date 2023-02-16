@@ -27,6 +27,12 @@ class FormInputView(
             field = value
         }
 
+    var softInput: ((Boolean) -> Unit)? = null
+        set(value) {
+            formAdapter.softInput = value
+            field = value
+        }
+
     private var binding = FormViewBinding.inflate(
         layoutInflater,
         this,

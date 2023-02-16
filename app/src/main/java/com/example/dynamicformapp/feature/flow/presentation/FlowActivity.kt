@@ -36,19 +36,17 @@ class FormActivity : FragmentActivity(), FlowActions {
         viewModel.remove(*idSet)
     }
 
-    private fun addStep(vo: StepVO) = updateStep(vo)
-
-    private fun removeStep(vo: StepVO) = updateStep(vo)
-
-    private fun updateStep(vo: StepVO) {
-        with(supportFragmentManager) {
-            this.beginTransaction().replace(
-                R.id.framelayout_flow,
-                findFragmentByTag(vo.id) ?: vo.fragment.newInstance(), vo.id
-            ).addToBackStack(vo.id).commit()
+    private fun next(vo: StepVO) = with(supportFragmentManager) {
+        with(vo) {
+            beginTransaction().add(
+                R.id.framelayout_flow, findFragmentByTag(id) ?: fragment.newInstance(), id
+            ).addToBackStack(id).commit()
         }
     }
 
+    private fun previous(vo: StepVO) = with(supportFragmentManager) {
+        findFragmentByTag(vo.id)?.let { beginTransaction().remove(it).commit() }
+    }
 
     @Deprecated("Deprecated in Java", ReplaceWith("onPrevious()"))
     override fun onBackPressed() {
@@ -58,8 +56,9 @@ class FormActivity : FragmentActivity(), FlowActions {
     private fun listen() {
         viewModel.state.observe(this) { state ->
             when (state) {
-                is FlowViewModel.FlowState.Steps.AddStep -> addStep(state.vo)
-                is FlowViewModel.FlowState.Steps.RemoveStep -> removeStep(state.vo)
+                is FlowViewModel.FlowState.Steps.ToNext -> next(state.vo)
+                is FlowViewModel.FlowState.Steps.ToPrevious -> previous(state.vo)
+                is FlowViewModel.FlowState.Steps.Finish -> finish()
                 is FlowViewModel.FlowState.Progress.OnUpdate -> {
                     ObjectAnimator.ofInt(
                         binding.inputProgress,

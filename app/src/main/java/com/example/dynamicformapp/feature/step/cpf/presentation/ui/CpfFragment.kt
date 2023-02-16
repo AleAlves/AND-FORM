@@ -11,6 +11,7 @@ import com.example.dynamicformapp.feature.form.presentation.ui.FormFragment
 import com.example.dynamicformapp.feature.step.cpf.presentation.CpfViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class CpfFragment : FormFragment() {
 

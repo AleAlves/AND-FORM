@@ -1,10 +1,12 @@
 package com.example.dynamicformapp.feature.step.address.presentation
 
 
+import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.feature.form.domain.GenericFormUseCase
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import com.example.dynamicformapp.feature.step.address.domain.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,14 +23,16 @@ class AddressDetailViewModel @Inject constructor(
     private var noNumber = false
 
     override fun loadForms() {
-        initForms(
-            cityFormUseCase(::onOutput),
-            stateUseCase(::onOutput),
-            sateAcronymFormUseCase(::onOutput),
-            addressForm(::onOutput),
-            addressNumberFormUseCase(::onOutput),
-            addressComplementFormUseCase(::onOutput)
-        )
+        viewModelScope.launch {
+            initForms(
+                cityFormUseCase(::onOutput),
+                stateUseCase(::onOutput),
+                sateAcronymFormUseCase(::onOutput),
+                addressForm(::onOutput),
+                addressNumberFormUseCase(::onOutput),
+                addressComplementFormUseCase(::onOutput)
+            )
+        }
     }
 
     override fun onSetupForms() {

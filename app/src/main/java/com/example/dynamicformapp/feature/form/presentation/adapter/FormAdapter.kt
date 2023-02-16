@@ -24,6 +24,7 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
     }
 
     var onInput: ((FormIO) -> Unit)? = null
+    var softInput: ((Boolean) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder<FormVO> {
         val inflater = LayoutInflater.from(parent.context)
@@ -44,6 +45,7 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
 
     override fun onBindViewHolder(holder: FormViewHolder<FormVO>, position: Int) {
         with(holder) {
+            softInput = this@FormAdapter.softInput
             data = items.currentList[position]
             onInput = this@FormAdapter.onInput
         }

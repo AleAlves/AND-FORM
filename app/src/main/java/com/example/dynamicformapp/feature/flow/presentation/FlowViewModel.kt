@@ -1,13 +1,10 @@
 package com.example.dynamicformapp.feature.flow.presentation
 
-import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.flow.domain.FlowInteractor
 import com.example.dynamicformapp.feature.flow.domain.model.StepVO
-import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,12 +26,16 @@ class FlowViewModel @Inject constructor(
 
     fun onPrevious() {
         if (position > 0) {
-            position--
             if (steps[position].returnable) {
                 removeStep()
+                position--
             } else {
                 onPrevious()
+                position--
             }
+        }
+        else{
+            formLiveData.postValue(FlowState.Steps.Finish)
         }
     }
 
@@ -53,12 +54,12 @@ class FlowViewModel @Inject constructor(
 
     private fun addStep() {
         updateProgress()
-        formLiveData.postValue(FlowState.Steps.AddStep(steps[position]))
+        formLiveData.postValue(FlowState.Steps.ToNext(steps[position]))
     }
 
     private fun removeStep() {
         updateProgress()
-        formLiveData.postValue(FlowState.Steps.RemoveStep(steps[position]))
+        formLiveData.postValue(FlowState.Steps.ToPrevious(steps[position]))
     }
 
     private fun updateProgress() {
@@ -73,9 +74,11 @@ class FlowViewModel @Inject constructor(
 
     sealed class FlowState : ViewState {
 
+
         sealed class Steps : FlowState() {
-            data class AddStep(val vo: StepVO) : Steps()
-            data class RemoveStep(val vo: StepVO) : Steps()
+            data class ToNext(val vo: StepVO) : Steps()
+            data class ToPrevious(val vo: StepVO) : Steps()
+            object Finish : Steps()
         }
 
         sealed class Progress : FlowState() {

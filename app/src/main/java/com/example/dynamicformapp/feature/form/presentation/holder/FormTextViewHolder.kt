@@ -1,10 +1,13 @@
 package com.example.dynamicformapp.feature.form.presentation.holder
 
+import android.app.Activity
 import android.text.InputFilter
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import com.example.dynamicformapp.core.util.toEditable
 import com.example.dynamicformapp.databinding.InputTextViewBinding
@@ -52,8 +55,10 @@ class FormTextViewHolder<T>(
                 } else {
                     edit.isEnabled = data.isEnabled
                 }
-                if (data.requestFocus) {
-                    edit.requestFocus()
+                with(data.requestFocus) {
+                    if (this) {
+                        edit.requestFocus()
+                    }
                 }
                 edit.addTextChangedListener(this@FormTextViewHolder)
             }

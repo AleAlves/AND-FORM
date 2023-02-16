@@ -1,9 +1,11 @@
 package com.example.dynamicformapp.feature.step.name.presentation.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import com.example.dynamicformapp.databinding.FragmentNameBinding
 import com.example.dynamicformapp.feature.form.presentation.ui.FormFragment
