@@ -17,7 +17,7 @@ class AddressNumberFormUseCase @Inject constructor(
 
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.address_number_input_hint),
-        subtitle = context.getString(R.string.address_number_input_helper),
+        helper = context.getString(R.string.address_number_input_helper),
         maxSize = 5,
         minSize = 1,
         requestFocus = false,

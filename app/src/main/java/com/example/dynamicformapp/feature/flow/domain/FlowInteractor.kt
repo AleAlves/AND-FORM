@@ -20,12 +20,12 @@ class FlowInteractorImpl @Inject constructor(
 ) : FlowInteractor {
 
     override fun fetchFormSteps() = listOf(
+        StepVO(id = "ADDRESS_DETAIL", false, AddressDetailFragment::class.java),
         StepVO(id = "ID", true, CpfFragment::class.java),
         StepVO(id = "NAME", true, NameFragment::class.java),
         StepVO(id = "ROLE", true, RoleFragment::class.java),
         StepVO(id = "PHONE", true, PhoneFragment::class.java),
         StepVO(id = "ADDRESS_ZIP", true, AddressZipCodeFragment::class.java),
-        StepVO(id = "ADDRESS_DETAIL", false, AddressDetailFragment::class.java),
         StepVO(id = "PASSWORD", true, PasswordFragment::class.java),
     )
 }

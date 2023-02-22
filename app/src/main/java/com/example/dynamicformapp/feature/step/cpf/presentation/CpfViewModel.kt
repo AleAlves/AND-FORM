@@ -7,24 +7,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CpfViewModel @Inject constructor(
-    private val cpfFormUseCase: CpfFormUseCase,
-    private val termsFormUseCase: TermsFormUseCase
+    private val cpfFormUseCase: CpfFormUseCase, private val termsFormUseCase: TermsFormUseCase
 ) : FormViewModel() {
 
     private var cpf = ""
 
-    override fun loadForms() {
-        initForms(
-            cpfFormUseCase(::onOutput),
-            termsFormUseCase(::onOutput)
-        )
-    }
+    override fun onLoadForms() = initForms(
+        cpfFormUseCase(::onOutput),
+        termsFormUseCase(::onOutput)
+    )
 
-    override fun setupValidations() {
+    override fun onValidations() {
         cpfFormUseCase.onValidation { value, _, _ ->
             cpf = value
         }
     }
 
-    override fun getValidations(): Boolean = cpfFormUseCase.isValid.and(termsFormUseCase.isValid)
+    override fun getValidations(): Boolean =
+        cpfFormUseCase.isValid().and(termsFormUseCase.isValid())
 }

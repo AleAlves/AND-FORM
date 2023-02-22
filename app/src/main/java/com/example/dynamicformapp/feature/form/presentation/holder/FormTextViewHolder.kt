@@ -1,13 +1,10 @@
 package com.example.dynamicformapp.feature.form.presentation.holder
 
-import android.app.Activity
 import android.text.InputFilter
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import com.example.dynamicformapp.core.util.toEditable
 import com.example.dynamicformapp.databinding.InputTextViewBinding
@@ -31,7 +28,7 @@ class FormTextViewHolder<T>(
         )
 
         with(binding) {
-            inputTextViewSubtitle.text = data.subtitle
+            inputTextViewSubtitle.text = data.helper
             inputViewEditext.let { edit ->
                 edit.removeTextChangedListener(this@FormTextViewHolder)
                 if (data.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
@@ -41,7 +38,7 @@ class FormTextViewHolder<T>(
                 }
                 edit.setRawInputType(data.inputType)
                 edit.filters = arrayOf(InputFilter.LengthFilter(data.maxSize))
-                edit.text = data.text.toEditable()
+                edit.text = inputValue.toEditable()
                 edit.setSelection(edit.text?.length ?: 0)
                 edit.error = data.error
                 edit.hint = data.hint
@@ -49,7 +46,7 @@ class FormTextViewHolder<T>(
                 if (data.isReadOnly) {
                     edit.isEnabled = false
                     inputTextViewCounter.visibility = GONE
-                    if (data.subtitle.isEmpty()) {
+                    if (data.helper.isEmpty()) {
                         inputTextViewSubtitle.visibility = GONE
                     }
                 } else {

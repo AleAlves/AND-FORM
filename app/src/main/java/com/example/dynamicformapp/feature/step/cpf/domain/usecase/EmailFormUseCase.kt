@@ -26,7 +26,7 @@ class EmailFormUseCase @Inject constructor(
 
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.login_email_input_hint),
-        subtitle = context.getString(R.string.login_email_input_helper),
+        helper = context.getString(R.string.login_email_input_helper),
         maxSize = 50,
         minSize = 5,
         requestFocus = true,

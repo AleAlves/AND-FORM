@@ -17,7 +17,7 @@ class PasswordViewModel @Inject constructor(
 
     private val passWordRulesLiveData = intoMediator<PasswordState>()
 
-    override fun loadForms() {
+    override fun onLoadForms() {
         initForms(
             passwordFormUseCase(::onOutput),
             passwordConfirmFormUseCase(::onOutput)
@@ -25,12 +25,11 @@ class PasswordViewModel @Inject constructor(
     }
 
     override fun onSetupForms() {
-        super.onSetupForms()
         passwordConfirmFormUseCase.formVO.hint = "Confirm password"
         passwordConfirmFormUseCase.formVO.requestFocus = false
     }
 
-    override fun setupValidations() {
+    override fun onValidations() {
         passwordFormUseCase.onValidation { value, _, rules ->
             password = value
             passWordRulesLiveData.postValue(PasswordState.LoadRules(rules = rules))
@@ -41,7 +40,7 @@ class PasswordViewModel @Inject constructor(
     }
 
     override fun getValidations(): Boolean =
-        passwordFormUseCase.isValid && password == passwordCounterPart
+        passwordFormUseCase.isValid() && password == passwordCounterPart
 
     sealed class PasswordState : FormState() {
         data class LoadRules(val rules: FormRuleSet?) : PasswordState()

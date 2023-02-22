@@ -13,15 +13,15 @@ class NameViewModel @Inject constructor(
 
     private var name = ""
 
-    override fun loadForms() {
+    override fun onLoadForms() {
         initForms(nameFormUseCase(::onOutput))
     }
 
-    override fun setupValidations() {
+    override fun onValidations() {
         nameFormUseCase.onValidation { value, _, _ ->
             name = value
         }
     }
 
-    override fun getValidations(): Boolean = nameFormUseCase.isValid
+    override fun getValidations(): Boolean = nameFormUseCase.isValid()
 }

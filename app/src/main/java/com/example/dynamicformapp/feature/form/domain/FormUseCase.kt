@@ -1,6 +1,7 @@
 package com.example.dynamicformapp.feature.form.domain
 
 import com.example.dynamicformapp.core.domain.BaseUseCase
+import com.example.dynamicformapp.core.util.clearMask
 import com.example.dynamicformapp.feature.form.domain.model.FormIO
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
@@ -22,7 +23,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     protected var ruleSetListener: OutputListener? = null
 
     abstract val formVO: VO
-    var isValid: Boolean = false
+    private var isValid: Boolean = false
 
     override fun invoke(output: IO): VO {
         outputListener = output
@@ -34,8 +35,8 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
             is FormTextVO -> textInput(input)
             else -> selectionInput(input)
         }
-        ruleSetListener?.invoke(input.value, input.isSelected, ruleSet)
         outputListener.invoke(input)
+        ruleSetListener?.invoke(input.value, input.isSelected, ruleSet)
     }
 
     private fun textInput(input: FormIO) {
@@ -65,7 +66,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
         isValid = vo.ruleSet?.rules?.let {
             verifyRuleSet(vo.text, it)
         } ?: hasTextInputValidRange(vo)
-        ruleSetListener?.invoke(vo.text, isValid, vo.ruleSet)
+        ruleSetListener?.invoke(vo.text.clearMask(), isValid, vo.ruleSet)
     }
 
     private fun verifyRuleSet(
@@ -92,4 +93,6 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     fun onRuleSetValidation(rules: FormRuleSet) {
         isValid = rules.hasErrors.not()
     }
+
+    fun isValid() = isValid
 }

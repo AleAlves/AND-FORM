@@ -1,5 +1,7 @@
 package com.example.dynamicformapp.feature.form.domain.model
 
+import java.util.UUID
+
 data class FormTextVO(
     var requestFocus: Boolean,
     val inputType: Int,
@@ -7,7 +9,7 @@ data class FormTextVO(
     val minSize: Int,
     val mask: String = "",
     var hint: String = "",
-    val subtitle: String = "",
+    var helper: String = "",
     val isSingleLine: Boolean,
     val hasCounter: Boolean = true,
     var error: String? = null,

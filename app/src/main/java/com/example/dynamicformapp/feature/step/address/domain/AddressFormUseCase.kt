@@ -18,7 +18,8 @@ class AddressFormUseCase @Inject constructor(
     override var ruleSet: FormRuleSet = FormRuleSet(
         rules = listOf(
             FormRule(
-                regex = Regex("[A-Za-z0-9'\\.\\-\\s\\,]")
+                regex = Regex("[A-Za-z0-9'\\.\\-\\s\\,]"),
+                error = "Input error"
             )
         ),
         onRuleCallback = ::onRuleSetValidation
@@ -26,10 +27,10 @@ class AddressFormUseCase @Inject constructor(
 
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.address_address_input_hint),
-        subtitle = context.getString(R.string.address_address_input_helper),
+        helper = context.getString(R.string.address_address_input_helper),
         maxSize = 50,
         minSize = 5,
-        requestFocus = true,
+        requestFocus = false,
         isSingleLine = true,
         ruleSet = ruleSet,
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,

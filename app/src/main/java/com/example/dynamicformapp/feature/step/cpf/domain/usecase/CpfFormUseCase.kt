@@ -26,7 +26,7 @@ class CpfFormUseCase @Inject constructor(
 
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.cpf_input_hint),
-        subtitle = context.getString(R.string.cpf_input_helper),
+        helper = context.getString(R.string.cpf_input_helper),
         maxSize = 14,
         minSize = 14,
         requestFocus = true,

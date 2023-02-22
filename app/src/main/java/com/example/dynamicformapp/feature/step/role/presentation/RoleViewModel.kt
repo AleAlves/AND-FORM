@@ -13,17 +13,15 @@ class RoleViewModel @Inject constructor(
 
     private var role = ""
 
-    override fun loadForms() {
-        initForms(
-            *roleForm(::onOutput),
-        )
+    override fun onLoadForms() {
+        initForms(*roleForm(::onOutput))
     }
 
-    override fun setupValidations() {
+    override fun onValidations() {
         roleForm.onValidation { value, _, _ ->
             role = value
         }
     }
 
-    override fun getValidations(): Boolean = roleForm.isValid
+    override fun getValidations(): Boolean = roleForm.isValid()
 }

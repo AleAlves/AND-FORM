@@ -13,17 +13,15 @@ class AddressZipCodeViewModel @Inject constructor(
 
     private var zipCode = ""
 
-    override fun loadForms() {
-        initForms(
-            zipCodeForm(::onOutput)
-        )
+    override fun onLoadForms() {
+        initForms(zipCodeForm(::onOutput))
     }
 
-    override fun setupValidations() {
+    override fun onValidations() {
         zipCodeForm.onValidation { value, _, _ ->
             zipCode = value
         }
     }
 
-    override fun getValidations(): Boolean = zipCodeForm.isValid
+    override fun getValidations(): Boolean = zipCodeForm.isValid()
 }

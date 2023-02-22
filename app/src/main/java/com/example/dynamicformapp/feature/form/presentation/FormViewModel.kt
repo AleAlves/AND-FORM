@@ -1,13 +1,12 @@
 package com.example.dynamicformapp.feature.form.presentation
 
-import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.core.presentation.BaseViewModel
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import com.example.dynamicformapp.feature.form.domain.model.*
 import kotlinx.coroutines.*
 
 interface FormActions {
-    fun loadForms()
+    fun onLoadForms()
     fun onSetupForms() {}
     fun onInput(input: FormIO)
     fun onOutput(input: FormIO)
@@ -15,30 +14,22 @@ interface FormActions {
 
 abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormActions {
 
-    private var formsVO: ArrayList<FormVO> = arrayListOf()
+    private var formsVO: List<FormVO> = listOf()
 
     private val formLiveData = intoMediator<FormState>()
     private val outputLiveData = intoMediator<FormState.Field>()
     private val buttonLiveData = intoMediator<FormState.Button>()
 
-    protected abstract fun setupValidations()
+    protected abstract fun onValidations()
 
     protected abstract fun getValidations(): Boolean
 
     fun initForms(vararg forms: FormVO) = launch {
-        formsVO.apply {
-            clear()
-            forms.map {
-                add(it)
-            }
-        }
+        formsVO = forms.toList()
         onSetupForms()
-        setupValidations()
+        onValidations()
         onFormValidation()
-    }
-
-    override fun onSetupForms() = launch {
-        formLiveData.value = FormState.OnLoadForm(formsVO)
+        formLiveData.postValue(FormState.OnLoadForm(formsVO))
     }
 
     override fun onInput(input: FormIO) = launch {
@@ -68,7 +59,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         notifyOutputAt(input.position)
     }
 
-    private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) = launch {
+    private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) {
         formsVO.mapIndexed { index, vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
@@ -77,21 +68,23 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         }
     }
 
-    private fun notifyOutputAt(position: Int) = launch {
-        outputLiveData.value = (FormState.Field.OnFieldOutput(position))
+    private fun notifyOutputAt(position: Int) {
+        outputLiveData.postValue(FormState.Field.OnFieldOutput(position))
     }
 
-    fun updateFormFields(asyncBlockingQueue: suspend CoroutineScope.() -> Unit) = launch {
-        asyncBlockingQueue.invoke(this)
-        notifyAllFields()
+    fun updateFormFields(asyncBlockingQueue: suspend CoroutineScope.() -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+            asyncBlockingQueue.invoke(this)
+            notifyAllFields()
+        }
     }
 
-    private fun notifyAllFields() = launch {
-        outputLiveData.value = FormState.Field.OnUpdateFields
+    fun notifyAllFields() {
+        outputLiveData.postValue(FormState.Field.OnUpdateFields)
     }
 
-    private fun onFormValidation() = launch {
-        buttonLiveData.value = FormState.Button.OnValidation(getValidations())
+    private fun onFormValidation() {
+        buttonLiveData.postValue(FormState.Button.OnValidation(getValidations()))
     }
 
     open class FormState : ViewState {

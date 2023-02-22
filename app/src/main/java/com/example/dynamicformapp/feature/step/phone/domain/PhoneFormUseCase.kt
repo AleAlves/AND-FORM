@@ -22,7 +22,7 @@ class PhoneFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
 
     override val formVO: FormTextVO = FormTextVO(
         hint = "Phone",
-        subtitle = "Don`t worry We wont spam you",
+        helper = "Don`t worry We wont spam you",
         maxSize = 15,
         minSize = 15,
         ruleSet = ruleSet,

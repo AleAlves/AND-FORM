@@ -26,7 +26,7 @@ class AddressZipCodeFormUseCase @Inject constructor(
 
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.address_zip_input_hint),
-        subtitle = context.getString(R.string.address_zip_input_helper),
+        helper = context.getString(R.string.address_zip_input_helper),
         maxSize = 9,
         minSize = 9,
         requestFocus = true,

@@ -1,11 +1,8 @@
 package com.example.dynamicformapp.feature.form.presentation.ui
 
 
-import android.app.Activity
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import com.example.dynamicformapp.core.util.hideKeyboard
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
@@ -23,7 +20,7 @@ abstract class FormFragment : StepFragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         onSetupView()
-        viewModel.loadForms()
+        viewModel.onLoadForms()
     }
 
 
@@ -36,7 +33,6 @@ abstract class FormFragment : StepFragment() {
         this.inputView = inputView
         this.buttonNext = buttonNext
         inputView.onInput = viewModel::onInput
-        inputView.softInput = ::onSoftInput
         listenChanges()
     }
 

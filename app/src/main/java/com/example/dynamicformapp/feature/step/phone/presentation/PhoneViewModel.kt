@@ -13,17 +13,15 @@ class PhoneViewModel @Inject constructor(
 
     private var role = ""
 
-    override fun loadForms() {
-        initForms(
-            phoneFormUseCase(::onOutput),
-        )
+    override fun onLoadForms() {
+        initForms(phoneFormUseCase(::onOutput))
     }
 
-    override fun setupValidations() {
+    override fun onValidations() {
         phoneFormUseCase.onValidation { value, _, _ ->
             role = value
         }
     }
 
-    override fun getValidations(): Boolean = phoneFormUseCase.isValid
+    override fun getValidations(): Boolean = phoneFormUseCase.isValid()
 }

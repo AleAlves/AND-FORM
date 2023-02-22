@@ -26,9 +26,9 @@ class AddressComplementFormUseCase @Inject constructor(
 
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.address_complement_input_hint),
-        subtitle = context.getString(R.string.address_complement_input_helper),
+        helper = context.getString(R.string.address_complement_input_helper),
         maxSize = 50,
-        minSize = 0,
+        minSize = 1,
         requestFocus = false,
         isSingleLine = true,
         ruleSet = ruleSet,

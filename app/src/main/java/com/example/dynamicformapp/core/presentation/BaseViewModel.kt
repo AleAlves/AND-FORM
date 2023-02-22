@@ -4,6 +4,7 @@ package com.example.dynamicformapp.core.presentation
 import androidx.lifecycle.*
 import com.example.dynamicformapp.core.presentation.ui.ViewState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<T : ViewState> : ViewModel() {
@@ -17,7 +18,7 @@ abstract class BaseViewModel<T : ViewState> : ViewModel() {
     }
 
     fun launch(async: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             async.invoke(this)
         }
     }

@@ -18,7 +18,7 @@ class FlowViewModel @Inject constructor(
     private var position = -1
 
     fun onNext() {
-        if (position < steps.size) {
+        if (position < steps.size.minus(1)) {
             position++
             addStep()
         }
@@ -26,15 +26,14 @@ class FlowViewModel @Inject constructor(
 
     fun onPrevious() {
         if (position > 0) {
+            position--
             if (steps[position].returnable) {
                 removeStep()
-                position--
+
             } else {
                 onPrevious()
-                position--
             }
-        }
-        else{
+        } else {
             formLiveData.postValue(FlowState.Steps.Finish)
         }
     }

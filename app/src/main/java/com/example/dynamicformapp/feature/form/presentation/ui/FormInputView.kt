@@ -27,12 +27,6 @@ class FormInputView(
             field = value
         }
 
-    var softInput: ((Boolean) -> Unit)? = null
-        set(value) {
-            formAdapter.softInput = value
-            field = value
-        }
-
     private var binding = FormViewBinding.inflate(
         layoutInflater,
         this,
@@ -48,7 +42,7 @@ class FormInputView(
     }
 
     fun updateForm() {
-        formAdapter.notifyItemChanged(0, formAdapter.items.currentList.size)
+        formAdapter.notifyItemRangeChanged(0, formAdapter.items.currentList.size)
     }
 
     init {
@@ -62,7 +56,6 @@ class FormInputView(
             }
             animation = null
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-            setHasFixedSize(true)
             adapter = formAdapter
         }
     }

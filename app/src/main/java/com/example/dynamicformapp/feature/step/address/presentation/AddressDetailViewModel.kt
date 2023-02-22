@@ -1,20 +1,18 @@
 package com.example.dynamicformapp.feature.step.address.presentation
 
 
-import androidx.lifecycle.viewModelScope
 import com.example.dynamicformapp.feature.form.domain.GenericFormUseCase
 import com.example.dynamicformapp.feature.form.presentation.FormViewModel
 import com.example.dynamicformapp.feature.step.address.domain.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddressDetailViewModel @Inject constructor(
-    private val addressComplementFormUseCase: AddressComplementFormUseCase,
-    private val addressNumberFormUseCase: AddressNumberFormUseCase,
-    private val sateAcronymFormUseCase: GenericFormUseCase,
-    private val cityFormUseCase: GenericFormUseCase,
+    private val complementForm: AddressComplementFormUseCase,
+    private val numberForm: AddressNumberFormUseCase,
+    private val acronymForm: GenericFormUseCase,
+    private val cityForm: GenericFormUseCase,
     private val stateUseCase: GenericFormUseCase,
     private val addressForm: AddressFormUseCase
 ) : FormViewModel() {
@@ -22,43 +20,47 @@ class AddressDetailViewModel @Inject constructor(
     private var address = ""
     private var noNumber = false
 
-    override fun loadForms() {
-        viewModelScope.launch {
-            initForms(
-                cityFormUseCase(::onOutput),
-                stateUseCase(::onOutput),
-                sateAcronymFormUseCase(::onOutput),
-                addressForm(::onOutput),
-                addressNumberFormUseCase(::onOutput),
-                addressComplementFormUseCase(::onOutput)
-            )
-        }
+    override fun onLoadForms() {
+        initForms(
+            cityForm(::onOutput),
+            stateUseCase(::onOutput),
+            acronymForm(::onOutput),
+            addressForm(::onOutput),
+            numberForm(::onOutput),
+            complementForm(::onOutput)
+        )
     }
 
     override fun onSetupForms() {
-        super.onSetupForms()
-        cityFormUseCase.formVO.text = "São Paulo"
+        cityForm.formVO.text = "São Paulo"
         stateUseCase.formVO.text = "São Paulo"
-        sateAcronymFormUseCase.formVO.text = "SP"
+        acronymForm.formVO.text = "SP"
     }
 
-    override fun setupValidations() {
+    override fun onValidations() {
         addressForm.onValidation { value, _, _ ->
             address = value
         }
+        numberForm.onValidation { _, isSelected, _ ->
+            noNumber = isSelected
+            update(isSelected)
+        }
+    }
 
-        with(addressNumberFormUseCase) {
-            onValidation { _, isSelected, _ ->
-                updateFormFields {
-                    with(formVO) {
-                        isEnabled = isSelected.not()
-                        noNumber = isSelected
-                    }
-                }
+    private fun update(isSelected: Boolean) {
+        updateFormFields {
+            if (isSelected) {
+                numberForm.formVO.text = ""
+                complementForm.formVO.hint = "Complement"
+            } else {
+                numberForm.formVO.hint = "Number"
+                complementForm.formVO.hint = "Complement (Optional)"
             }
+            numberForm.formVO.isEnabled = isSelected.not()
         }
     }
 
     override fun getValidations(): Boolean =
-        addressForm.isValid.and(addressNumberFormUseCase.isValid || noNumber)
+        addressForm.isValid()
+            .and(numberForm.isValid() || noNumber)
 }
