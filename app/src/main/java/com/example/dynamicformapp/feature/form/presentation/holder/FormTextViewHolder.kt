@@ -38,7 +38,7 @@ class FormTextViewHolder<T>(
                 }
                 edit.setRawInputType(data.inputType)
                 edit.filters = arrayOf(InputFilter.LengthFilter(data.maxSize))
-                edit.text = inputValue.toEditable()
+                edit.setText(inputValue.toString())
                 edit.setSelection(edit.text?.length ?: 0)
                 edit.error = data.error
                 edit.hint = data.hint

@@ -48,19 +48,19 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         onFormValidation()
     }
 
-    private fun onTextOutput(formVO: FormTextVO, input: FormIO) = launch {
+    private fun onTextOutput(formVO: FormTextVO, input: FormIO) {
         formVO.error = input.error
         formVO.text = input.value
         formVO.checkBox?.isSelected = input.isSelected
         notifyOutputAt(input.position)
     }
 
-    private fun onCheckOutput(formVO: FormCheckVO, input: FormIO) = launch {
+    private fun onCheckOutput(formVO: FormCheckVO, input: FormIO) {
         formVO.isSelected = input.isSelected
         notifyOutputAt(input.position)
     }
 
-    private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) = launch {
+    private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) {
         formsVO.map { vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
@@ -74,7 +74,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     }
 
     fun updateFormFields(asyncBlockingQueue: suspend CoroutineScope.() -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             asyncBlockingQueue.invoke(this)
             notifyAllFields()
         }

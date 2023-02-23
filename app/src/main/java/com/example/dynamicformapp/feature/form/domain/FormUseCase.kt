@@ -63,10 +63,12 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     }
 
     protected fun onRuleSetValidations(vo: FormTextVO) {
-        isValid = vo.ruleSet?.rules?.let {
-            verifyRuleSet(vo.text, it)
-        } ?: hasTextInputValidRange(vo)
-        ruleSetListener?.invoke(vo.text.clearMask(), isValid, vo.ruleSet)
+        with(vo) {
+            ruleSet?.rules?.let { verifyRuleSet(vo.text, it) } ?: hasTextInputValidRange(vo)
+            checkBox?.isSelected?.let {
+                ruleSetListener?.invoke(vo.text.clearMask(), it, vo.ruleSet)
+            }
+        }
     }
 
     private fun verifyRuleSet(

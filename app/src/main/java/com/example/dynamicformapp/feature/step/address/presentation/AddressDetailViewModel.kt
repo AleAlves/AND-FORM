@@ -43,19 +43,19 @@ class AddressDetailViewModel @Inject constructor(
         }
         numberForm.onValidation { _, isSelected, _ ->
             noNumber = isSelected
-            update(isSelected)
+            update(noNumber)
         }
     }
 
-    private fun update(isSelected: Boolean) = updateFormFields {
-        if (isSelected) {
+    private fun update(noNumber: Boolean) = updateFormFields {
+        if (noNumber) {
             numberForm.formVO.text = ""
             complementForm.formVO.hint = "Complement"
         } else {
             numberForm.formVO.hint = "Number"
             complementForm.formVO.hint = "Complement (Optional)"
         }
-        numberForm.formVO.isEnabled = isSelected.not()
+        numberForm.formVO.isEnabled = noNumber.not()
     }
 
     override fun getValidations(): Boolean =

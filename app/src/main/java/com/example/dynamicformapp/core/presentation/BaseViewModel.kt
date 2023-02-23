@@ -18,7 +18,7 @@ abstract class BaseViewModel<T : ViewState> : ViewModel() {
     }
 
     fun launch(async: suspend CoroutineScope.() -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             async.invoke(this)
         }
     }
