@@ -2,6 +2,7 @@ package com.example.dynamicformapp.feature.form.presentation.ui
 
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import com.example.dynamicformapp.feature.flow.presentation.StepFragment
 import com.example.dynamicformapp.feature.form.domain.model.FormVO
@@ -57,10 +58,12 @@ abstract class FormFragment : StepFragment() {
     }
 
     private fun notifyOutputAt(position: Int) {
+        Log.d("WOW", "notifyOutputAt $position")
         inputView.notifyChangeAt(position)
     }
 
     private fun updateForms() {
+        Log.d("WOW", "notifyAllFields")
         inputView.updateForm()
     }
 

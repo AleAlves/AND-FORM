@@ -17,8 +17,9 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     private var formsVO: List<FormVO> = listOf()
 
     private val formLiveData = intoMediator<FormState>()
-    private val outputLiveData = intoMediator<FormState.Field>()
     private val buttonLiveData = intoMediator<FormState.Button>()
+    private val updateAtLiveData = intoMediator<FormState.Field>()
+    private val updateAllLiveData = intoMediator<FormState.Field>()
 
     protected abstract fun onValidations()
 
@@ -69,18 +70,18 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
     }
 
     private fun notifyOutputAt(position: Int) {
-        outputLiveData.postValue(FormState.Field.OnFieldOutput(position))
+        updateAtLiveData.postValue(FormState.Field.OnFieldOutput(position))
     }
 
     fun updateFormFields(asyncBlockingQueue: suspend CoroutineScope.() -> Unit) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             asyncBlockingQueue.invoke(this)
             notifyAllFields()
         }
     }
 
     private fun notifyAllFields() {
-        outputLiveData.postValue(FormState.Field.OnUpdateFields)
+        updateAllLiveData.postValue(FormState.Field.OnUpdateFields)
     }
 
     private fun onFormValidation() {

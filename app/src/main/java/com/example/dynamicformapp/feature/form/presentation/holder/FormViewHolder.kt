@@ -43,7 +43,6 @@ abstract class FormViewHolder<T>(
     }
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        Log.d("WOW", "onTextChanged:    $s")
         inputValue = s.toString()
         onInput(
             FormIO(
