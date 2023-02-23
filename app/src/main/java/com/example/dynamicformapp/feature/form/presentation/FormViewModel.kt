@@ -59,13 +59,13 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         notifyOutputAt(input.position)
     }
 
-    private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) {
-        formsVO.mapIndexed { index, vo ->
+    private fun onRadioOutput(formVO: FormRadioVO, input: FormIO) = launch {
+        formsVO.map { vo ->
             if (vo is FormRadioVO) {
                 vo.isSelected = vo == formVO && input.isSelected
             }
-            notifyOutputAt(index)
         }
+        notifyAllFields()
     }
 
     private fun notifyOutputAt(position: Int) {
@@ -79,7 +79,7 @@ abstract class FormViewModel : BaseViewModel<FormViewModel.FormState>(), FormAct
         }
     }
 
-    fun notifyAllFields() {
+    private fun notifyAllFields() {
         outputLiveData.postValue(FormState.Field.OnUpdateFields)
     }
 

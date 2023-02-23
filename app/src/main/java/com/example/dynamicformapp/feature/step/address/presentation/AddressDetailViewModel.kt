@@ -47,20 +47,17 @@ class AddressDetailViewModel @Inject constructor(
         }
     }
 
-    private fun update(isSelected: Boolean) {
-        updateFormFields {
-            if (isSelected) {
-                numberForm.formVO.text = ""
-                complementForm.formVO.hint = "Complement"
-            } else {
-                numberForm.formVO.hint = "Number"
-                complementForm.formVO.hint = "Complement (Optional)"
-            }
-            numberForm.formVO.isEnabled = isSelected.not()
+    private fun update(isSelected: Boolean) = updateFormFields {
+        if (isSelected) {
+            numberForm.formVO.text = ""
+            complementForm.formVO.hint = "Complement"
+        } else {
+            numberForm.formVO.hint = "Number"
+            complementForm.formVO.hint = "Complement (Optional)"
         }
+        numberForm.formVO.isEnabled = isSelected.not()
     }
 
     override fun getValidations(): Boolean =
-        addressForm.isValid()
-            .and(numberForm.isValid() || noNumber)
+        addressForm.isValid().and(numberForm.isValid() || noNumber)
 }

@@ -22,5 +22,4 @@ abstract class BaseViewModel<T : ViewState> : ViewModel() {
             async.invoke(this)
         }
     }
-
 }
