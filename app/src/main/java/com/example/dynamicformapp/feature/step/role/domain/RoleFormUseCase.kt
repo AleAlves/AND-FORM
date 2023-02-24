@@ -1,6 +1,5 @@
 package com.example.dynamicformapp.feature.step.role.domain
 
-import com.example.dynamicformapp.feature.form.domain.OutputListener
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormRadioVO
 import javax.inject.Inject
@@ -29,8 +28,4 @@ class RoleFormUseCase @Inject constructor() : FormUsaCase<Array<FormRadioVO>>() 
             onInput = ::onInput
         ),
     )
-
-    override fun onValidation(output: OutputListener) {
-        ruleSetListener = output
-    }
 }

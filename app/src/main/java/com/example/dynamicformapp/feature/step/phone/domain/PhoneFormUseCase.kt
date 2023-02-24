@@ -1,7 +1,6 @@
 package com.example.dynamicformapp.feature.step.phone.domain
 
 import android.text.InputType
-import com.example.dynamicformapp.feature.form.domain.OutputListener
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
@@ -32,9 +31,4 @@ class PhoneFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
         inputType = InputType.TYPE_CLASS_PHONE,
         onInput = ::onInput
     )
-
-    override fun onValidation(output: OutputListener) {
-        ruleSetListener = output
-        onRuleSetValidations(formVO)
-    }
 }

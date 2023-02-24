@@ -1,10 +1,7 @@
 package com.example.dynamicformapp.feature.form.domain
 
 import android.text.InputType
-import com.example.dynamicformapp.feature.form.domain.OutputListener
-import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
-import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
 import javax.inject.Inject
 
 open class GenericFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() {
@@ -22,9 +19,4 @@ open class GenericFormUseCase @Inject constructor() : FormUsaCase<FormTextVO>() 
         inputType = InputType.TYPE_CLASS_TEXT,
         onInput = ::onInput
     )
-
-    override fun onValidation(output: OutputListener) {
-        ruleSetListener = output
-        onRuleSetValidations(formVO)
-    }
 }

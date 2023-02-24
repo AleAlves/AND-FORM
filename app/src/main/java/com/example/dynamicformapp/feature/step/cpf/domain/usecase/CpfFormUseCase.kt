@@ -36,9 +36,4 @@ class CpfFormUseCase @Inject constructor(
         inputType = InputType.TYPE_CLASS_NUMBER,
         onInput = ::onInput,
     )
-
-    override fun onValidation(output: OutputListener) {
-        ruleSetListener = output
-        onRuleSetValidations(formVO)
-    }
 }

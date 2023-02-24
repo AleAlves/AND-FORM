@@ -24,9 +24,4 @@ class NameFormUseCase @Inject constructor(
         inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME,
         onInput = ::onInput,
     )
-
-    override fun onValidation(output: OutputListener) {
-        ruleSetListener = output
-        onRuleSetValidations(formVO)
-    }
 }

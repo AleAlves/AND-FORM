@@ -1,7 +1,6 @@
 package com.example.dynamicformapp.feature.step.password.domain
 
 import android.text.InputType
-import com.example.dynamicformapp.feature.form.domain.OutputListener
 import com.example.dynamicformapp.feature.form.domain.FormUsaCase
 import com.example.dynamicformapp.feature.form.domain.model.FormRule
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
@@ -43,9 +42,4 @@ class PasswordFormUseCase @Inject constructor() :
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD,
         onInput = ::onInput
     )
-
-    override fun onValidation(output: OutputListener) {
-        ruleSetListener = output
-        onRuleSetValidations(formVO)
-    }
 }

@@ -14,7 +14,6 @@ class AddressNumberFormUseCase @Inject constructor(
     @ApplicationContext private val context: Context
 ) : FormUsaCase<FormTextVO>() {
 
-
     override val formVO: FormTextVO = FormTextVO(
         hint = context.getString(R.string.address_number_input_hint),
         helper = context.getString(R.string.address_number_input_helper),
@@ -29,9 +28,4 @@ class AddressNumberFormUseCase @Inject constructor(
         inputType = InputType.TYPE_CLASS_NUMBER,
         onInput = ::onInput,
     )
-
-    override fun onValidation(output: OutputListener) {
-        ruleSetListener = output
-        onRuleSetValidations(formVO)
-    }
 }

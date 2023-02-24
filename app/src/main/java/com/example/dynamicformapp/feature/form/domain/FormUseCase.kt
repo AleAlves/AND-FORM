@@ -17,7 +17,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     private lateinit var outputListener: IO
 
     protected open val ruleSet: FormRuleSet? = null
-    protected var ruleSetListener: OutputListener? = null
+    private var ruleSetListener: OutputListener? = null
 
     abstract val formVO: VO
     private var isValid: Boolean = false
@@ -25,6 +25,13 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     override fun invoke(output: IO): VO {
         outputListener = output
         return formVO
+    }
+
+    override fun onValidation(output: OutputListener) {
+        ruleSetListener = output
+        if (formVO is FormTextVO) {
+            onInitialValidation(formVO as FormTextVO)
+        }
     }
 
     override fun onInput(input: FormIO) {
@@ -59,12 +66,18 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
         } ?: hasTextInputValidRange(vo)
     }
 
-    protected fun onRuleSetValidations(vo: FormTextVO) {
+    private fun onInitialValidation(vo: FormTextVO) {
         with(vo) {
-            ruleSet?.rules?.let { verifyRuleSet(vo.text, it) } ?: hasTextInputValidRange(vo)
-            checkBox?.isSelected?.let {
-                ruleSetListener?.invoke(FormOutput(vo.text.clearMask(), it, vo.ruleSet))
-            }
+            ruleSet?.rules?.let {
+                isValid = verifyRuleSet(vo.text, it)
+            } ?: hasTextInputValidRange(vo)
+            ruleSetListener?.invoke(
+                FormOutput(
+                    vo.text.clearMask(),
+                    checkBox?.isSelected ?: false,
+                    vo.ruleSet
+                )
+            )
         }
     }
 
