@@ -15,6 +15,7 @@
         android:imeOptions="actionNext"
         android:saveEnabled="false"
         android:singleLine="true"
+        android:autofillHints="name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/input_checkbox"
         app:layout_constraintHorizontal_weight="1"

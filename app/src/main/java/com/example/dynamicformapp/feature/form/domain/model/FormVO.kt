@@ -15,3 +15,9 @@ data class FormIO(
     var error: String? = null,
     val isSelected: Boolean = false
 )
+
+data class FormOutput(
+    val value: String,
+    val isSelected: Boolean,
+    val ruleSet: FormRuleSet?
+)

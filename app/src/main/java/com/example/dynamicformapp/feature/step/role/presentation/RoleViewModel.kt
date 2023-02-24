@@ -18,8 +18,8 @@ class RoleViewModel @Inject constructor(
     }
 
     override fun onValidations() {
-        roleForm.onValidation { value, _, _ ->
-            role = value
+        roleForm.onValidation {
+            role = it.value
         }
     }
 

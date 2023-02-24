@@ -7,7 +7,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CpfViewModel @Inject constructor(
-    private val cpfFormUseCase: CpfFormUseCase, private val termsFormUseCase: TermsFormUseCase
+    private val cpfFormUseCase: CpfFormUseCase,
+    private val termsFormUseCase: TermsFormUseCase
 ) : FormViewModel() {
 
     private var cpf = ""
@@ -18,8 +19,8 @@ class CpfViewModel @Inject constructor(
     )
 
     override fun onValidations() {
-        cpfFormUseCase.onValidation { value, _, _ ->
-            cpf = value
+        cpfFormUseCase.onValidation {
+            cpf = it.value
         }
     }
 

@@ -30,12 +30,14 @@ class PasswordViewModel @Inject constructor(
     }
 
     override fun onValidations() {
-        passwordFormUseCase.onValidation { value, _, rules ->
-            password = value
-            passWordRulesLiveData.postValue(PasswordState.LoadRules(rules = rules))
+        passwordFormUseCase.onValidation {
+            password = it.value
+            launch {
+                passWordRulesLiveData.postValue(PasswordState.LoadRules(rules = it.ruleSet))
+            }
         }
-        passwordConfirmFormUseCase.onValidation { value, _, _ ->
-            passwordCounterPart = value
+        passwordConfirmFormUseCase.onValidation {
+            passwordCounterPart = it.value
         }
     }
 

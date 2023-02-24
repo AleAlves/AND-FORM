@@ -18,8 +18,8 @@ class PhoneViewModel @Inject constructor(
     }
 
     override fun onValidations() {
-        phoneFormUseCase.onValidation { value, _, _ ->
-            role = value
+        phoneFormUseCase.onValidation {
+            role = it.value
         }
     }
 

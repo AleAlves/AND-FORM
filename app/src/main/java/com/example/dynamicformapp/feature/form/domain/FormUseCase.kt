@@ -2,13 +2,10 @@ package com.example.dynamicformapp.feature.form.domain
 
 import com.example.dynamicformapp.core.domain.BaseUseCase
 import com.example.dynamicformapp.core.util.clearMask
-import com.example.dynamicformapp.feature.form.domain.model.FormIO
-import com.example.dynamicformapp.feature.form.domain.model.FormRule
-import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
-import com.example.dynamicformapp.feature.form.domain.model.FormRuleSet
+import com.example.dynamicformapp.feature.form.domain.model.*
 
 typealias IO = ((input: FormIO) -> Unit)
-typealias OutputListener = ((value: String, isSelected: Boolean, ruleSet: FormRuleSet?) -> Unit)
+typealias OutputListener = ((output: FormOutput) -> Unit)
 
 interface FormUsaCaseInput {
     fun onInput(input: FormIO)
@@ -36,7 +33,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
             else -> selectionInput(input)
         }
         outputListener.invoke(input)
-        ruleSetListener?.invoke(input.value, input.isSelected, ruleSet)
+        ruleSetListener?.invoke(FormOutput(input.value, input.isSelected, ruleSet))
     }
 
     private fun textInput(input: FormIO) {
@@ -66,7 +63,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
         with(vo) {
             ruleSet?.rules?.let { verifyRuleSet(vo.text, it) } ?: hasTextInputValidRange(vo)
             checkBox?.isSelected?.let {
-                ruleSetListener?.invoke(vo.text.clearMask(), it, vo.ruleSet)
+                ruleSetListener?.invoke(FormOutput(vo.text.clearMask(), it, vo.ruleSet))
             }
         }
     }

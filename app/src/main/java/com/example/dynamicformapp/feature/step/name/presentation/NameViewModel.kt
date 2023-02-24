@@ -18,8 +18,8 @@ class NameViewModel @Inject constructor(
     }
 
     override fun onValidations() {
-        nameFormUseCase.onValidation { value, _, _ ->
-            name = value
+        nameFormUseCase.onValidation {
+            name = it.value
         }
     }
 

@@ -18,8 +18,8 @@ class AddressZipCodeViewModel @Inject constructor(
     }
 
     override fun onValidations() {
-        zipCodeForm.onValidation { value, _, _ ->
-            zipCode = value
+        zipCodeForm.onValidation {
+            zipCode = it.value
         }
     }
 

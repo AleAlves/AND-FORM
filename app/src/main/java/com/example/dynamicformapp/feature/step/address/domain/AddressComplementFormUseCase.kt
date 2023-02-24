@@ -18,7 +18,8 @@ class AddressComplementFormUseCase @Inject constructor(
     override var ruleSet: FormRuleSet = FormRuleSet(
         rules = listOf(
             FormRule(
-                regex = Regex("^.{50}\$")
+                regex = Regex("[A-Za-z0-9'\\.\\-\\s\\,]"),
+                error = "Input error"
             )
         ),
         onRuleCallback = ::onRuleSetValidation

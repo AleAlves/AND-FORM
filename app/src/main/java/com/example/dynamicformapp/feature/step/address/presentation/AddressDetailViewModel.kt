@@ -19,6 +19,7 @@ class AddressDetailViewModel @Inject constructor(
 
     private var address = ""
     private var noNumber = false
+    private var complement = ""
 
     override fun onLoadForms() {
         initForms(
@@ -38,12 +39,15 @@ class AddressDetailViewModel @Inject constructor(
     }
 
     override fun onValidations() {
-        addressForm.onValidation { value, _, _ ->
-            address = value
+        addressForm.onValidation {
+            address = it.value
         }
-        numberForm.onValidation { _, isSelected, _ ->
-            noNumber = isSelected
+        numberForm.onValidation {
+            noNumber = it.isSelected
             update(noNumber)
+        }
+        complementForm.onValidation {
+            complement = it.value
         }
     }
 
@@ -59,5 +63,7 @@ class AddressDetailViewModel @Inject constructor(
     }
 
     override fun getValidations(): Boolean =
-        addressForm.isValid().and(numberForm.isValid() || noNumber)
+        addressForm.isValid().and(
+            (numberForm.isValid() && !noNumber).or(complementForm.isValid() && noNumber)
+        )
 }
