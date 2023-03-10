@@ -19,7 +19,7 @@ class CpfFormUseCase @Inject constructor(
         rules = listOf(
             FormRule(
                 regex = Regex("^.{14}\$")
-            )
+            ),
         ),
         onRuleCallback = ::onRuleSetValidation
     )

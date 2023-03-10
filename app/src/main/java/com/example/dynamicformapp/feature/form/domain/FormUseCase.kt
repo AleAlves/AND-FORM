@@ -86,7 +86,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
     ): Boolean {
         with(rules) {
             map { rule ->
-                value.contains(rule.regex).let { isValid ->
+                value.clearMask().contains(rule.regex).let { isValid ->
                     rule.isValid = isValid
                     if (isValid) {
                         onValidation?.invoke(null)

@@ -58,16 +58,10 @@ abstract class FormFragment : StepFragment() {
     }
 
     private fun notifyOutputAt(position: Int) {
-        Log.d("WOW", "notifyOutputAt $position")
         inputView.notifyChangeAt(position)
     }
 
     private fun updateForms() {
-        Log.d("WOW", "notifyAllFields")
         inputView.updateForm()
-    }
-
-    private fun onSoftInput(shouldShow: Boolean) {
-
     }
 }

@@ -14,19 +14,19 @@ class PasswordFormUseCase @Inject constructor() :
         rules = listOf(
             FormRule(
                 regex = Regex("^.{6}\$"),
-                name = "The password size must be 6",
+                name = "Size must be 6",
             ),
             FormRule(
                 regex = Regex(".*[0-9].*"),
-                name = "The password must constains numbers",
+                name = "Must contain numbers",
             ),
             FormRule(
                 regex = Regex(".*[a-zA-Z].*"),
-                name = "The password must constain letter",
+                name = "Must contain letters",
             ),
             FormRule(
                 regex = Regex("[\$&+,:;=?@#|'<>.^*()%!-]"),
-                name = "The password must constain special character",
+                name = "Must contain special character",
             )
         ),
         onRuleCallback = ::onRuleSetValidation
