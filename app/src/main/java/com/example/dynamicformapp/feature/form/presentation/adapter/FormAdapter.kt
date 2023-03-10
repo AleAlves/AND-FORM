@@ -64,7 +64,7 @@ class FormAdapter : RecyclerView.Adapter<FormViewHolder<FormVO>>() {
         }
 
         override fun areContentsTheSame(oldItem: FormVO, newItem: FormVO): Boolean {
-            return oldItem == newItem
+            return oldItem.hashCode() == newItem.hashCode()
         }
     })
 

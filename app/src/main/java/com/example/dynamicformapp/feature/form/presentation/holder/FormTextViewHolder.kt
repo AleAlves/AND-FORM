@@ -6,7 +6,8 @@ import android.text.method.PasswordTransformationMethod
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.LinearLayout
-import com.example.dynamicformapp.core.util.toEditable
+import com.example.dynamicformapp.core.util.getMaskCharacterCount
+import com.example.dynamicformapp.core.util.getPlainCharacterCount
 import com.example.dynamicformapp.databinding.InputTextViewBinding
 import com.example.dynamicformapp.feature.form.domain.model.FormTextVO
 
@@ -18,9 +19,9 @@ class FormTextViewHolder<T>(
     override fun setupView(data: T?) {
         data as FormTextVO
 
+        mask = data.mask
         inputValue = data.text
         inputSelected = data.checkBox?.isSelected ?: false
-        mask = data.mask
 
         binding.root.layoutParams = LinearLayout.LayoutParams(
             if (data.fill) LinearLayout.LayoutParams.MATCH_PARENT else LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -38,11 +39,11 @@ class FormTextViewHolder<T>(
                 }
                 edit.setRawInputType(data.inputType)
                 edit.filters = arrayOf(InputFilter.LengthFilter(data.maxSize))
-                edit.setText(inputValue.toString())
+                edit.setText(inputValue)
                 edit.setSelection(edit.text?.length ?: 0)
                 edit.error = data.error
                 edit.hint = data.hint
-                inputTextViewCounter.text = "${edit.text.toString().length}/${data.maxSize}"
+                inputTextViewCounter.text = "${data.text.getPlainCharacterCount() }/${data.maxSize - mask.getMaskCharacterCount()}"
                 if (data.isReadOnly) {
                     edit.isEnabled = false
                     inputTextViewCounter.visibility = GONE

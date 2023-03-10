@@ -63,7 +63,6 @@ class AddressDetailViewModel @Inject constructor(
     }
 
     override fun getValidations(): Boolean =
-        addressForm.isValid().and(
-            (numberForm.isValid() && !noNumber).or(complementForm.isValid() && noNumber)
-        )
+        addressForm.isValid() &&
+                (numberForm.isValid() && !noNumber) || (complementForm.isValid() && noNumber)
 }

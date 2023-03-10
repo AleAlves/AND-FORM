@@ -1,6 +1,5 @@
 package com.example.dynamicformapp.feature.form.domain.model
 
-import java.util.UUID
 
 data class FormTextVO(
     var requestFocus: Boolean,

@@ -139,4 +139,7 @@ dependencies {
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$expresso_version")
     androidTestImplementation("androidx.test:core-ktx:$androidx_test_version")
     androidTestImplementation("io.mockk:mockk-android:$mockito_version")
+
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
 }

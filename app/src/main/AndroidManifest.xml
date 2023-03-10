@@ -18,6 +18,7 @@
         android:theme="@style/Theme.DynamicFormApp"
         android:windowSoftInputMode="stateAlwaysVisible"
         tools:targetApi="31">
+
         <activity
             android:name=".feature.flow.presentation.FormActivity"
             android:exported="true"
@@ -25,10 +26,19 @@
             android:theme="@style/Theme.DynamicFormApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".core.util.SmsReceiver"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED_ACTION" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -40,7 +40,7 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
             else -> selectionInput(input)
         }
         outputListener.invoke(input)
-        ruleSetListener?.invoke(FormOutput(input.value, input.isSelected, ruleSet))
+        ruleSetListener?.invoke(FormOutput(input.value.clearMask(), input.isSelected, ruleSet))
     }
 
     private fun textInput(input: FormIO) {
@@ -99,8 +99,9 @@ abstract class FormUsaCase<VO> : FormUsaCaseInput, BaseUseCase<IO, VO>() {
         }
     }
 
-    private fun hasTextInputValidRange(vo: FormTextVO) =
-        vo.text.length <= vo.maxSize && vo.text.length >= vo.minSize
+    private fun hasTextInputValidRange(vo: FormTextVO) = with(vo.text.clearMask()) {
+        length <= vo.maxSize && length >= vo.minSize
+    }
 
     fun onRuleSetValidation(rules: FormRuleSet) {
         isValid = rules.hasErrors.not()
